@@ -43,7 +43,7 @@ symfony console doctrine:migrations:migrate
 
 6.Start Symfony Server :  
 ```powershell
-symfony serve -d
+symfony serve
 ```
 
 
