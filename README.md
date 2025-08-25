@@ -31,17 +31,12 @@ symfony composer install
 symfony console doctrine:database:create
 ```
 
-4. Create Migrations:
-```powershell
-symfony console make:migration
-```
-
-5. Execute Migrations : 
+4. Execute Migrations : 
 ```powershell
 symfony console doctrine:migrations:migrate
 ```
 
-6. Start Symfony Server :  
+5. Start Symfony Server :  
 ```powershell
 symfony serve
 ```
