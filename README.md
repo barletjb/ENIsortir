@@ -25,23 +25,19 @@ git clone https://github.com/barletjb/ENIsortir.git
 ```powershell
 symfony composer install
 ```
-
-3. Create Environment File : 
-/.env.local
-
-4. Create Database: 
+3. Create Database: 
 ```powershell
 symfony console doctrine:database:create
 ```
-5. Update Database URL :
+4. Update Database URL :
 /.env.dev
 
-6. Execute Migrations : 
+5. Execute Migrations : 
 ```powershell
 symfony console doctrine:migrations:migrate
 ```
 
-7. Start Symfony Server :  
+6. Start Symfony Server :  
 ```powershell
 symfony serve
 ```
