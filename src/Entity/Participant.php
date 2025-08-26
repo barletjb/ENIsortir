@@ -41,9 +41,8 @@ class Participant
     #[ORM\Column(length: 50)]
     private ?string $pseudo = null;
 
-    /**
-     * @var Collection<int, Sortie>
-     */
+  
+  
     #[ORM\ManyToMany(targetEntity: Sortie::class, mappedBy: 'participants')]
     private Collection $sorties;
 
@@ -55,6 +54,11 @@ class Participant
     {
         $this->sorties = new ArrayCollection();
     }
+  
+    public function getSorties(): Collection { return $this->sorties; }
+
+  
+  
 
     public function getId(): ?int
     {

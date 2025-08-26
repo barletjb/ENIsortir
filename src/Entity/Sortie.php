@@ -153,6 +153,34 @@ class Sortie
         return $this;
     }
 
+
+
+    #[ORM\ManyToOne(targetEntity: Site::class)]
+    private ?Site $site = null;
+
+    #[ORM\ManyToOne(targetEntity: Lieu::class)]
+    private ?Lieu $lieu = null;
+
+    public function getSite(): ?Site
+    {
+        return $this->site;
+    }
+
+    public function setSite(?Site $site): self
+    {
+        $this->site = $site;
+        return $this;
+    }
+
+    public function getLieu(): ?Lieu
+    {
+        return $this->lieu;
+    }
+
+    public function setLieu(?Lieu $lieu): self
+    {
+        $this->lieu = $lieu;
+
     public function getSite(): ?Site
     {
         return $this->site;
@@ -209,6 +237,7 @@ class Sortie
     public function setOrganisateur(?Participant $organisateur): static
     {
         $this->organisateur = $organisateur;
+
 
         return $this;
     }
