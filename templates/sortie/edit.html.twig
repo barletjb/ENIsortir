@@ -2,7 +2,108 @@
 
 {% block body %}
     <h1>Créer une sortie</h1>
+    {{ form_start(sortie_form) }}
+    <div>
+        {{ form_label(sortie_form.nom) }}
+        {{ form_widget(sortie_form.nom) }}
+    </div>
+    <div>
+        {{ form_label(sortie_form.dateHeureDebut) }}
+        {{ form_widget(sortie_form.dateHeureDebut) }}
+    </div>
+    <div>
+        {{ form_label(sortie_form.dateLimiteInscription) }}
+        {{ form_widget(sortie_form.dateLimiteInscription) }}
+    </div>
+    <div>
+        {{ form_label(sortie_form.nbInscriptionsMax) }}
+        {{ form_widget(sortie_form.nbInscriptionsMax) }}
+    </div>
+    <div>
+        {{ form_label(sortie_form.duree) }}
+        {{ form_widget(sortie_form.duree) }} minutes
+    </div>
+    <div>
+        {{ form_label(sortie_form.infosSortie) }}
+        {{ form_widget(sortie_form.infosSortie) }}
+    </div>
+    <div>
+        Ville organisatrice :
+{#        {% if user != '' %}#}
+{#            {{ user.getSite().getNom() }}#}
+{#        {% endif %}#}
 
-    {{ form(sortie_form) }}
+    </div>
+    <div>
+        {{ form_label(sortie_form.lieu) }}
+        {{ form_widget(sortie_form.lieu) }}
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCreateLieu">
+            +
+        </button>
+    </div>
+
+    <div>
+        Ville:
+        {% if lieu != '' %}
+            {{ lieu.getVille().getNom() }}
+        {% endif %}
+    </div>
+    <div>
+        Rue:
+        {% if lieu != '' %}
+            {{ lieu.getRue() }}
+        {% endif %}
+    </div>
+    <div>
+        Code Postal:
+        {% if lieu != '' %}
+            {{ lieu.getVille().getCodePostal() }}
+        {% endif %}
+    </div>
+    <div>
+        Latitude:
+        {% if lieu != '' %}
+            {{ lieu.getLatitude() }}
+        {% endif %}
+    </div>
+    <div>
+        Longitude:
+        {% if lieu != '' %}
+            {{ lieu.getLongitude() }}
+        {% endif %}
+    </div>
+
+    <button type="submit" name="submit_sortie" class="btn btn-primary">Créer sortie</button>
+    {{ form_end(sortie_form) }}
+
+    {# Modal Bootstrap avec formulaire #}
+    <div class="modal fade" id="modalCreateLieu" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Créer un lieu</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <h1>Créer un lieu</h1>
+                    {{ form_start(lieu_form) }}
+                    {{ form_row(lieu_form.nom) }}
+                    {{ form_row(lieu_form.rue) }}
+                    {{ form_row(lieu_form.ville) }}
+                    {{ form_row(lieu_form.latitude) }}
+                    {{ form_row(lieu_form.longitude) }}
+                    <button type="submit" name="submit_lieu" class="btn btn-primary">Ajouter le lieu</button>
+                    {{ form_end(lieu_form) }}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
 
 {% endblock %}
+
+

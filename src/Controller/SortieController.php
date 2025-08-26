@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Lieu;
 use App\Entity\Sortie;
+use App\Form\LieuType;
 use App\Form\SortieType;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -10,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/sortie', name: 'sortie')]
 final class SortieController extends AbstractController
@@ -68,14 +71,21 @@ final class SortieController extends AbstractController
 
 
     #[Route('/edit',name: '_edit')]
-public function editSortie(Request $request, EntityManagerInterface $em) : Response
+    public function editSortie(Request $request, EntityManagerInterface $em) : Response
     {
+
         $sortie = new Sortie();
-        $form = $this->createForm(SortieType::class, $sortie);
+        $formSortie = $this->createForm(SortieType::class, $sortie);
 
-        $form->handleRequest($request);
+        $formSortie->handleRequest($request);
 
-        if ($form->isSubmitted()) {
+        $lieu = new Lieu();
+        $formLieu = $this->createForm(LieuType::class, $lieu);
+
+        $formLieu->handleRequest($request);
+
+
+        if ($formSortie->isSubmitted() && $formSortie->isValid()) {
             $em->persist($sortie);
             $em->flush();
 
@@ -83,8 +93,22 @@ public function editSortie(Request $request, EntityManagerInterface $em) : Respo
             return $this->redirectToRoute('sortie');
         }
 
+
+
+        if ($formLieu->isSubmitted() && $formLieu->isValid()) {
+            $em->persist($lieu);
+            $em->flush();
+
+            $this->addFlash('success', 'Nouveau lieu créé');
+            return $this->redirectToRoute('sortie_edit');
+        }
+
         return $this->render('sortie/edit.html.twig',[
-            'sortie_form' => $form,]);
+            'lieu' => $sortie->getLieu(),
+            'user' => $this->getUser(),
+            'sortie_form' => $formSortie,
+            'lieu_form' => $formLieu
+        ]);
 
     }
 
