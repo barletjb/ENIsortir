@@ -10,11 +10,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-
-#[Route('/sortie',name: 'sortie')]
+#[Route('/sortie', name: 'sortie')]
 final class SortieController extends AbstractController
 {
-    #[Route('/sortie', name: 'app_sortie')]
+    #[Route('/', name: '')]
+    #[IsGranted('ROLE_USER')]
     public function index(): Response
     {
         return $this->render('sortie/index.html.twig', [
