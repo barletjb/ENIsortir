@@ -29,16 +29,22 @@
         <th>Organisateur</th>
         <th>Actions</th>
     </tr>
-    <tr>
+
     {% for sortie in sorties %}
+    <tr>
         <th>{{ sortie.nom }}</th>
         <th>{{ sortie.dateHeureDebut|date('d/m/Y') }}</th>
         <th>{{ sortie.dateLimiteInscription|date('d/m/Y') }}</th>
-        <th>{{ sortie.nbInscriptionsMax }}  </th>
+        <th>Todo "sortie.participant.length" / {{ sortie.nbInscriptionsMax }}  </th>
         <th>{{ sortie.etat }}  </th>
-    {% endfor %}
+        <th>Todo "Inscrit"</th>
+        <th>Todo "Organisateur"</th>
+        <th>Todo "Actions"</th>
     </tr>
+    {% endfor %}
+
 </table>
 <button href="" class="rechercher" type="button">CRÉER UNE SORTIE</button>
+
 
 {% endblock %}

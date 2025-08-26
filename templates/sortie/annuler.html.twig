@@ -1,0 +1,31 @@
+<h1>Annuler une sortie</h1>
+
+<div>
+    <strong>Nom de la sortie :</strong> {{ sortie.nom }}
+</div>
+
+<div>
+    <strong>Date de la sortie :</strong> {{ sortie.dateHeureDebut|date('d/m/Y H:i') }}
+</div>
+
+{# <div>
+    <strong>Ville organisatrice :</strong> {{ sortie.site.nom }}
+</div>
+
+<div>
+    <strong>Lieu :</strong> {{ sortie.lieu.nom }}
+</div> #}
+
+
+<form method="post">
+    <div>
+        <label for="motif">Motif d'annulation :</label>
+        <textarea id="motif" name="motif" rows="4" cols="50" required></textarea>
+    </div>
+
+    <br>
+    <button type="submit">Enregistrer</button>
+    <a href="{{ path('app_sortie') }}">
+        <button type="button">Annuler</button>
+    </a>
+</form>
