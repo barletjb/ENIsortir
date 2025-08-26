@@ -7,10 +7,13 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['email'], message: 'L\'email est déjà utilisé')]
+#[UniqueEntity(fields: ['pseudo'], message: 'Le pseudo n\'est pas disponible')]
+#[UniqueEntity(fields: ['telephone'], message: 'Le téléphone n\'est pas disponible')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -40,10 +43,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank(message: "Le nom est obligatoire")]
     private ?string $nom = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank(message: "Le prénom est obligatoire")]
     private ?string $prenom = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $confirmationToken = null;
+
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    private bool $isActive = false;
+
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    private bool $profileCompleted = false;
+
+    #[ORM\Column(length: 10, nullable: true)]
+    #[Assert\NotBlank(message: "Le téléphone est obligatoire")]
+    private ?string $telephone = null;
+
+    #[ORM\Column(length: 50, nullable: true)]
+    #[Assert\NotBlank(message: "Le pseudo est obligatoire")]
+    private ?string $pseudo = null;
+
+    #[ORM\Column(type: 'boolean', options: ['default' => true])]
+    private bool $isActif = true;
 
     public function getId(): ?int
     {
@@ -78,7 +103,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
@@ -138,4 +162,78 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getConfirmationToken(): ?string
+    {
+        return $this->confirmationToken;
+    }
+
+    public function setConfirmationToken(?string $confirmationToken): static
+    {
+        $this->confirmationToken = $confirmationToken;
+
+        return $this;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->isActive;
+    }
+
+    public function setIsActive(bool $isActive): static
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    public function isProfileCompleted(): bool
+    {
+        return $this->profileCompleted;
+    }
+
+    public function setProfileCompleted(bool $profileCompleted): static
+    {
+        $this->profileCompleted = $profileCompleted;
+
+        return $this;
+    }
+
+    public function getTelephone(): ?string
+    {
+        return $this->telephone;
+    }
+
+    public function setTelephone(?string $telephone): static
+    {
+        $this->telephone = $telephone;
+
+        return $this;
+    }
+
+    public function getPseudo(): ?string
+    {
+        return $this->pseudo;
+    }
+
+    public function setPseudo(?string $pseudo): static
+    {
+        $this->pseudo = $pseudo;
+
+        return $this;
+    }
+
+    public function isActif(): bool
+    {
+        return $this->isActif;
+    }
+
+    public function setIsActif(bool $isActif): static
+    {
+        $this->isActif = $isActif;
+
+        return $this;
+    }
+
+
 }
