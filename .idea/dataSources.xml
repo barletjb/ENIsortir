@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="ENISortir@localhost" uuid="d190d16f-1e3a-4368-afff-8ecfcdc6ae39">
+    <data-source source="LOCAL" name="enisortir@localhost" uuid="1f408ce1-d5a3-4668-99af-3075055f24a5">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/ENISortir</jdbc-url>
+      <jdbc-url>jdbc:mysql://localhost:3306/enisortir</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>
