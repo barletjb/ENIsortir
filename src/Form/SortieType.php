@@ -4,13 +4,15 @@ namespace App\Form;
 
 use App\Entity\Etat;
 use App\Entity\Lieu;
-use App\Entity\Participant;
 use App\Entity\Site;
 use App\Entity\Sortie;
+
+
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -46,23 +48,24 @@ class SortieType extends AbstractType
                 'label' => 'Description et infos',
             ])
 
-            ->add('site', EntityType::class, [
-                'class' => Site::class,
-                'choice_label' => 'id',
-            ])
             ->add('lieu', EntityType::class, [
                 'class' => Lieu::class,
-                'choice_label' => 'id',
+                'label' => 'Lieu',
+                'placeholder' => '-- Choisir un lieu --',
+                'choice_label' => function (Lieu $lieu) {
+                    return $lieu->getNom();
+                },
             ])
-            ->add('participants', EntityType::class, [
-                'class' => Participant::class,
-                'choice_label' => 'id',
-                'multiple' => true,
-            ])
-            ->add('organisateur', EntityType::class, [
-                'class' => Participant::class,
-                'choice_label' => 'id',
-            ])
+//            ->add('etat', EntityType::class, [
+//                'class' => Etat::class,
+//                'label' => 'Etat',
+//                'attr' => [
+//                    'value' => "Créée"
+//                ]
+//            ])
+
+
+
         ;
     }
 
