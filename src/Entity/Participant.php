@@ -3,12 +3,13 @@
 namespace App\Entity;
 
 use App\Repository\ParticipantRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints\Unique;
 
 #[ORM\Entity(repositoryClass: ParticipantRepository::class)]
-#[UniqueEntity(fields:['email'], message: 'Email is already in use')]
+#[UniqueEntity(fields:['mail'], message: 'Email is already in use')]
 #[UniqueEntity(fields:['pseudo'], message: 'Pseudo is already in use')]
 #[UniqueEntity(fields:['telephone'], message: 'Telephone is already in use')]
 class Participant
@@ -38,6 +39,14 @@ class Participant
 
     #[ORM\Column(length: 50)]
     private ?string $pseudo = null;
+
+
+    private collection $sorties;
+    public function __construct(){
+        $this->sorties = new ArrayCollection();
+    }
+
+    public function getSorties(): Collection { return $this->sorties; }
 
     public function getId(): ?int
     {
