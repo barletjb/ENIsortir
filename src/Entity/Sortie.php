@@ -48,21 +48,19 @@ class Sortie
     private ?Lieu $lieu = null;
 
     /**
-     * @var Collection<int, Participant>
+     * @var Collection<int, User>
      */
-    #[ORM\ManyToMany(targetEntity: Participant::class, inversedBy: 'sorties')]
-    private Collection $participants;
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'sorties')]
+    private Collection $user;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Participant $organisateur = null;
+    private ?User $organisateur = null;
 
     public function __construct()
     {
-        $this->participants = new ArrayCollection();
+        $this->user = new ArrayCollection();
     }
-
-
 
     public function getId(): ?int
     {
@@ -153,15 +151,16 @@ class Sortie
         return $this;
     }
 
+
+
     public function getSite(): ?Site
     {
         return $this->site;
     }
 
-    public function setSite(?Site $site): static
+    public function setSite(?Site $site): self
     {
         $this->site = $site;
-
         return $this;
     }
 
@@ -169,6 +168,12 @@ class Sortie
     {
         return $this->lieu;
     }
+
+//    public function setLieu(?Lieu $lieu): self
+//    {
+//        $this->lieu = $lieu;
+//    }
+
 
     public function setLieu(?Lieu $lieu): static
     {
@@ -178,37 +183,38 @@ class Sortie
     }
 
     /**
-     * @return Collection<int, Participant>
+     * @return Collection<int, User>
      */
-    public function getParticipants(): Collection
+    public function getUsers(): Collection
     {
-        return $this->participants;
+        return $this->users;
     }
 
-    public function addParticipant(Participant $participant): static
+    public function addUser(User $user): static
     {
-        if (!$this->participants->contains($participant)) {
-            $this->participants->add($participant);
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
         }
 
         return $this;
     }
 
-    public function removeParticipant(Participant $participant): static
+    public function removeUser(User $user): static
     {
-        $this->participants->removeElement($participant);
+        $this->users->removeElement($user);
 
         return $this;
     }
 
-    public function getOrganisateur(): ?Participant
+    public function getOrganisateur(): ?User
     {
         return $this->organisateur;
     }
 
-    public function setOrganisateur(?Participant $organisateur): static
+    public function setOrganisateur(?User $organisateur): static
     {
         $this->organisateur = $organisateur;
+
 
         return $this;
     }
