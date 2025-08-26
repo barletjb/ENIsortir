@@ -4,39 +4,39 @@
     <h1>Créer une sortie</h1>
     {{ form_start(sortie_form) }}
     <div>
-    {{ form_label(sortie_form.nom) }}
-    {{ form_widget(sortie_form.nom) }}
+        {{ form_label(sortie_form.nom) }}
+        {{ form_widget(sortie_form.nom) }}
     </div>
     <div>
-    {{ form_label(sortie_form.dateHeureDebut) }}
-    {{ form_widget(sortie_form.dateHeureDebut) }}
+        {{ form_label(sortie_form.dateHeureDebut) }}
+        {{ form_widget(sortie_form.dateHeureDebut) }}
     </div>
     <div>
-    {{ form_label(sortie_form.dateLimiteInscription) }}
-    {{ form_widget(sortie_form.dateLimiteInscription) }}
+        {{ form_label(sortie_form.dateLimiteInscription) }}
+        {{ form_widget(sortie_form.dateLimiteInscription) }}
     </div>
     <div>
-    {{ form_label(sortie_form.nbInscriptionsMax) }}
-    {{ form_widget(sortie_form.nbInscriptionsMax) }}
+        {{ form_label(sortie_form.nbInscriptionsMax) }}
+        {{ form_widget(sortie_form.nbInscriptionsMax) }}
     </div>
     <div>
-    {{ form_label(sortie_form.duree) }}
-    {{ form_widget(sortie_form.duree) }} minutes
+        {{ form_label(sortie_form.duree) }}
+        {{ form_widget(sortie_form.duree) }} minutes
     </div>
     <div>
-    {{ form_label(sortie_form.infosSortie) }}
-    {{ form_widget(sortie_form.infosSortie) }}
+        {{ form_label(sortie_form.infosSortie) }}
+        {{ form_widget(sortie_form.infosSortie) }}
     </div>
     <div>
-    Ville organisatrice :
-        {% if user != '' %}
-            {{ user.getSite().getNom() }}
-        {% endif %}
+        Ville organisatrice :
+{#        {% if user != '' %}#}
+{#            {{ user.getSite().getNom() }}#}
+{#        {% endif %}#}
 
     </div>
     <div>
-    {{ form_label(sortie_form.lieu) }}
-    {{ form_widget(sortie_form.lieu) }}
+        {{ form_label(sortie_form.lieu) }}
+        {{ form_widget(sortie_form.lieu) }}
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCreateLieu">
             +
         </button>
@@ -45,7 +45,7 @@
     <div>
         Ville:
         {% if lieu != '' %}
-        {{ lieu.getVille().getNom() }}
+            {{ lieu.getVille().getNom() }}
         {% endif %}
     </div>
     <div>
@@ -61,16 +61,16 @@
         {% endif %}
     </div>
     <div>
-    Latitude:
-    {% if lieu != '' %}
-        {{ lieu.getLatitude() }}
-    {% endif %}
+        Latitude:
+        {% if lieu != '' %}
+            {{ lieu.getLatitude() }}
+        {% endif %}
     </div>
     <div>
-    Longitude:
-    {% if lieu != '' %}
-        {{ lieu.getLongitude() }}
-    {% endif %}
+        Longitude:
+        {% if lieu != '' %}
+            {{ lieu.getLongitude() }}
+        {% endif %}
     </div>
 
     <button type="submit" name="submit_sortie" class="btn btn-primary">Créer sortie</button>
