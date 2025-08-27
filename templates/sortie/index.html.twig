@@ -4,8 +4,14 @@
 
 {% block body %}
 <section>
+
     <div>Date du jour : </div>
-    <div>Participant : {{ user.prenom }} {{ user.nom |first }}.</div>
+    {% if user==null %}
+    <div> Vous devez vous connecter !!</div>
+    {% else %}
+        <div> Participant : {{ user.prenom }} {{ user.nom |first }}. </div>
+    {% endif %}
+
 </section>
 
     <h2>Filtrer les sorties</h2>
@@ -69,17 +75,6 @@
 
         {% for sortie in sorties %}
             <tr>
-               {# <th>{{ sortie.nom }}</th>
-                <th>{{ sortie.dateHeureDebut|date('d/m/Y') }}</th>
-                <th>{{ sortie.dateLimiteInscription|date('d/m/Y') }}</th>
-                <th>Todo "sortie.participant.length" / {{ sortie.nbInscriptionsMax }}  </th>
-                <th>{{ sortie.etat }}  </th>
-                <th>Todo "Inscrit"</th>
-                <th>Todo "Organisateur"</th>
-                <th>Todo "Actions"</th>
-
-               #}
-
                 <th>{{ sortie.nom }}</th>
                 <th>{{ sortie.dateHeureDebut|date('d/m/Y') }}</th>
                 <th>{{ sortie.dateLimiteInscription|date('d/m/Y') }}</th>
