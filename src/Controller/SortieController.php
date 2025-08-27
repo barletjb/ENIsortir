@@ -8,6 +8,7 @@ use App\Entity\Site;
 use App\Entity\Sortie;
 use App\Entity\User;
 use App\Form\LieuType;
+use App\Form\RechercheIndexType;
 use App\Form\SortieType;
 use App\Repository\LieuRepository;
 use App\Repository\SortieRepository;
@@ -23,16 +24,20 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class SortieController extends AbstractController
 {
     #[Route('/', name: '')]
-    #[IsGranted('ROLE_USER')]
-    public function index(SortieRepository $sortieRepository): Response
-
+    public function index(Request $request, SortieRepository $sortieRepository): Response
     {
+        $form = $this->createForm(RechercheIndexType::class);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $form->handleRequest($request);
+            return $this->redirect('sortie/index.html.twig');
+        }
+
         $sorties = $sortieRepository->findAll();
         return $this->render('sortie/index.html.twig', [
             'sorties' => $sorties,
+            'form_filtre' => $form,
         ]);
     }
-
 
     #[Route('/{id}/annuler', name: 'app_sortie_annuler')]
     public function annuler(int $id, Request $request, EntityManagerInterface $em): Response
@@ -134,6 +139,7 @@ final class SortieController extends AbstractController
         ]);
     }
 
+
     #[Route('/lieu/add', name: '_lieu_add', methods: ['POST'])]
     public function addLieu(Request $request, EntityManagerInterface $em): JsonResponse
     {
@@ -158,5 +164,20 @@ final class SortieController extends AbstractController
         ], 400);
     }
 
+    #[Route('/{id}', name: 'sortie_detail')]
+    public function detail(int $id, EntityManagerInterface $em): Response
+    {
+        $sortie = $em->getRepository(Sortie::class)->find($id);
+
+        if (!$sortie) {
+            $this->addFlash('error', 'La sortie demandée n’existe pas.');
+            return $this->redirectToRoute('sortie');
+        }
+
+
+        return $this->render('sortie/detail.html.twig', [
+            'sortie' => $sortie,
+        ]);
+    }
 
 }

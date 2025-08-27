@@ -20,6 +20,7 @@ security:
                 login_path: app_login
                 check_path: app_login
                 enable_csrf: true
+                default_target_path: sortie
             remember_me:
               secret: '%kernel.secret%'
               lifetime: 604800
@@ -28,6 +29,7 @@ security:
               interval: '15 minutes'
             logout:
               path: app_logout
+              target: app_login
                 # where to redirect after logout
                 # target: app_any_route
 

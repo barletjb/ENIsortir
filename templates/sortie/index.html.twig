@@ -4,47 +4,80 @@
 
 {% block body %}
 <section>
-    <div><label>Date du jour : </label> </div>
+    <div><label>Date du jour : </label></div>
     <div><label>Participant : </label></div>
 </section>
 
-<h2>Filtrer les sorties</h2>
-<div><label>Site : </label><select> </select> </div>
-<div><label>Le nom de la sortie contient : </label><input type="search"></div>
-<div><label>Entre : </label><input type="date" name="date_début"><input type="date" name="date_fin"></div>
-<div><input type="checkbox" id="organisateur" name="organisateur" /><label for="organisateur">Sorties dont je suis l'organisateur∙trice</label></div>
-<div><input type="checkbox" id="participant" name="participant" /><label for="participant">Sorties auxquelles je suis inscrit∙e</label></div>
-<div><input type="checkbox" id="non_participant" name="non_participant" /><label for="participant">Sorties auxquelles je ne suis pas inscrit∙e</label></div>
-<div><input type="checkbox" id="sorties_passees" name="sorties_passees" /><label for="sorties_passees">Sorties passées</label></div>
-<button class="rechercher" type="button">RECHECHER</button>
+    <h2>Filtrer les sorties</h2>
+    <div>
+        {{ form_start(form_filtre) }}
+        <div>
+            {{ form_label(form_filtre.site) }}
+            {{ form_widget(form_filtre.site) }}
+        </div>
+        <div>
+            {{ form_label(form_filtre.rechercheNom) }}
+            {{ form_widget(form_filtre.rechercheNom) }}
+        </div>
+        <div>
+            <label>Entre le :</label>
+             {{ form_widget(form_filtre.dateDebut) }}
+            <label>et </label>
+            {{ form_widget(form_filtre.dateFin) }}
+        </div>
+        <div>
+            {{ form_label(form_filtre.organisateur) }}
+            {{ form_widget(form_filtre.organisateur) }}
+        </div>
+        <div>
+            {{ form_label(form_filtre.participant) }}
+            {{ form_widget(form_filtre.participant) }}
+        </div>
+        <div>
+            {{ form_label(form_filtre.nonParticipant) }}
+            {{ form_widget(form_filtre.nonParticipant) }}
+        </div>
+        <div>
+            {{ form_label(form_filtre.sortiesPassees) }}
+            {{ form_widget(form_filtre.sortiesPassees) }}
+        </div>
+        <div>
+            {{ form_label(form_filtre.submit) }}
+            {{ form_widget(form_filtre.submit) }}
+        </div>
+        {{ form_start(form_filtre) }}
+    </div>
 
-<table>
-    <tr>
-        <th>Nom de la sortie</th>
-        <th>Date de la sortie</th>
-        <th>Clôture d'inscription</th>
-        <th>Inscrit(s)/Places</th>
-        <th>État</th>
-        <th>Inscrit</th>
-        <th>Organisateur</th>
-        <th>Actions</th>
-    </tr>
 
-    {% for sortie in sorties %}
-    <tr>
-        <th>{{ sortie.nom }}</th>
-        <th>{{ sortie.dateHeureDebut|date('d/m/Y') }}</th>
-        <th>{{ sortie.dateLimiteInscription|date('d/m/Y') }}</th>
-        <th>Todo "sortie.participant.length" / {{ sortie.nbInscriptionsMax }}  </th>
-        <th>{{ sortie.etat }}  </th>
-        <th>Todo "Inscrit"</th>
-        <th>Todo "Organisateur"</th>
-        <th>Todo "Actions"</th>
-    </tr>
-    {% endfor %}
 
-</table>
-<button href="" class="rechercher" type="button">CRÉER UNE SORTIE</button>
 
+
+    <table>
+        <tr>
+            <th>Nom de la sortie</th>
+            <th>Date de la sortie</th>
+            <th>Clôture d'inscription</th>
+            <th>Inscrit(s)/Places</th>
+            <th>État</th>
+            <th>Inscrit</th>
+            <th>Organisateur</th>
+            <th>Actions</th>
+        </tr>
+
+        {% for sortie in sorties %}
+            <tr>
+                <th>{{ sortie.nom }}</th>
+                <th>{{ sortie.dateHeureDebut|date('d/m/Y') }}</th>
+                <th>{{ sortie.dateLimiteInscription|date('d/m/Y') }}</th>
+                <th>Todo "sortie.participant.length" / {{ sortie.nbInscriptionsMax }}  </th>
+                <th>{{ sortie.etat }}  </th>
+                <th>Todo "Inscrit"</th>
+                <th>Todo "Organisateur"</th>
+                <th>Todo "Actions"</th>
+            </tr>
+        {% endfor %}
+
+    </table>
+    <button href="" class="creer" type="button">CRÉER UNE SORTIE</button>
 
 {% endblock %}
