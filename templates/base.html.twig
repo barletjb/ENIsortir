@@ -26,7 +26,7 @@
             {# <li><a href="{{ path('') }}"><i class="bi bi-grid"></i> Accueil </a></li> #}
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                 {% if is_granted('ROLE_ADMIN') %}
-{#                    <li><a href="{{ path('') }}"><i class="bi bi-plus-circle"></i> Créer Profil</a></li>#}
+                 <li><a href="{{ path('admin_user_create') }}"><i class="bi bi-plus-circle"></i> Créer Profil</a></li>
                     {#                <li><a href="{{ path('') }}"><i class=""></i> Villes</a></li>#}
                     {#                <li><a href="{{ path('') }}"><i class=""></i> Sites</a></li>#}
                 {% endif %}

@@ -21,7 +21,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 180)]
+    #[ORM\Column(length: 180, unique: true)]
     #[Assert\NotBlank(message: "L'email est obligatoire")]
     #[Assert\Email(message: "L'adresse email n'est pas valide")]
     #[Assert\Regex(
@@ -59,12 +59,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
     private bool $profileCompleted = false;
 
-    #[ORM\Column(length: 10, nullable: true)]
-    #[Assert\NotBlank(message: "Le téléphone est obligatoire")]
+    #[ORM\Column(length: 10, unique: true, nullable: true)]
     private ?string $telephone = null;
 
-    #[ORM\Column(length: 50, nullable: true)]
-    #[Assert\NotBlank(message: "Le pseudo est obligatoire")]
+    #[ORM\Column(length: 50, unique: true, nullable: true)]
     private ?string $pseudo = null;
 
     #[ORM\Column(type: 'boolean', options: ['default' => true])]
