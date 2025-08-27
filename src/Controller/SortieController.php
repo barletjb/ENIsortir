@@ -18,16 +18,21 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class SortieController extends AbstractController
 {
     #[Route('/', name: '')]
-    #[IsGranted('ROLE_USER')]
-    public function index(SortieRepository $sortieRepository): Response
-
+    public function index(Request $request, SortieRepository $sortieRepository): Response
     {
+        $form = $this->createForm(RechercheIndexType::class);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $form->handleRequest($request);
+            return $this->redirect('sortie/index.html.twig', [
+            ]);
+        }
+
         $sorties = $sortieRepository->findAll();
         return $this->render('sortie/index.html.twig', [
             'sorties' => $sorties,
+            'form_filtre' => $form,
         ]);
     }
-
 
     #[Route('/{id}/annuler', name: 'app_sortie_annuler')]
     public function annuler(int $id, Request $request, EntityManagerInterface $em): Response
