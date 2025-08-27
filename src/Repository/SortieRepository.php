@@ -16,9 +16,12 @@ class SortieRepository extends ServiceEntityRepository
         parent::__construct($registry, Sortie::class);
     }
 
-    public function findByFiltres(array $criterias, $user)
+
+
+    public function findByFiltre(array $criterias, $user): array
     {
         $qb = $this->createQueryBuilder('s');
+
 
         if (!empty($criterias['site'])) {
             $qb->andWhere('s.site = :site')
@@ -30,45 +33,45 @@ class SortieRepository extends ServiceEntityRepository
                 ->setParameter('nom', '%' . $criterias['rechercheNom'] . '%');
         }
 
+
         if (!empty($criterias['dateDebut'])) {
-            $qb->andWhere('s.date_heure_debut >= :dateDebut')
+            $qb->andWhere('s.dateHeureDebut >= :dateDebut')
                 ->setParameter('dateDebut', $criterias['dateDebut']);
         }
 
         if (!empty($criterias['dateFin'])) {
-            $qb->andWhere('s.date_heure_debut <= :dateFin')
+            $qb->andWhere('s.dateHeureDebut <= :dateFin')
                 ->setParameter('dateFin', $criterias['dateFin']);
         }
 
-        if (!empty($criterias['organisateur']) && $criterias['organisateur'] === true) {
+
+        if (!empty($criterias['organisateur'])) {
             $qb->andWhere('s.organisateur = :user')
                 ->setParameter('user', $user);
         }
 
-        if (!empty($criterias['participant']) && $criterias['participant'] === true) {
-            $qb->join('s.participants', 'p')
-                ->andWhere('p = :user')
+        if (!empty($criterias['participant'])) {
+            $qb->andWhere(':user MEMBER OF s.users')
                 ->setParameter('user', $user);
         }
 
-        if (!empty($criteres['nonParticipant']) && $criteres['nonParticipant'] === true) {
-            $qb->leftJoin('s.participants', 'np')
-                ->andWhere($qb->expr()->orX(
-                    $qb->expr()->neq('np', ':userNonParticipant'),
-                    $qb->expr()->isNull('np')
-                ))
-                ->setParameter('userNonParticipant', $user);
+        if (!empty($criterias['nonParticipant'])) {
+            $qb->andWhere(':user NOT MEMBER OF s.users')
+                ->setParameter('user', $user);
         }
 
-        if (!empty($criteres['sortiesPassees']) && $criteres['sortiesPassees'] === true) {
-                $qb->andWhere('s.dateHeureDebut < :now')
+        if (!empty($criterias['sortiesPassees'])) {
+            $qb->andWhere('s.dateHeureDebut < :now')
                 ->setParameter('now', new \DateTime());
         } else {
-                $qb->andWhere('s.dateHeureDebut >= :now')
+            $qb->andWhere('s.dateHeureDebut >= :now')
                 ->setParameter('now', new \DateTime());
         }
 
+
+        $qb->orderBy('s.dateHeureDebut', 'ASC');
         return $qb->getQuery()->getResult();
     }
+
 
 }

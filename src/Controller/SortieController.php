@@ -31,11 +31,13 @@ final class SortieController extends AbstractController
         $form->handleRequest($request);
 
         $criterias = null;
+        $sorties = [];
+
 
         if ($form->isSubmitted() && $form->isValid()) {
             $criterias = $form->getData();
-            $userId = $this->getUser()->getId();
-            $sorties = $sortieRepository->findByFiltres($criterias,$userId);
+            //$userId = $this->getUser()->getId();
+            $sorties = $sortieRepository->findByFiltre($criterias,$this->getUser());
         } else {
             $sorties = $sortieRepository->findAll();
         }
@@ -47,7 +49,7 @@ final class SortieController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/annuler', name: 'app_sortie_annuler')]
+    #[Route('/{id}/annuler', name: '_annuler')]
     public function annuler(int $id, Request $request, EntityManagerInterface $em): Response
     {
         $sortie = $em->getRepository(Sortie::class)->find($id);
@@ -60,7 +62,7 @@ final class SortieController extends AbstractController
 
         if ($sortie->getOrganisateur() !== $participant && !$participant->isAdmin()) {
             $this->addFlash('error', 'Vous ne pouvez pas annuler cette sortie.');
-            return $this->redirectToRoute('app_sortie');
+            return $this->redirectToRoute('sortie');
         }
 
         if ($request->isMethod('POST')) {
@@ -71,7 +73,7 @@ final class SortieController extends AbstractController
             $em->flush();
 
             $this->addFlash('success', 'La sortie a été annulée.');
-            return $this->redirectToRoute('app_sortie');
+            return $this->redirectToRoute('sortie');
         }
 
         return $this->render('sortie/annuler.html.twig', [
@@ -172,7 +174,7 @@ final class SortieController extends AbstractController
         ], 400);
     }
 
-    #[Route('/{id}', name: 'sortie_detail')]
+    #[Route('/{id}', name: '_detail')]
     public function detail(int $id, EntityManagerInterface $em): Response
     {
         $sortie = $em->getRepository(Sortie::class)->find($id);
