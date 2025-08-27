@@ -36,7 +36,12 @@ symfony console doctrine:database:create
 symfony console doctrine:migrations:migrate
 ```
 
-5. Start Symfony Server :  
+5. Install reset Password :
+```powershell
+symfony composer require symfonycasts/reset-password-bundle 
+```
+
+6. Start Symfony Server :  
 ```powershell
 symfony serve
 ```
