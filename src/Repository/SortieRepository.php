@@ -16,7 +16,7 @@ class SortieRepository extends ServiceEntityRepository
         parent::__construct($registry, Sortie::class);
     }
 
-    public function findByFiltres(array $criterias, $user)
+    public function findByFiltres(array $criterias, $userId)
     {
         $qb = $this->createQueryBuilder('s');
 
@@ -31,40 +31,32 @@ class SortieRepository extends ServiceEntityRepository
         }
 
         if (!empty($criterias['dateDebut'])) {
-            $qb->andWhere('s.date_heure_debut >= :dateDebut')
+            $qb->andWhere('s.dateHeureDebut >= :dateDebut')
                 ->setParameter('dateDebut', $criterias['dateDebut']);
         }
 
         if (!empty($criterias['dateFin'])) {
-            $qb->andWhere('s.date_heure_debut <= :dateFin')
+            $qb->andWhere('s.dateHeureDebut <= :dateFin')
                 ->setParameter('dateFin', $criterias['dateFin']);
         }
 
         if (!empty($criterias['organisateur']) && $criterias['organisateur'] === true) {
             $qb->andWhere('s.organisateur = :user')
-                ->setParameter('user', $user);
+                ->setParameter('user', $userId);
         }
 
         if (!empty($criterias['participant']) && $criterias['participant'] === true) {
-            $qb->join('s.participants', 'p')
-                ->andWhere('p = :user')
-                ->setParameter('user', $user);
+            $qb->andWhere(':user MEMBER OF s.participants')
+                ->setParameter('user', $userId);
         }
 
         if (!empty($criteres['nonParticipant']) && $criteres['nonParticipant'] === true) {
-            $qb->leftJoin('s.participants', 'np')
-                ->andWhere($qb->expr()->orX(
-                    $qb->expr()->neq('np', ':userNonParticipant'),
-                    $qb->expr()->isNull('np')
-                ))
-                ->setParameter('userNonParticipant', $user);
+            $qb->andWhere(':user NOT MEMBER OF s.participants')
+                ->setParameter('user', $userId);
         }
 
         if (!empty($criteres['sortiesPassees']) && $criteres['sortiesPassees'] === true) {
-                $qb->andWhere('s.dateHeureDebut < :now')
-                ->setParameter('now', new \DateTime());
-        } else {
-                $qb->andWhere('s.dateHeureDebut >= :now')
+            $qb->andWhere('s.dateHeureDebut < :now')
                 ->setParameter('now', new \DateTime());
         }
 
