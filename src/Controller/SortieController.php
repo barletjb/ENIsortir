@@ -26,16 +26,24 @@ final class SortieController extends AbstractController
     #[Route('/', name: '')]
     public function index(Request $request, SortieRepository $sortieRepository): Response
     {
+        $user = $this->getUser();
         $form = $this->createForm(RechercheIndexType::class);
+        $form->handleRequest($request);
+
+        $criterias = null;
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $form->handleRequest($request);
-            return $this->redirect('sortie/index.html.twig');
+            $criterias = $form->getData();
+            $userId = $this->getUser()->getId();
+            $sorties = $sortieRepository->findByFiltres($criterias,$userId);
+        } else {
+            $sorties = $sortieRepository->findAll();
         }
 
-        $sorties = $sortieRepository->findAll();
         return $this->render('sortie/index.html.twig', [
             'sorties' => $sorties,
             'form_filtre' => $form,
+            'user' => $user,
         ]);
     }
 
