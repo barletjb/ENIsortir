@@ -117,6 +117,19 @@ final class SortieController extends AbstractController
 
     }
 
+    #[Route('/{id}', name: 'sortie_detail')]
+    public function detail(int $id, EntityManagerInterface $em): Response
+    {
+        $sortie = $em->getRepository(Sortie::class)->find($id);
 
+        if (!$sortie) {
+            $this->addFlash('error', 'La sortie demandée n’existe pas.');
+            return $this->redirectToRoute('sortie');
+        }
+
+        return $this->render('sortie/detail.html.twig', [
+            'sortie' => $sortie,
+        ]);
+    }
 
 }
