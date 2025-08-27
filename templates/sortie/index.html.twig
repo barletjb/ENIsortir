@@ -4,8 +4,8 @@
 
 {% block body %}
 <section>
-    <div><label>Date du jour : </label></div>
-    <div><label>Participant : </label></div>
+    <div>Date du jour : </div>
+    <div>Participant : {{ user.prenom }} {{ user.nom |first }}.</div>
 </section>
 
     <h2>Filtrer les sorties</h2>
