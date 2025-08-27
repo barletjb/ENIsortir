@@ -1,7 +1,19 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Créer une sortie</h1>
+    <h1>Créer une sortie pour le campus de {{ user.site.nom }}</h1>
+
+<div class="row justify-content-center">
+    <div class="col-4">
+
+{#        <div>#}
+{#            Ville organisatrice :#}
+{#            {% if user != '' %}#}
+{#                {{ user.site.nom }}#}
+{#            {% endif %}#}
+
+{#        </div>#}
+
     {{ form_start(sortie_form) }}
     <div>
         {{ form_label(sortie_form.nom) }}
@@ -20,34 +32,31 @@
         {{ form_widget(sortie_form.nbInscriptionsMax) }}
     </div>
     <div>
-        {{ form_label(sortie_form.duree) }}
-        {{ form_widget(sortie_form.duree) }} minutes
+        {{ form_label(sortie_form.duree) }} (en minutes)
+        {{ form_widget(sortie_form.duree) }}
     </div>
     <div>
         {{ form_label(sortie_form.infosSortie) }}
         {{ form_widget(sortie_form.infosSortie) }}
     </div>
-    <div>
-        Ville organisatrice :
-{#        {% if user != '' %}#}
-{#            {{ user.getSite().getNom() }}#}
-{#        {% endif %}#}
 
-    </div>
     <div>
         {{ form_label(sortie_form.lieu) }}
-        {{ form_widget(sortie_form.lieu) }}
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCreateLieu">
+        <button type="button" class="btnAdd" data-bs-toggle="modal" data-bs-target="#modalCreateLieu">
             +
         </button>
+        {{ form_widget(sortie_form.lieu) }}
+
     </div>
 
     <div id="lieu-details" style="margin-top: 1em;">
 
     </div>
 
-    <button type="submit" name="submit_sortie" class="btn btn-primary">Créer sortie</button>
+    <button type="submit" name="submit_sortie" class="btn btn-success">Créer sortie</button>
     {{ form_end(sortie_form) }}
+    </div>
+</div>
 
      <div class="modal fade" id="modalCreateLieu" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
@@ -66,7 +75,7 @@
                     {{ form_row(lieu_form.ville) }}
                     {{ form_row(lieu_form.latitude) }}
                     {{ form_row(lieu_form.longitude) }}
-                    <button type="submit" name="submit_lieu" class="btn btn-primary">Ajouter le lieu</button>
+                    <button type="submit" name="submit_lieu" class="btn btn-dark">Ajouter le lieu</button>
 {#                    {{ form_end(lieu_form) }}#}
                     </form>
 

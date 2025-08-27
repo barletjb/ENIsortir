@@ -78,6 +78,8 @@
         {% endfor %}
 
     </table>
-    <button href="" class="creer" type="button">CRÉER UNE SORTIE</button>
+    <a href="{{ path('sortie_edit') }}">
+        <button href="" class="btn btn-success" type="button">CRÉER UNE SORTIE</button>
+    </a>
 
 {% endblock %}

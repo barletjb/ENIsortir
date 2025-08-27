@@ -78,8 +78,9 @@ final class SortieController extends AbstractController
         $etat = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'Créée']);
 
         # A modifier quand user sera opé
-        $site = $em->getRepository(Site::class)->findOneBy(['id' => 1]);
-        $orga = $em->getRepository(User::class)->findOneBy(['id' => 1]);
+        $orga = $em->getRepository(User::class)->findOneBy(['id' => $this->getUser()->getId()]);
+        $site = $em->getRepository(Site::class)->findOneBy(['id' => $this->getUser()->getSite()->getId()]);
+
 
         $sortie = new Sortie();
         $sortie->setEtat($etat);
