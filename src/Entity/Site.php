@@ -30,13 +30,10 @@ class Site
     #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'site', orphanRemoval: true)]
     private Collection $users;
 
-
-
     public function __construct()
     {
         $this->sorties = new ArrayCollection();
         $this->participants = new ArrayCollection();
-        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -115,5 +112,4 @@ class Site
 
         return $this;
     }
-
 }

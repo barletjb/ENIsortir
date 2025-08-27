@@ -50,9 +50,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank(message: "Le prénom est obligatoire")]
     private ?string $prenom = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $confirmationToken = null;
-
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
     private bool $isActive = false;
 
@@ -68,9 +65,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean', options: ['default' => true])]
     private bool $isActif = true;
 
-    #[ORM\ManyToOne(inversedBy: 'users')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Site $site = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $avatar = null;
 
     public function getId(): ?int
     {
@@ -165,18 +161,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getConfirmationToken(): ?string
-    {
-        return $this->confirmationToken;
-    }
-
-    public function setConfirmationToken(?string $confirmationToken): static
-    {
-        $this->confirmationToken = $confirmationToken;
-
-        return $this;
-    }
-
     public function isActive(): bool
     {
         return $this->isActive;
@@ -237,14 +221,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getSite(): ?Site
+    public function getAvatar(): ?string
     {
-        return $this->site;
+        return $this->avatar;
     }
 
-    public function setSite(?Site $site): static
+    public function setAvatar(?string $avatar): static
     {
-        $this->site = $site;
+        $this->avatar = $avatar;
 
         return $this;
     }
