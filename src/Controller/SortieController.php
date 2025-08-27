@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Lieu;
 use App\Entity\Sortie;
 use App\Form\LieuType;
+use App\Form\RechercheIndexType;
 use App\Form\SortieType;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,8 +24,7 @@ final class SortieController extends AbstractController
         $form = $this->createForm(RechercheIndexType::class);
         if ($form->isSubmitted() && $form->isValid()) {
             $form->handleRequest($request);
-            return $this->redirect('sortie/index.html.twig', [
-            ]);
+            return $this->redirect('sortie/index.html.twig');
         }
 
         $sorties = $sortieRepository->findAll();
