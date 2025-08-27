@@ -45,7 +45,10 @@
             {{ form_label(form_filtre.submit) }}
             {{ form_widget(form_filtre.submit) }}
         </div>
-        {{ form_start(form_filtre) }}
+
+        {{ form_end(form_filtre) }}
+
+
     </div>
 
 
@@ -66,7 +69,7 @@
 
         {% for sortie in sorties %}
             <tr>
-                <th>{{ sortie.nom }}</th>
+               {# <th>{{ sortie.nom }}</th>
                 <th>{{ sortie.dateHeureDebut|date('d/m/Y') }}</th>
                 <th>{{ sortie.dateLimiteInscription|date('d/m/Y') }}</th>
                 <th>Todo "sortie.participant.length" / {{ sortie.nbInscriptionsMax }}  </th>
@@ -74,6 +77,22 @@
                 <th>Todo "Inscrit"</th>
                 <th>Todo "Organisateur"</th>
                 <th>Todo "Actions"</th>
+
+               #}
+
+                <th>{{ sortie.nom }}</th>
+                <th>{{ sortie.dateHeureDebut|date('d/m/Y') }}</th>
+                <th>{{ sortie.dateLimiteInscription|date('d/m/Y') }}</th>
+                <th>{{ sortie.users|length }} / {{ sortie.nbInscriptionsMax }}</th>
+                <th>{{ sortie.etat.libelle }}</th>
+                <th>{% if user in sortie.users %}{% else %}{% endif %}</th>
+                <th>{{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom }}</th>
+                <th>
+                    <a href="{{ path('sortie_detail', {id: sortie.id}) }}">Voir</a>
+                    {% if sortie.organisateur == user %}
+                        | <a href="{{ path('sortie_annuler', {id: sortie.id}) }}">Annuler</a>
+                    {% endif %}
+                </th>
             </tr>
         {% endfor %}
 
