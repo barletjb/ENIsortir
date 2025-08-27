@@ -1,1 +1,67 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    color:white;
+}
 
+
+body{
+    background: linear-gradient(180deg,rgba(59, 58, 58, 1) 0%, rgba(0, 0, 0, 1) 100%);
+
+}
+
+main{
+    height:80%;
+}
+
+footer{
+    background: black;
+    color: white;
+    height:5%;
+    text-align: center;
+}
+
+header{
+    text-align: center;
+    height:15%;
+}
+
+a{
+    text-decoration: none;
+    color:white;
+}
+
+a:hover{
+    font-size: large;
+}
+
+h1{
+    text-align: center;
+}
+
+.navbar{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.btnAdd{
+    background: rgb(210, 175, 222);
+    border-radius: 5px;
+}
+
+.btnAdd:hover{
+    background: rgb(173, 126, 194);
+
+}
+
+.btn-success{
+    background: rgb(166, 224, 183);
+    color: black;
+}
+
+.btn-success:hover{
+    background: rgb(107, 179, 127);
+    color: black;
+}

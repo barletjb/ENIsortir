@@ -68,6 +68,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean', options: ['default' => true])]
     private bool $isActif = true;
 
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Site $site = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -229,6 +233,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsActif(bool $isActif): static
     {
         $this->isActif = $isActif;
+
+        return $this;
+    }
+
+    public function getSite(): ?Site
+    {
+        return $this->site;
+    }
+
+    public function setSite(?Site $site): static
+    {
+        $this->site = $site;
 
         return $this;
     }
