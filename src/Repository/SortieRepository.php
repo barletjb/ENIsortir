@@ -17,7 +17,6 @@ class SortieRepository extends ServiceEntityRepository
     }
 
 
-
     public function findByFiltre(array $criterias, $user): array
     {
         $qb = $this->createQueryBuilder('s');
@@ -47,7 +46,7 @@ class SortieRepository extends ServiceEntityRepository
 
         if (!empty($criterias['organisateur'])) {
             $qb->andWhere('s.organisateur = :user')
-                ->setParameter('user', $user);
+                ->setParameter('user', $userId);
         }
 
         if (!empty($criterias['participant'])) {
