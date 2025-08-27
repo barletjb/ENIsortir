@@ -51,7 +51,7 @@ class Sortie
      * @var Collection<int, User>
      */
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'sorties')]
-    private Collection $user;
+    private Collection $users;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
