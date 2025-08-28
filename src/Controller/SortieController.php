@@ -14,6 +14,7 @@ use App\Repository\LieuRepository;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -67,7 +68,9 @@ final class SortieController extends AbstractController
 
         if ($request->isMethod('POST')) {
             $motif = $request->get('motif');
-            $sortie->setEtat('Annulé');
+
+            $sortie->setEtat('Annulée');
+
             $sortie->setInfosSortie(($sortie->getInfosSortie() ?? '') . " Annulée, motif: " . $motif);
 
             $em->flush();
@@ -87,13 +90,11 @@ final class SortieController extends AbstractController
     {
         $etat = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'Créée']);
 
-
         $orga = $em->getRepository(User::class)->findOneBy(['id' => $this->getUser()->getId()]);
         $site = $em->getRepository(Site::class)->findOneBy(['id' => $this->getUser()->getSite()->getId()]);
 
         $sortie = new Sortie();
         $sortie->setEtat($etat);
-
         $sortie->setSite($site);
         $sortie->setOrganisateur($orga);
         $formSortie = $this->createForm(SortieType::class, $sortie);
@@ -180,7 +181,9 @@ final class SortieController extends AbstractController
         $sortie = $em->getRepository(Sortie::class)->find($id);
 
         if (!$sortie) {
+
             $this->addFlash('error', 'La sortie demandée n\'existe pas.');
+
             return $this->redirectToRoute('sortie');
         }
 
@@ -190,8 +193,9 @@ final class SortieController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/inscription', name: '_inscription')]
-    public function inscription(Sortie $sortie, EntityManagerInterface $em): RedirectResponse
+    #[Route('/{id}/inscription', name: '_inscription', methods: ['POST'])]
+    public function inscription(Sortie $sortie, EntityManagerInterface $em): Response
+
     {
         $user = $this->getUser();
 
@@ -200,13 +204,12 @@ final class SortieController extends AbstractController
             $em->persist($sortie);
             $em->flush();
 
-            $this->addFlash('success', 'Inscription réussie à la sortie.');
+            $this->addFlash('success', 'Inscription réussie !');
         } else {
-            $this->addFlash('warning', 'Vous êtes déjà inscrit à cette sortie.');
+            $this->addFlash('info', 'Vous êtes déjà inscrit(e).');
         }
 
-        return $this->redirectToRoute('sortie_detail',  ['id' => $sortie->getId()]);
+        return $this->redirectToRoute('sortie');
     }
-
 
 }
