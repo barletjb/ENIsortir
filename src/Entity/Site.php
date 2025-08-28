@@ -35,7 +35,6 @@ class Site
     public function __construct()
     {
         $this->sorties = new ArrayCollection();
-        $this->participants = new ArrayCollection();
         $this->users = new ArrayCollection();
     }
 
