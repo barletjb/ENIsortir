@@ -181,7 +181,7 @@ final class SortieController extends AbstractController
         $sortie = $em->getRepository(Sortie::class)->find($id);
 
         if (!$sortie) {
-            $this->addFlash('error', 'La sortie demandée n’existe pas.');
+            $this->addFlash('error', 'La sortie demandée n\'existe pas.');
             return $this->redirectToRoute('sortie');
         }
 
