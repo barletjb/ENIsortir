@@ -11,9 +11,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-#[UniqueEntity(fields: ['email'], message: 'L\'email est dÃ©jÃ  utilisÃ©')]
+#[UniqueEntity(fields: ['email'], message: 'L\'email est déjà utilisé')]
 #[UniqueEntity(fields: ['pseudo'], message: 'Le pseudo n\'est pas disponible')]
-#[UniqueEntity(fields: ['telephone'], message: 'Le tÃ©lÃ©phone n\'est pas disponible')]
+#[UniqueEntity(fields: ['telephone'], message: 'Le téléphone n\'est pas disponible')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -47,7 +47,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $nom = null;
 
     #[ORM\Column(length: 50)]
-    #[Assert\NotBlank(message: "Le prÃ©nom est obligatoire")]
+    #[Assert\NotBlank(message: "Le prénom est obligatoire")]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -59,7 +59,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
     private bool $profileCompleted = false;
 
-    #[ORM\Column(length: 10, unique: true, nullable: true)]
+    #[ORM\Column(length: 10, nullable: true)]
     private ?string $telephone = null;
 
     #[ORM\Column(length: 50, unique: true, nullable: true)]

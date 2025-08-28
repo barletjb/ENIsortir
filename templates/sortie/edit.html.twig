@@ -6,15 +6,6 @@
     <div class="row justify-content-center">
         <div class="col-4">
 
-            {#        <div>#}
-            {#            Ville organisatrice :#}
-            {#            {% if user != '' %}#}
-            {#                {{ user.site.nom }}#}
-            {#            {% endif %}#}
-
-            {#        </div>#}
-
-
     {{ form_start(sortie_form) }}
     <div>
         {{ form_row(sortie_form.nom) }}
@@ -82,8 +73,9 @@
                 </div>
             </div>
         </div>
-         <script src="{{ asset('js/lieu_script.js') }}" defer></script>
     </div>
+         <script src="{{ asset('js/lieu_script.js') }}" defer></script>
+
 
 
     <script src="{{ asset('js/sortie_script.js') }}" defer></script>

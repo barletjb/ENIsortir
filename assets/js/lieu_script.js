@@ -41,7 +41,7 @@ function addLieu() {
     const lieuSelect = document.getElementById('sortie_lieu');
     const lieuForm = document.getElementById('lieu-form');
     const modalElement = document.getElementById('modalCreateLieu');
-    // const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
+    const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
 
     if (!lieuForm) {
         console.warn('Élément #lieu-form introuvable dans le DOM.');
@@ -74,6 +74,7 @@ function addLieu() {
                 } else {
                     alert('Erreur lors de l’ajout du lieu : ' + (data.errors || 'Inconnue'));
                     modal.hide();
+
                 }
             })
             .catch(err => {
