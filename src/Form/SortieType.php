@@ -46,6 +46,7 @@ class SortieType extends AbstractType
             ->add('duree',IntegerType::class,[
                 'label' => 'Durée (en minutes)',
                 'required' => false,
+
                 'attr' => [
                     'min' => 1,
                     'step' => 1,
@@ -69,14 +70,7 @@ class SortieType extends AbstractType
                 ]
 
             ])
-//            ->add('etat', EntityType::class, [
-//                'class' => Etat::class,
-//                'label' => 'Etat',
-//                'data' => "Créée",
-//                'attr' => [
-//                    'hidden' => true,
-//                ]
-//            ])
+
 
 
 

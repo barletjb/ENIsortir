@@ -15,10 +15,10 @@ use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/sortie', name: 'sortie')]
 final class SortieController extends AbstractController
@@ -179,7 +179,7 @@ final class SortieController extends AbstractController
         $sortie = $em->getRepository(Sortie::class)->find($id);
 
         if (!$sortie) {
-            $this->addFlash('error', 'La sortie demandée n’existe pas.');
+            $this->addFlash('error', 'La sortie demandée n\'existe pas.');
             return $this->redirectToRoute('sortie');
         }
 
@@ -188,5 +188,24 @@ final class SortieController extends AbstractController
             'sortie' => $sortie,
         ]);
     }
+
+    #[Route('/{id}/inscription', name: '_inscription')]
+    public function inscription(Sortie $sortie, EntityManagerInterface $em): RedirectResponse
+    {
+        $user = $this->getUser();
+
+        if (!$sortie->getUsers()->contains($user)) {
+            $sortie->addUser($user);
+            $em->persist($sortie);
+            $em->flush();
+
+            $this->addFlash('success', 'Inscription réussie à la sortie.');
+        } else {
+            $this->addFlash('warning', 'Vous êtes déjà inscrit à cette sortie.');
+        }
+
+        return $this->redirectToRoute('sortie_detail',  ['id' => $sortie->getId()]);
+    }
+
 
 }

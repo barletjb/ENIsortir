@@ -5,11 +5,12 @@
 {% block body %}
     <section>
 
-        <div>Date du jour : </div>
+        <div>Date du jour :</div>
         {% if user==null %}
-            <div>Vous devez vous connecter !!</div>
+            <div> Vous devez vous connecter !!</div>
         {% else %}
-            <div>Participant : {{ user.prenom }} {{ user.nom |first }}.</div>
+            <div> Participant : {{ user.prenom }} {{ user.nom |first }}.</div>
+
         {% endif %}
 
     </section>
@@ -27,7 +28,7 @@
         </div>
         <div>
             <label>Entre le :</label>
-             {{ form_widget(form_filtre.dateDebut) }}
+            {{ form_widget(form_filtre.dateDebut) }}
             <label>et </label>
             {{ form_widget(form_filtre.dateFin) }}
         </div>
@@ -54,55 +55,125 @@
 
         {{ form_end(form_filtre) }}
 
-
     </div>
 
-
-
-
-
-    <table>
-        <tr>
-            <th>Nom de la sortie</th>
-            <th>Date de la sortie</th>
-            <th>Clôture d'inscription</th>
-            <th>Inscrit(s)/Places</th>
-            <th>État</th>
-            <th>Inscrit</th>
-            <th>Organisateur</th>
-            <th>Actions</th>
-        </tr>
-
-        {% for sortie in sorties %}
-            <tr>
-               {# <th>{{ sortie.nom }}</th>
-                <th>{{ sortie.dateHeureDebut|date('d/m/Y') }}</th>
-                <th>{{ sortie.dateLimiteInscription|date('d/m/Y') }}</th>
-                <th>Todo "sortie.participant.length" / {{ sortie.nbInscriptionsMax }}  </th>
-                <th>{{ sortie.etat }}  </th>
-                <th>Todo "Inscrit"</th>
-                <th>Todo "Organisateur"</th>
-                <th>Todo "Actions"</th>
-
-               #}
-
-                <th>{{ sortie.nom }}</th>
-                <th>{{ sortie.dateHeureDebut|date('d/m/Y') }}</th>
-                <th>{{ sortie.dateLimiteInscription|date('d/m/Y') }}</th>
-                <th>{{ sortie.users|length }} / {{ sortie.nbInscriptionsMax }}</th>
-                <th>{{ sortie.etat.libelle }}</th>
-                <th>{% if user in sortie.users %}{% else %}{% endif %}</th>
-                <th>{{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom }}</th>
-                <th>
-                    <a href="{{ path('sortie_detail', {id: sortie.id}) }}">Voir</a>
-                    {% if sortie.organisateur == user %}
-                        | <a href="{{ path('sortie_annuler', {id: sortie.id}) }}">Annuler</a>
-                    {% endif %}
-                </th>
-            </tr>
+    <section class="sortie-list">
+        {% for sortie in sorties %} #}
+            <div>
+                {{ sortie.nom }}
+                {{ sortie.dateHeureDebut|date('d/m/Y') }}
+                {{ sortie.dateLimiteInscription|date('d/m/Y') }}
+                {{ sortie.users|length }} / {{ sortie.nbInscriptionsMax }}
+                {{ sortie.etat.libelle }}
+                {% if user in sortie.users %}#}
+                    X
+                {% else %}
+                {% endif %}
+                {{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom |first }}.
+                {% if  sortie.etat!="En création" %}
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                            data-bs-target="#modalDesistement"
+                            data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
+                        Se désister
+                    </button>
+                {% endif %}
+                {% if user in sortie.users %}#}
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                            data-bs-target="#modalDesistement"
+                            data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
+                        Se désister
+                    </button>
+                {% else %}
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#modalInscription"
+                            data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
+                        S'inscrire
+                    </button>
+                {% endif %}
+                {% if sortie.organisateur == user and sortie.etat!="Ouverte" %}
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#modalModification"
+                            data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
+                        Modifier
+                    </button>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#modalPublication"
+                            data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
+                        Publier
+                    </button>
+                {% else %}
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                            data-bs-target="#modalAnnulation"
+                            data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
+                        Annuler
+                    </button>
+                {% endif %}
+            </div>
         {% endfor %}
+    </section>
 
-    </table>
+
+    {#    <table> #}
+    {#        <tr> #}
+    {#            <th>Nom de la sortie</th> #}
+    {#            <th>Date de la sortie</th> #}
+    {#            <th>Clôture d'inscription</th> #}
+    {#            <th>Inscrit(s)/Places</th> #}
+    {#            <th>État</th> #}
+    {#            <th>Inscrit</th> #}
+    {#            <th>Organisateur</th> #}
+    {#            <th>Actions</th> #}
+    {#        </tr> #}
+    {#        {% for sortie in sorties %} #}
+    {#            <tr> #}
+    {#            <th>{{ sortie.nom }}</th> #}
+    {#            <th>{{ sortie.dateHeureDebut|date('d/m/Y') }}</th> #}
+    {#            <th>{{ sortie.dateLimiteInscription|date('d/m/Y') }}</th> #}
+    {#            <th>{{ sortie.users|length }} / {{ sortie.nbInscriptionsMax }}</th> #}
+    {#            <th>{{ sortie.etat.libelle }}</th> #}
+    {#            <th>{% if user in sortie.users %} #}
+    {#                    X #}
+    {#                    #}{#                    {% else %} #}
+    {#                {% endif %} #}
+    {#            </th> #}
+    {#            <th> #}
+    {#                    {{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom |first }}. #}
+    {#            </th> #}
+    {#            <th> #}
+    {#            <a href="{{ path('sortie_detail', {id: sortie.id}) }}">Voir</a> #}
+    {#            <a href="{{ path('sortie_annuler', {id: sortie.id}) }}">Annuler</a> #}
+    {#            <a href="{{ path('sortie_inscription', {id: sortie.id}) }}">S'inscrire</a> #}
+    {#            <a href="{{ path('sortie_desistement', {id: sortie.id}) }}">Ss désister</a> #}
+    {#            {% if user in sortie.users %} #}
+    {#            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalDesistement" #}
+    {#                    data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}"> #}
+    {#                Se désister #}
+    {#            </button> #}
+    {#            {% else %} #}
+    {#                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalInscription" #}
+    {#                        data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}"> #}
+    {#                    S'inscrire #}
+    {#                </button> #}
+    {#            {% endif %} #}
+    {#            {% if sortie.organisateur == user and sortie.etat!="Ouverte"%} #}
+    {#                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalModification" #}
+    {#                        data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}"> #}
+    {#                    Modifier #}
+    {#                </button> #}
+    {#                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalPublication" #}
+    {#                        data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}"> #}
+    {#                    Publier #}
+    {#                </button> #}
+    {#            {% else %} #}
+    {#                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalAnnulation" #}
+    {#                        data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}"> #}
+    {#                    Annuler #}
+    {#                </button> #}
+    {#            {% endif %} #}
+    {#            </tr> #}
+    {#        {% endfor %} #}
+    {#    </table> #}
+    
     <a href="{{ path('sortie_edit') }}">
         <button class="btn btn-success" type="button">CRÉER UNE SORTIE</button>
     </a>
