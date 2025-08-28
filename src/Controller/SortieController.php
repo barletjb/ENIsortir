@@ -87,14 +87,12 @@ final class SortieController extends AbstractController
     {
         $etat = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'Créée']);
 
-        # A modifier quand user sera opé
         $orga = $em->getRepository(User::class)->findOneBy(['id' => $this->getUser()->getId()]);
         $site = $em->getRepository(Site::class)->findOneBy(['id' => $this->getUser()->getSite()->getId()]);
 
-
         $sortie = new Sortie();
         $sortie->setEtat($etat);
-        # A modifier quand user sera opé
+
         $sortie->setSite($site);
         $sortie->setOrganisateur($orga);
         $formSortie = $this->createForm(SortieType::class, $sortie);

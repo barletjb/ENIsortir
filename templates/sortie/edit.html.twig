@@ -16,36 +16,39 @@
 
     {{ form_start(sortie_form) }}
     <div>
-        {{ form_label(sortie_form.nom) }}
-        {{ form_widget(sortie_form.nom) }}
+        {{ form_row(sortie_form.nom) }}
+{#        {{ form_label(sortie_form.nom) }}#}
+{#        {{ form_widget(sortie_form.nom) }}#}
     </div>
     <div>
-        {{ form_label(sortie_form.dateHeureDebut) }}
-        {{ form_widget(sortie_form.dateHeureDebut) }}
+        {{ form_row(sortie_form.dateHeureDebut) }}
+{#        {{ form_widget(sortie_form.dateHeureDebut) }}#}
     </div>
     <div>
-        {{ form_label(sortie_form.dateLimiteInscription) }}
-        {{ form_widget(sortie_form.dateLimiteInscription) }}
+        {{ form_row(sortie_form.dateLimiteInscription) }}
+{#        {{ form_widget(sortie_form.dateLimiteInscription) }}#}
     </div>
     <div>
-        {{ form_label(sortie_form.nbInscriptionsMax) }}
-        {{ form_widget(sortie_form.nbInscriptionsMax) }}
+        {{ form_row(sortie_form.nbInscriptionsMax) }}
+{#        {{ form_widget(sortie_form.nbInscriptionsMax) }}#}
     </div>
     <div>
-        {{ form_label(sortie_form.duree) }} (en minutes)
-        {{ form_widget(sortie_form.duree) }}
+        {{ form_row(sortie_form.duree) }}
+{#        {{ form_widget(sortie_form.duree) }}#}
     </div>
     <div>
-        {{ form_label(sortie_form.infosSortie) }}
-        {{ form_widget(sortie_form.infosSortie) }}
+        {{ form_row(sortie_form.infosSortie) }}
+{#        {{ form_widget(sortie_form.infosSortie) }}#}
     </div>
 
     <div>
+        {{ form_errors(sortie_form.lieu) }}
         {{ form_label(sortie_form.lieu) }}
         <button type="button" class="btnAdd" data-bs-toggle="modal" data-bs-target="#modalCreateLieu">
             +
         </button>
         {{ form_widget(sortie_form.lieu) }}
+
 
     </div>
 
@@ -68,7 +71,7 @@
                 <div class="modal-body">
                     <h1>Créer un lieu</h1>
 {#                    {{ form_start(lieu_form) }}#}
-                    <form id="lieu-form" action="{{ path('sortie_lieu_add') }}" method="POST">
+                    <form id="lieu-form" action="{{ path('sortie_lieu_add') }}" method="POST" data-turbo="false">
                         {{ form_row(lieu_form._token) }}
                     {{ form_row(lieu_form.nom) }}
                     {{ form_row(lieu_form.rue) }}
@@ -82,84 +85,10 @@
                 </div>
             </div>
         </div>
+         <script src="{{ asset('js/lieu_script.js') }}" defer></script>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const lieuSelect = document.getElementById('sortie_lieu');
-            const lieuDetails = document.getElementById('lieu-details');
-
-            if (lieuSelect) {
-                lieuSelect.addEventListener('change', function () {
-                    const lieuId = this.value;
-
-                    if (!lieuId) {
-                        lieuDetails.innerHTML = '';
-                        return;
-                    }
-
-                    fetch(`/sortie/lieu/details/${lieuId}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            lieuDetails.innerHTML = `
-                        <div>Ville : ${data.ville}</div>
-                        <div>Rue : ${data.rue}</div>
-                        <div>Code Postal : ${data.codePostal}</div>
-                        <div>Latitude : ${data.latitude}</div>
-                        <div>Longitude : ${data.longitude}</div>
-                    `;
-                        })
-                        .catch(error => {
-                            console.error('Erreur lors du chargement des détails du lieu:', error);
-                        });
-                });
-            } else {
-                console.warn('Élément #lieu-select introuvable dans le DOM.');
-            }
-        });
-    </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const lieuSelect = document.getElementById('sortie_lieu');
-            const lieuForm = document.getElementById('lieu-form');
-            const modal = bootstrap.Modal.getInstance(document.getElementById('modalCreateLieu'))
-                || new bootstrap.Modal(document.getElementById('modalCreateLieu'));
-
-            lieuForm.addEventListener('submit', function (e) {
-                e.preventDefault();
-
-                const formData = new FormData(lieuForm);
-
-                fetch('/sortie/lieu/add', {
-                    method: 'POST',
-                    body: formData
-                })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.success) {
-                            const option = document.createElement('option');
-                            option.value = data.id;
-                            option.text = data.nom;
-                            option.selected = true;
-                            lieuSelect.appendChild(option);
-
-                            lieuSelect.dispatchEvent(new Event('change'));
-
-                            modal.hide();
-
-                        } else {
-                            alert('Erreur lors de l’ajout du lieu : ' + (data.errors || 'Inconnue'));
-                        }
-                    })
-                    .catch(err => {
-                        console.error('Erreur AJAX:', err);
-                        alert('Une erreur est survenue');
-                    });
-            });
-        });
-    </script>
-
+    <script src="{{ asset('js/sortie_script.js') }}" defer></script>
 
 {% endblock %}
 
