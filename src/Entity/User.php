@@ -59,7 +59,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
     private bool $profileCompleted = false;
 
-    #[ORM\Column(length: 10, unique: true, nullable: true)]
+    #[ORM\Column(length: 10, nullable: true)]
     private ?string $telephone = null;
 
     #[ORM\Column(length: 50, unique: true, nullable: true)]
