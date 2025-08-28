@@ -197,6 +197,11 @@ final class SortieController extends AbstractController
     public function inscription(Sortie $sortie, EntityManagerInterface $em): Response
 
     {
+        if (new \DateTime() > $sortie->getdateLimiteInscription()) {
+            $this->addFlash('warning', 'Les inscriptions sont closes pour cette sortie.');
+            return $this->redirectToRoute('sortie_detail', ['id' => $sortie->getId()]);
+        }
+
         $user = $this->getUser();
 
         if (!$sortie->getUsers()->contains($user)) {
