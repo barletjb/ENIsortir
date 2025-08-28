@@ -56,9 +56,6 @@ class RechercheIndexType extends AbstractType
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Rechercher',
-                'attr' => [
-                    'class' => 'btn btn-success',
-                ]
             ])
         ;
     }
@@ -66,8 +63,7 @@ class RechercheIndexType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'method' => 'GET',
-            'csrf_protection' => false,
+            'method' => 'GET'
         ]);
     }
 }

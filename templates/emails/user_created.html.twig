@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Création de compte{% endblock %}
+
+{% block body %}
+    <p>
+        Un compte a été crée:
+        Votre email est {{ user.email }}
+        Votre mot de passe temporaire est {{ temporaryPassword }}. A CHANGER !!!
+    </p>
+    <p><a href="{{ path('app_login') }}">Pour vous connecter</a>.</p>
+{% endblock %}

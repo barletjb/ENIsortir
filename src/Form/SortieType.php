@@ -38,7 +38,7 @@ class SortieType extends AbstractType
                 'label' => 'Nombre de places',
             ])
             ->add('duree',IntegerType::class,[
-                'label' => 'Durée',
+                'label' => 'DurÃ©e',
                 'attr' => [
                     'min' => 1,
                     'step' => 1,
@@ -53,14 +53,14 @@ class SortieType extends AbstractType
                 'label' => 'Lieu',
                 'placeholder' => '-- Choisir un lieu --',
                 'choice_label' => function (Lieu $lieu) {
-                    return $lieu->getNom() ?: 'Nom non défini';
+                    return $lieu->getNom() ?: 'Nom non dÃ©fini';
                 },
 
             ])
 //            ->add('etat', EntityType::class, [
 //                'class' => Etat::class,
 //                'label' => 'Etat',
-//                'data' => "Créée",
+//                'data' => "CrÃ©Ã©e",
 //                'attr' => [
 //                    'hidden' => true,
 //                ]
