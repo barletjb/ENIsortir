@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: LieuRepository::class)]
 class Lieu
@@ -17,15 +18,19 @@ class Lieu
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Vous devez indiquer un nom de lieu')]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Vous devez indiquer un nom de rue')]
     private ?string $rue = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'Vous devez indiquer une latitude')]
     private ?float $latitude = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'Vous devez indiquer une longitude')]
     private ?float $longitude = null;
 
     /**
@@ -36,6 +41,7 @@ class Lieu
 
     #[ORM\ManyToOne(inversedBy: 'lieux')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotBlank(message: 'Vous devez indiquer une ville')]
     private ?Ville $ville = null;
 
     public function __construct()
