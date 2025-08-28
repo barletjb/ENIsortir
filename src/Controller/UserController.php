@@ -2,8 +2,6 @@
 
 namespace App\Controller;
 
-
-
 use App\Entity\User;
 use App\Form\UserType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -54,3 +52,4 @@ public function confirmation(string $email,EntityManagerInterface $em,Request $r
 
 
 }
+

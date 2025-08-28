@@ -5,6 +5,7 @@
 {% block body %}
     <section>
 
+
         <div>Date du jour :</div>
         {% if user==null %}
             <div> Vous devez vous connecter !!</div>
@@ -71,22 +72,27 @@
                         <p class="card-text mb-3"><strong>Organisateur :</strong> {{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom|first }}.</p>
 
                         <div class="mt-auto">
+{#                            {%  if  sortie.etat.libelle != "Activité en cours"%}#}
+                            <button type="button" class="btnMod" onclick="window.location.href='{{ path('sortie_detail', { id: sortie.id }) }}'">
+                                Afficher
+                            </button>
+{#                            {% endif %}#}
 
-                            {% if sortie.etat.libelle != "En création" and user in sortie.users %}
+{#                            {% if sortie.etat.libelle != "En création" and user in sortie.users %}#}
                                 <button type="button" class="btnMod" data-bs-toggle="modal"
                                         data-bs-target="#modalDesistement"
                                         data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
                                     Se désister
                                 </button>
-                            {% elseif sortie.etat.libelle != "En création" and user not in sortie.users %}
+{#                            {% elseif sortie.etat.libelle != "En création" and user not in sortie.users %}#}
                                 <button type="button" class="btnAcc" data-bs-toggle="modal"
                                         data-bs-target="#modalInscription"
                                         data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
                                     S'inscrire
                                 </button>
-                            {% endif %}
+{#                            {% endif %}#}
 
-                            {% if sortie.organisateur == user and sortie.etat.libelle != "Ouverte" %}
+{#                            {% if sortie.organisateur == user and sortie.etat.libelle != "Ouverte" %}#}
                                 <button type="button" class="btnMod" data-bs-toggle="modal"
                                         data-bs-target="#modalModification"
                                         data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
@@ -97,13 +103,13 @@
                                         data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
                                     Publier
                                 </button>
-                            {% else %}
+{#                            {% else %}#}
                                 <button type="button" class="btnMod" data-bs-toggle="modal"
                                         data-bs-target="#modalAnnulation"
                                         data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
                                     Annuler
                                 </button>
-                            {% endif %}
+{#                            {% endif %}#}
                         </div>
                     </div>
                 </div>
@@ -112,6 +118,90 @@
         {% endfor %}
     </div>
 
+    <div class="modal fade" id="modalInscription" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Confirmation d'inscription</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Voulez-vous vous inscrire à la sortie <strong id="sortieNom"></strong> ?</p>
+                </div>
+                <div class="modal-footer">
+                    <form id="inscriptionForm" method="post" action="">
+                        <input type="hidden" name="sortie_id" id="sortieIdInput">
+                        <button type="button" class="btnMod" data-bs-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btnAcc">Confirmer</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+            function inscription() {
+            const modal = document.getElementById('modalInscription');
+            modal.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                const sortieId = button.getAttribute('data-id');
+                const sortieNom = button.getAttribute('data-nom');
+
+                document.getElementById('sortieNom').textContent = sortieNom;
+                document.getElementById('sortieIdInput').value = sortieId;
+
+                document.getElementById('inscriptionForm').action = '/sortie/' + sortieId + '/inscription';
+            });
+        };
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', inscription);
+            } else {
+              inscription();
+        };
+    </script>
+
+    <div class="modal fade" id="modalDesistement" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Confirmation de désistement</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Voulez-vous vous désister de la sortie <strong id="sortieNom"></strong> ?</p>
+                </div>
+                <div class="modal-footer">
+                    <form id="desistementForm" method="post" action="">
+                        <input type="hidden" name="sortie_id" id="sortieIdInput">
+                        <button type="button" class="btnMod" data-bs-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btnAcc">Confirmer</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function desistement() {
+            const modal = document.getElementById('modalDesistement');
+            modal.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                const sortieId = button.getAttribute('data-id');
+                const sortieNom = button.getAttribute('data-nom');
+
+                document.getElementById('sortieNom').textContent = sortieNom;
+                document.getElementById('sortieIdInput').value = sortieId;
+
+                document.getElementById('desistementForm').action = '/sortie/' + sortieId + '/desistement';
+            });
+
+        };
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', desistement);
+        } else {
+            desistement();
+        }
+    </script>
 
     {#    <table> #}
     {#        <tr> #}
@@ -173,9 +263,9 @@
     {#            </tr> #}
     {#        {% endfor %} #}
     {#    </table> #}
-    
+
     <a href="{{ path('sortie_edit') }}">
-        <button class="btn btn-success" type="button">CRÉER UNE SORTIE</button>
+        <button href="" class="btn btn-success" type="button">CRÃ‰ER UNE SORTIE</button>
     </a>
 
 {% endblock %}

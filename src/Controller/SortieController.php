@@ -38,7 +38,7 @@ final class SortieController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $criterias = $form->getData();
             //$userId = $this->getUser()->getId();
-            $sorties = $sortieRepository->findByFiltre($criterias,$this->getUser());
+            $sorties = $sortieRepository->findByFiltre($criterias, $this->getUser());
         } else {
             $sorties = $sortieRepository->findAll();
         }
@@ -84,13 +84,91 @@ final class SortieController extends AbstractController
         ]);
     }
 
+    #[Route('/profil/{id}', name: '_user_profil')]
+    public function afficherProfil(User $user): Response
+    {
+        return $this->render('user/profil.html.twig', [
+            'user' => $user,
+        ]);
+    }
 
-    #[Route('/edit',name: '_edit')]
-    public function editSortie(Request $request, EntityManagerInterface $em) : Response
+    #[Route('/{id}/inscription', name: '_inscription', methods: ['POST'])]
+    public function inscription(Sortie $sortie, EntityManagerInterface $em): RedirectResponse
+    {
+        $user = $this->getUser();
+        $nbUsers = count($em->getRepository(User::class)->findAll());
+        $date = new \DateTime();
+
+        if ($date <= $sortie->getDateLimiteInscription()) {
+            if ($nbUsers < $sortie->getNbInscriptionsMax()) {
+                if (!$sortie->getUsers()->contains($user)) {
+                    $sortie->addUser($user);
+                    $em->persist($sortie);
+                    $em->flush();
+                    $this->addFlash('success', 'Inscription réussie !');
+                } else {
+                    $this->addFlash('info', 'Vous êtes déjà inscrit(e).');
+                }
+            } else {
+                $this->addFlash('info', 'Le nombre maximal de personne est atteint. Une prochaine fois, peut-être...');
+            }
+        } else {
+            $this->addFlash('info', 'La date de clôture des inscriptions est atteinte !');
+        }
+        return $this->redirectToRoute('sortie');
+
+    }
+
+    #[Route('/{id}/desistement', name: '_desistement', methods: ['POST'])]
+    public function desistement(Sortie $sortie, EntityManagerInterface $em): RedirectResponse
+    {
+        $user = $this->getUser();
+
+
+        if ($sortie->getUsers()->contains($user)) {
+            $sortie->removeUser($user);
+            $em->persist($sortie);
+            $em->flush();
+            $this->addFlash('success', 'Désistement réussi !');
+        } else {
+            $this->addFlash('info', 'Vous n\'êtes pas inscrit(e) à cette sortie.');
+        }
+
+        return $this->redirectToRoute('sortie');
+
+    }
+
+
+    #[Route('/{id}/annulation', name: '_annulation', methods: ['POST'])]
+    public function annulation(Sortie $sortie, Request $request, EntityManagerInterface $em): RedirectResponse
+    {
+        if ($sortie->getEtat()->getLibelle() === 'Activité en cours') {
+            $this->addFlash('info', 'La sortie ne peut pas être annulée car elle est en cours.');
+            return $this->redirectToRoute('sortie');
+        }
+        $user = $this->getUser();
+        $raison = $request->request->get('raison_annulation');
+
+        if ($sortie->getOrganisateur()->contains($user) || $user->getRoles() === 'ROLE_ADMIN') {
+            $sortie->setEtat('Annulée');
+            $sortie->setRaisonAnnulation($raison);
+            $em->persist($sortie);
+            $em->flush();
+
+            $this->addFlash('success', 'La sortie a été annulée avec la raison : ' . $raison);
+
+            return $this->redirectToRoute('sortie');
+        }
+    }
+
+
+    #[Route('/edit', name: '_edit')]
+    public function editSortie(Request $request, EntityManagerInterface $em): Response
     {
         $etat = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'Créée']);
 
         $orga = $em->getRepository(User::class)->findOneBy(['id' => $this->getUser()->getId()]);
+
         $site = $em->getRepository(Site::class)->findOneBy(['id' => $this->getUser()->getSite()->getId()]);
 
         $sortie = new Sortie();
@@ -197,28 +275,6 @@ final class SortieController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/inscription', name: '_inscription', methods: ['POST'])]
-    public function inscription(Sortie $sortie, EntityManagerInterface $em): Response
 
-    {
-        if (new \DateTime() > $sortie->getdateLimiteInscription()) {
-            $this->addFlash('warning', 'Les inscriptions sont closes pour cette sortie.');
-            return $this->redirectToRoute('sortie_detail', ['id' => $sortie->getId()]);
-        }
-
-        $user = $this->getUser();
-
-        if (!$sortie->getUsers()->contains($user)) {
-            $sortie->addUser($user);
-            $em->persist($sortie);
-            $em->flush();
-
-            $this->addFlash('success', 'Inscription réussie !');
-        } else {
-            $this->addFlash('info', 'Vous êtes déjà inscrit(e).');
-        }
-
-        return $this->redirectToRoute('sortie');
-    }
 
 }
