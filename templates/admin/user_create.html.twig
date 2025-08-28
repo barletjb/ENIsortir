@@ -7,6 +7,7 @@
         <div class="col-4">
 
             {{ form_start(form, {'attr': {'data-turbo': 'false'}}) }}
+            {{ form_row(form.avatar) }}
             {{ form_row(form.site) }}
             {{ form_row(form.email) }}
             {{ form_row(form.nom) }}
