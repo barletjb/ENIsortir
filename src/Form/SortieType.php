@@ -34,11 +34,11 @@ class SortieType extends AbstractType
                 'label' => 'Date limite d\'inscription',
                 'widget' => 'single_text',
             ])
-            ->add('nbInscriptionsMax',TextType::class,[
+            ->add('nbInscriptionsMax',IntegerType::class,[
                 'label' => 'Nombre de places',
             ])
             ->add('duree',IntegerType::class,[
-                'label' => 'Durée',
+                'label' => 'DurÃ©e',
                 'attr' => [
                     'min' => 1,
                     'step' => 1,
@@ -53,14 +53,16 @@ class SortieType extends AbstractType
                 'label' => 'Lieu',
                 'placeholder' => '-- Choisir un lieu --',
                 'choice_label' => function (Lieu $lieu) {
-                    return $lieu->getNom();
+                    return $lieu->getNom() ?: 'Nom non dÃ©fini';
                 },
+
             ])
 //            ->add('etat', EntityType::class, [
 //                'class' => Etat::class,
 //                'label' => 'Etat',
+//                'data' => "CrÃ©Ã©e",
 //                'attr' => [
-//                    'value' => "Créée"
+//                    'hidden' => true,
 //                ]
 //            ])
 
