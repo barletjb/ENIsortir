@@ -26,11 +26,11 @@ class Lieu
     private ?string $rue = null;
 
     #[ORM\Column]
-    #[Assert\NotBlank(message: 'Vous devez indiquer une latitude')]
+//    #[Assert\NotBlank(message: 'Vous devez indiquer une latitude')]
     private ?float $latitude = null;
 
     #[ORM\Column]
-    #[Assert\NotBlank(message: 'Vous devez indiquer une longitude')]
+//    #[Assert\NotBlank(message: 'Vous devez indiquer une longitude')]
     private ?float $longitude = null;
 
     /**
