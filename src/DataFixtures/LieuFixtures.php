@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Lieu;
+use App\Entity\Ville;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -16,7 +17,7 @@ class LieuFixtures extends Fixture implements DependentFixtureInterface
 
         $villes = [];
         for ($i = 0; $i < 7; $i++) {
-            $villes[] = $this->getReference("ville_$i");
+            $villes[] = $this->getReference("ville_$i", Ville::class);
         }
 
 

@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\User;
+use App\Entity\Site;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -31,7 +32,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $admin->setNom("Grand");
         $admin->setIsActif(true);
         $admin->setIsActive(true);
-        $admin->setSite($this->getReference("site_0"));
+        $admin->setSite($this->getReference("site_0", Site::class));
         $admin->setPassword($this->hasher->hashPassword($admin, "123456"));
         $manager->persist($admin);
 
@@ -47,7 +48,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             $user->setIsActive(true);
 
             $siteIndex = $faker->numberBetween(0, 2);
-            $user->setSite($this->getReference("site_{$siteIndex}"));
+            $user->setSite($this->getReference("site_{$siteIndex}", Site::class));
 
             $user->setPassword($this->hasher->hashPassword($user, "123456"));
             $manager->persist($user);

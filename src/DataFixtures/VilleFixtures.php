@@ -26,7 +26,7 @@ class VilleFixtures extends Fixture
             $ville->setCodePostal($data['codePostal']);
             $manager->persist($ville);
 
-            // ✅ Ajout de la référence
+
             $this->addReference("ville_$index", $ville);
         }
 
