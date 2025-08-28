@@ -46,6 +46,38 @@ h1{
     justify-content: space-around;
 }
 
+.sortie-list{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    grid-gap: 10em;
+    border: #997404 2px solid;
+    border-radius: 15px;
+
+}
+
+.btnAcc{
+    background: rgb(166, 224, 183);
+    border-radius: 5px;
+    color: black;
+}
+
+.btnAcc:hover{
+    background: rgb(107, 179, 127);
+    color: black;
+}
+
+
+.btnMod{
+    background: rgb(227, 98, 98);
+    border-radius: 5px;
+}
+
+.btnMod:hover{
+    background: rgb(213, 59, 59);
+
+}
+
 .btnAdd{
     background: rgb(210, 175, 222);
     border-radius: 5px;

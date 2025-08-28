@@ -87,6 +87,7 @@ final class SortieController extends AbstractController
     {
         $etat = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'Créée']);
 
+
         $orga = $em->getRepository(User::class)->findOneBy(['id' => $this->getUser()->getId()]);
         $site = $em->getRepository(Site::class)->findOneBy(['id' => $this->getUser()->getSite()->getId()]);
 
