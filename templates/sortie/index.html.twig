@@ -61,8 +61,8 @@
         {% for sortie in sorties %} #}
             <div>
                 {{ sortie.nom }}
-                {{ sortie.dateHeureDebut|date('d/m/Y') }}
-                {{ sortie.dateLimiteInscription|date('d/m/Y') }}
+{#                {{ sortie.dateHeureDebut|date('d/m/Y') }}#}
+{#                {{ sortie.dateLimiteInscription|date('d/m/Y') }}#}
                 {{ sortie.users|length }} / {{ sortie.nbInscriptionsMax }}
                 {{ sortie.etat.libelle }}
                 {% if user in sortie.users %}#}
