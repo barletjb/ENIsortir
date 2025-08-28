@@ -57,6 +57,9 @@ class Sortie
     #[ORM\JoinColumn(nullable: false)]
     private ?User $organisateur = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $raisonAnnulation = null;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -215,6 +218,18 @@ class Sortie
     {
         $this->organisateur = $organisateur;
 
+
+        return $this;
+    }
+
+    public function getRaisonAnnulation(): ?string
+    {
+        return $this->raisonAnnulation;
+    }
+
+    public function setRaisonAnnulation(?string $raisonAnnulation): static
+    {
+        $this->raisonAnnulation = $raisonAnnulation;
 
         return $this;
     }
