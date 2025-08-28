@@ -5,11 +5,13 @@
 {% block body %}
     <section>
 
+
         <div>Date du jour :</div>
         {% if user==null %}
             <div> Vous devez vous connecter !!</div>
         {% else %}
             <div> Participant : {{ user.prenom }} {{ user.nom |first }}.</div>
+
         {% endif %}
 
     </section>

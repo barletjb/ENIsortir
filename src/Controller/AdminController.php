@@ -8,13 +8,25 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class AdminController extends AbstractController
 {
+    /**
+     * @throws TransportExceptionInterface
+     * @throws RandomException
+     */
     #[Route('/admin/create-user', name: 'admin_user_create')]
-    public function create(Request $request, EntityManagerInterface $em): Response
-    {
+    public function create(
+        Request $request,
+        EntityManagerInterface $em,
+        UserPasswordHasherInterface $passwordHasher,
+        MailerInterface $mailer
+    ): Response {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
         $user = new User();
@@ -23,19 +35,30 @@ final class AdminController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $user->setConfirmationToken(uniqid('token_', true));
-
-            $user->setIsActive(false);
+            $user->setIsActive(true);
             $user->setProfileCompleted(false);
-
             $user->setRoles(['ROLE_USER']);
 
-            $user->setPassword('');
+            $temporaryPassword = bin2hex(random_bytes(4));
+
+            $hashedPassword = $passwordHasher->hashPassword($user, $temporaryPassword);
+            $user->setPassword($hashedPassword);
 
             $em->persist($user);
             $em->flush();
 
-            // ENVOYER MAIL CONFIRMATION
+            $email = (new Email())
+                ->from('admin@campus-eni.fr')
+                ->to($user->getEmail())
+                ->subject('Création de votre compte')
+                ->html(
+                    $this->renderView('emails/user_created.html.twig', [
+                        'user' => $user,
+                        'temporaryPassword' => $temporaryPassword,
+                    ])
+                );
+
+            $mailer->send($email);
 
             $this->addFlash('success', 'Utilisateur créé avec succès. Un email d’activation a été envoyé.');
 

@@ -10,37 +10,34 @@
               integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
               crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-{#        <link rel="stylesheet" href="{{ asset('styles/app.css') }}">#}
+        <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
     {% endblock %}
 </head>
 <body>
 <header>
-
+    <nav>
         <h1 >
-            <a href="{{ path('sortie') }}" class="">
-                <img src="{{ asset('') }}" alt="">
+{#            <a href="{{ path('') }}" class="">#}
+{#                <img src="{{ asset('') }}" alt="">#}
                 ENI - Sortir
             </a>
         </h1>
-    <nav>
-    <div class="navbar">
-             <a href="{{ path('sortie') }}"><i class="bi bi-grid"></i> Accueil </a>
+        <ul>
+            {# <li><a href="{{ path('') }}"><i class="bi bi-grid"></i> Accueil </a></li> #}
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                 {% if is_granted('ROLE_ADMIN') %}
-                 <a href="{{ path('admin_user_create') }}"><i class="bi bi-plus-circle"></i> Créer Profil</a>
-                    {#                <a href="{{ path('') }}"><i class=""></i> Villes</a>#}
-                    {#                <a href="{{ path('') }}"><i class=""></i> Sites</a>#}
+                 <li><a href="{{ path('admin_user_create') }}"><i class="bi bi-plus-circle"></i> Créer Profil</a></li>
+                    {#                <li><a href="{{ path('') }}"><i class=""></i> Villes</a></li>#}
+                    {#                <li><a href="{{ path('') }}"><i class=""></i> Sites</a></li>#}
                 {% endif %}
-{#                <a href="{{ path('') }}"><i class=""></i> Mon Profil</a>#}
-                <a href="{{ path('app_logout') }}"><i class="bi bi-box-arrow-right"></i> Se déconnecter</a>
+{#                <li><a href="{{ path('') }}"><i class=""></i> Mon Profil</a></li>#}
+                <li><a href="{{ path('app_logout') }}"><i class="bi bi-box-arrow-right"></i> Se déconnecter</a></li>
             {% else %}
-                <a href="{{ path('app_login') }}"><i class="bi bi-box-arrow-in-right"></i>Se connecter</a>
+                <li><a href="{{ path('app_login') }}"><i class="bi bi-box-arrow-in-right"></i>Se connecter</a></li>
             {% endif %}
-    </div>
+        </ul>
     </nav>
 </header>
-
-<main>
 
 {% for type, messages in app.flashes %}
     {% for message in messages %}
@@ -51,7 +48,6 @@
 {% endfor %}
 
 {% block body %}{% endblock %}
-</main>
 
 <footer>
     © Eni - Sortir {{ 'now'|date('Y') }}
