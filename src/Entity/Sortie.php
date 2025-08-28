@@ -7,7 +7,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use http\Message;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[ORM\Entity(repositoryClass: SortieRepository::class)]
 class Sortie
@@ -18,18 +21,26 @@ class Sortie
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank(message: 'Vous devez indiquer un nom de sortie')]
     private ?string $nom = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Assert\NotNull(message: 'Vous devez indiquer une date de début')]
+    #[Assert\GreaterThan('today', message: 'La date de début de la sortie doit être postérieure à aujourd\hui')]
     private ?\DateTime $dateHeureDebut = null;
 
-    #[ORM\Column]
-    private ?int $duree = null;
 
     #[ORM\Column]
+    #[Assert\NotNull(message: 'Vous devez indiquer une durée')]
+    private ?int $duree = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\NotNull(message: 'Vous devez indiquer une date de fin d\'inscription')]
+    #[Assert\LessThan(propertyPath: 'dateHeureDebut')]
     private ?\DateTime $dateLimiteInscription = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message:'Vous devez indiquer un nombre de place max')]
     private ?int $nbInscriptionsMax = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -45,6 +56,7 @@ class Sortie
 
     #[ORM\ManyToOne(inversedBy: 'sorties')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message:'Vous devez indiquer un lieu pour la sortie')]
     private ?Lieu $lieu = null;
 
     /**
@@ -87,7 +99,7 @@ class Sortie
         return $this->dateHeureDebut;
     }
 
-    public function setDateHeureDebut(\DateTime $dateHeureDebut): static
+    public function setDateHeureDebut(?\DateTime $dateHeureDebut): static
     {
         $this->dateHeureDebut = $dateHeureDebut;
 
@@ -111,7 +123,7 @@ class Sortie
         return $this->dateLimiteInscription;
     }
 
-    public function setDateLimiteInscription(\DateTime $dateLimiteInscription): static
+    public function setDateLimiteInscription(?\DateTime $dateLimiteInscription): static
     {
         $this->dateLimiteInscription = $dateLimiteInscription;
 

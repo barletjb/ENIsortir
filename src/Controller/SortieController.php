@@ -136,7 +136,7 @@ final class SortieController extends AbstractController
 
 
     #[Route('/{id}/annulation', name: '_annulation', methods: ['POST'])]
-    public function annulation2(Sortie $sortie, Request $request, EntityManagerInterface $em): RedirectResponse
+    public function annulation(Sortie $sortie, Request $request, EntityManagerInterface $em): RedirectResponse
     {
         if ($sortie->getEtat()->getLibelle() === 'Activité en cours') {
             $this->addFlash('info', 'La sortie ne peut pas être annulée car elle est en cours.');
@@ -163,9 +163,8 @@ final class SortieController extends AbstractController
     {
         $etat = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'Créée']);
 
-               $orga = $em->getRepository(User::class)->findOneBy(['id' => $this->getUser()->getId()]);
+                $orga = $em->getRepository(User::class)->findOneBy(['id' => $this->getUser()->getId()]);
         $site = $em->getRepository(Site::class)->findOneBy(['id' => $this->getUser()->getSite()->getId()]);
-
 
         $sortie = new Sortie();
         $sortie->setEtat($etat);
@@ -198,7 +197,7 @@ final class SortieController extends AbstractController
 //            return $this->redirectToRoute('sortie_edit');
         }
 
-        return $this->render('sortie/edit.html.twig', [
+        return $this->render('sortie/edit.html.twig',[
             'lieu' => $sortie->getLieu(),
             'user' => $this->getUser(),
             'sortie_form' => $formSortie,
@@ -246,7 +245,7 @@ final class SortieController extends AbstractController
 
         return new JsonResponse([
             'success' => false,
-            'errors' => (string)$form->getErrors(true, false)
+            'errors' => (string) $form->getErrors(true, false)
         ], 400);
     }
 
