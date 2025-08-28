@@ -14,6 +14,7 @@ use App\Repository\LieuRepository;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -67,12 +68,12 @@ final class SortieController extends AbstractController
 
         if ($request->isMethod('POST')) {
             $motif = $request->get('motif');
-            $sortie->setEtat('AnnulÃ©');
-            $sortie->setInfosSortie(($sortie->getInfosSortie() ?? '') . " AnnulÃ©e, motif: " . $motif);
+            $sortie->setEtat('Annulée');
+            $sortie->setInfosSortie(($sortie->getInfosSortie() ?? '') . " Annulée, motif: " . $motif);
 
             $em->flush();
 
-            $this->addFlash('success', 'La sortie a Ã©tÃ© annulÃ©e.');
+            $this->addFlash('success', 'La sortie a été annulée.');
             return $this->redirectToRoute('sortie');
         }
 
@@ -85,16 +86,16 @@ final class SortieController extends AbstractController
     #[Route('/edit',name: '_edit')]
     public function editSortie(Request $request, EntityManagerInterface $em) : Response
     {
-        $etat = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'CrÃ©Ã©e']);
+        $etat = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'Créée']);
 
-        # A modifier quand user sera opÃ©
+        # A modifier quand user sera opé
         $orga = $em->getRepository(User::class)->findOneBy(['id' => $this->getUser()->getId()]);
         $site = $em->getRepository(Site::class)->findOneBy(['id' => $this->getUser()->getSite()->getId()]);
 
 
         $sortie = new Sortie();
         $sortie->setEtat($etat);
-        # A modifier quand user sera opÃ©
+        # A modifier quand user sera opé
         $sortie->setSite($site);
         $sortie->setOrganisateur($orga);
         $formSortie = $this->createForm(SortieType::class, $sortie);
@@ -111,7 +112,7 @@ final class SortieController extends AbstractController
             $em->persist($sortie);
             $em->flush();
 
-            $this->addFlash('success', 'Nouvelle sortie crÃ©Ã©e');
+            $this->addFlash('success', 'Nouvelle sortie créée');
             return $this->redirectToRoute('sortie');
         }
 
@@ -119,7 +120,7 @@ final class SortieController extends AbstractController
             $em->persist($lieu);
             $em->flush();
 
-            $this->addFlash('success', 'Nouveau lieu crÃ©Ã©');
+            $this->addFlash('success', 'Nouveau lieu créé');
 //            return $this->redirectToRoute('sortie_edit');
         }
 
@@ -138,7 +139,7 @@ final class SortieController extends AbstractController
         $lieu = $lieuRepository->find($id);
 
         if (!$lieu) {
-            return new JsonResponse(['error' => 'Lieu non trouvÃ©'], 404);
+            return new JsonResponse(['error' => 'Lieu non trouvé'], 404);
         }
 
         return new JsonResponse([
@@ -181,7 +182,7 @@ final class SortieController extends AbstractController
         $sortie = $em->getRepository(Sortie::class)->find($id);
 
         if (!$sortie) {
-            $this->addFlash('error', 'La sortie demandÃ©e nâ€™existe pas.');
+            $this->addFlash('error', 'La sortie demandée n existe pas.');
             return $this->redirectToRoute('sortie');
         }
 
@@ -189,6 +190,23 @@ final class SortieController extends AbstractController
         return $this->render('sortie/detail.html.twig', [
             'sortie' => $sortie,
         ]);
+    }
+
+    #[Route('/{id}/inscription', name: '_inscription', methods: ['POST'])]
+    public function inscription(Sortie $sortie, EntityManagerInterface $em): Response
+    {
+        $user = $this->getUser();
+
+        if (!$sortie->getUsers()->contains($user)) {
+            $sortie->addUser($user);
+            $em->persist($sortie);
+            $em->flush();
+            $this->addFlash('success', 'Inscription réussie !');
+        } else {
+            $this->addFlash('info', 'Vous êtes déjà inscrit(e).');
+        }
+
+        return $this->redirectToRoute('sortie');
     }
 
 }
