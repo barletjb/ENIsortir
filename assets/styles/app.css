@@ -107,3 +107,9 @@ h1{
     background: rgb(107, 179, 127);
     color: black;
 }
+
+.photo{
+    float: right;
+    max-width: 40%;
+    height: auto;
+}
