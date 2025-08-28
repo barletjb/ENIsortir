@@ -51,6 +51,8 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             $user->setSite($this->getReference("site_{$siteIndex}", Site::class));
 
             $user->setPassword($this->hasher->hashPassword($user, "123456"));
+            $user->setPhoto('default.jpg');
+
             $manager->persist($user);
 
             $this->addReference("user_{$i}", $user);

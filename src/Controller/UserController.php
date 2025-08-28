@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Sortie;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

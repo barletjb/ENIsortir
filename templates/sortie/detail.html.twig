@@ -17,12 +17,31 @@
     <h2>Description</h2>
     <p>{{ sortie.infosSortie }}</p>
 
-    <h2>Participants inscrits</h2>
-    <ul>
-        {% for user in sortie.users %}
-            <li>{{ user.pseudo }} - {{ user.nom }}</li>
-        {% else %}
-            <li>Aucun participant inscrit</li>
-        {% endfor %}
-    </ul>
+
+<h2>Participants inscrits</h2>
+<ul>
+    {% for user in sortie.users %}
+        <li>
+            <a href="{{ path('user_profil', {id: user.id}) }}">
+                {{ user.pseudo }} - {{ user.nom }}
+            </a>
+        </li>
+    {% else %}
+        <li>Aucun participant inscrit</li>
+    {% endfor %}
+
+    {% if sortie.dateLimiteInscription > "now"|date %}
+    {% if not sortie.users.contains(app.user) %}
+    <form method="post" action="{{ path('sortie_inscription', {id: sortie.id}) }}">
+    <button type="submit" class="btn btn-success">Je participe</button>
+    </form>
+    {% else %}
+    <p class="text-success">Vous êtes déjà inscrit(e) à cette sortie.</p>
+    {% endif %}
+    {% else %}
+    <button class="btn btn-secondary" disabled>Inscriptions closes</button>
+    {% endif %}
+
+</ul>
+
 {% endblock %}

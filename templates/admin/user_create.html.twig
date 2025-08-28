@@ -3,15 +3,23 @@
 {% block body %}
     <h1>Créer un utilisateur</h1>
 
-    {{ form_start(form) }}
-    {{ form_row(form.avatar) }}
-    {{ form_row(form.email) }}
-    {{ form_row(form.nom) }}
-    {{ form_row(form.prenom) }}
-    {{ form_row(form.pseudo) }}
-    {{ form_row(form.telephone) }}
-    {{ form_row(form.temporaryPassword) }}
+    <div class="row justify-content-center">
+        <div class="col-4">
 
-    <button type="submit" class="btn btn-success">Créer</button>
-    {{ form_end(form) }}
+            {{ form_start(form, {'attr': {'data-turbo': 'false'}}) }}
+            {{ form_row(form.site) }}
+            {{ form_row(form.email) }}
+            {{ form_row(form.nom) }}
+            {{ form_row(form.prenom) }}
+            {{ form_row(form.pseudo) }}
+            {{ form_row(form.telephone) }}
+            {{ form_widget(form._token) }}
+
+            {#        {{ form(form) }}#}
+
+            <button type="submit" class="btn btn-success">Créer</button>
+            {{ form_end(form, {'render_rest': false}) }}
+
+        </div>
+    </div>
 {% endblock %}
