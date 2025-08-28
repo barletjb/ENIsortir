@@ -1,21 +1,22 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-<h1>Afficher une sortie</h1>
+    <h1>Afficher une sortie</h1>
 
-<p>Date et heure : {{ sortie.dateHeureDebut|date('d/m/Y H:i') }}</p>
-<p>Durée : {{ sortie.duree }} minutes</p>
-<p>Date limite d'inscription : {{ sortie.dateLimiteInscription|date('d/m/Y') }}</p>
-<p>Nombre de places : {{ sortie.nbInscriptionsMax }}</p>
+    <p>Date et heure : {{ sortie.dateHeureDebut|date('d/m/Y H:i') }}</p>
+    <p>Durée : {{ sortie.duree }} minutes</p>
+    <p>Date limite d'inscription : {{ sortie.dateLimiteInscription|date('d/m/Y') }}</p>
+    <p>Nombre de places : {{ sortie.nbInscriptionsMax }}</p>
 
-<h2>Lieu</h2>
-<p>Ville : {{ sortie.lieu.ville.nom }}</p>
-<p>Rue : {{ sortie.lieu.rue }}</p>
-<p>Code postal : {{ sortie.lieu.ville.codePostal }}</p>
-<p>Latitude : {{ sortie.lieu.latitude }}</p>
-<p>Longitude : {{ sortie.lieu.longitude }}</p>
+    <h2>Lieu</h2>
+    <p>Ville : {{ sortie.lieu.ville.nom }}</p>
+    <p>Rue : {{ sortie.lieu.rue }}</p>
+    <p>Code postal : {{ sortie.lieu.ville.codePostal }}</p>
+    <p>Latitude : {{ sortie.lieu.latitude }}</p>
+    <p>Longitude : {{ sortie.lieu.longitude }}</p>
 
-<h2>Description</h2>
-<p>{{ sortie.infosSortie }}</p>
+    <h2>Description</h2>
+    <p>{{ sortie.infosSortie }}</p>
+
 
 <h2>Participants inscrits</h2>
 <ul>
@@ -37,4 +38,5 @@
         <p class="text-success"> Vous êtes déjà inscrit(e) à cette sortie.</p>
     {% endif %}
 </ul>
+
 {% endblock %}

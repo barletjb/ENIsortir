@@ -16,10 +16,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/sortie', name: 'sortie')]
 final class SortieController extends AbstractController
@@ -68,7 +68,9 @@ final class SortieController extends AbstractController
 
         if ($request->isMethod('POST')) {
             $motif = $request->get('motif');
+
             $sortie->setEtat('Annulée');
+
             $sortie->setInfosSortie(($sortie->getInfosSortie() ?? '') . " Annulée, motif: " . $motif);
 
             $em->flush();
@@ -88,14 +90,11 @@ final class SortieController extends AbstractController
     {
         $etat = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'Créée']);
 
-        # A modifier quand user sera opé
         $orga = $em->getRepository(User::class)->findOneBy(['id' => $this->getUser()->getId()]);
         $site = $em->getRepository(Site::class)->findOneBy(['id' => $this->getUser()->getSite()->getId()]);
 
-
         $sortie = new Sortie();
         $sortie->setEtat($etat);
-        # A modifier quand user sera opé
         $sortie->setSite($site);
         $sortie->setOrganisateur($orga);
         $formSortie = $this->createForm(SortieType::class, $sortie);
@@ -182,7 +181,9 @@ final class SortieController extends AbstractController
         $sortie = $em->getRepository(Sortie::class)->find($id);
 
         if (!$sortie) {
-            $this->addFlash('error', 'La sortie demandée n existe pas.');
+
+            $this->addFlash('error', 'La sortie demandée n\'existe pas.');
+
             return $this->redirectToRoute('sortie');
         }
 
@@ -194,6 +195,7 @@ final class SortieController extends AbstractController
 
     #[Route('/{id}/inscription', name: '_inscription', methods: ['POST'])]
     public function inscription(Sortie $sortie, EntityManagerInterface $em): Response
+
     {
         $user = $this->getUser();
 
@@ -201,6 +203,7 @@ final class SortieController extends AbstractController
             $sortie->addUser($user);
             $em->persist($sortie);
             $em->flush();
+
             $this->addFlash('success', 'Inscription réussie !');
         } else {
             $this->addFlash('info', 'Vous êtes déjà inscrit(e).');
