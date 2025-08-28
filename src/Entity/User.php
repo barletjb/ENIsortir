@@ -11,9 +11,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-#[UniqueEntity(fields: ['email'], message: 'L\'email est déjà utilisé')]
+#[UniqueEntity(fields: ['email'], message: 'L\'email est dÃ©jÃ  utilisÃ©')]
 #[UniqueEntity(fields: ['pseudo'], message: 'Le pseudo n\'est pas disponible')]
-#[UniqueEntity(fields: ['telephone'], message: 'Le téléphone n\'est pas disponible')]
+#[UniqueEntity(fields: ['telephone'], message: 'Le tÃ©lÃ©phone n\'est pas disponible')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -47,8 +47,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $nom = null;
 
     #[ORM\Column(length: 50)]
-    #[Assert\NotBlank(message: "Le prénom est obligatoire")]
+    #[Assert\NotBlank(message: "Le prÃ©nom est obligatoire")]
     private ?string $prenom = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $confirmationToken = null;
 
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
     private bool $isActive = false;
@@ -65,8 +68,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean', options: ['default' => true])]
     private bool $isActif = true;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $avatar = null;
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Site $site = null;
 
     public function getId(): ?int
     {
@@ -161,6 +165,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getConfirmationToken(): ?string
+    {
+        return $this->confirmationToken;
+    }
+
+    public function setConfirmationToken(?string $confirmationToken): static
+    {
+        $this->confirmationToken = $confirmationToken;
+
+        return $this;
+    }
+
     public function isActive(): bool
     {
         return $this->isActive;
@@ -221,14 +237,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getAvatar(): ?string
+    public function getSite(): ?Site
     {
-        return $this->avatar;
+        return $this->site;
     }
 
-    public function setAvatar(?string $avatar): static
+    public function setSite(?Site $site): static
     {
-        $this->avatar = $avatar;
+        $this->site = $site;
 
         return $this;
     }

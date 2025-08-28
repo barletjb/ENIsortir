@@ -16,28 +16,62 @@ class SortieRepository extends ServiceEntityRepository
         parent::__construct($registry, Sortie::class);
     }
 
-    //    /**
-    //     * @return Sortie[] Returns an array of Sortie objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('s.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
 
-    //    public function findOneBySomeField($value): ?Sortie
-    //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+
+    public function findByFiltre(array $criterias, $user): array
+    {
+        $qb = $this->createQueryBuilder('s');
+
+
+        if (!empty($criterias['site'])) {
+            $qb->andWhere('s.site = :site')
+                ->setParameter('site', $criterias['site']);
+        }
+
+        if (!empty($criterias['rechercheNom'])) {
+            $qb->andWhere('s.nom LIKE :nom')
+                ->setParameter('nom', '%' . $criterias['rechercheNom'] . '%');
+        }
+
+
+        if (!empty($criterias['dateDebut'])) {
+            $qb->andWhere('s.dateHeureDebut >= :dateDebut')
+                ->setParameter('dateDebut', $criterias['dateDebut']);
+        }
+
+        if (!empty($criterias['dateFin'])) {
+            $qb->andWhere('s.dateHeureDebut <= :dateFin')
+                ->setParameter('dateFin', $criterias['dateFin']);
+        }
+
+
+        if (!empty($criterias['organisateur'])) {
+            $qb->andWhere('s.organisateur = :user')
+                ->setParameter('user', $user);
+        }
+
+        if (!empty($criterias['participant'])) {
+            $qb->andWhere(':user MEMBER OF s.users')
+                ->setParameter('user', $user);
+        }
+
+        if (!empty($criterias['nonParticipant'])) {
+            $qb->andWhere(':user NOT MEMBER OF s.users')
+                ->setParameter('user', $user);
+        }
+
+        if (!empty($criterias['sortiesPassees'])) {
+            $qb->andWhere('s.dateHeureDebut < :now')
+                ->setParameter('now', new \DateTime());
+        } else {
+            $qb->andWhere('s.dateHeureDebut >= :now')
+                ->setParameter('now', new \DateTime());
+        }
+
+
+        $qb->orderBy('s.dateHeureDebut', 'ASC');
+        return $qb->getQuery()->getResult();
+    }
+
+
 }
