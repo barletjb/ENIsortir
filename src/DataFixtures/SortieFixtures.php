@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Sortie;
 use App\Entity\User;
 use App\Entity\Lieu;
+use App\Entity\Etat;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -35,14 +36,13 @@ class SortieFixtures extends Fixture implements DependentFixtureInterface
             $sortie->setLieu($faker->randomElement($lieux));
             $sortie->setSite($faker->randomElement($users)->getSite());
 
-
             $now = new \DateTime();
             if ($dateDebut < $now) {
-                $sortie->setEtat($this->getReference('etat_passée'));
-            } elseif ($dateDebut < $now->modify('+7 days')) {
-                $sortie->setEtat($this->getReference('etat_cloturée'));
+                $sortie->setEtat($this->getReference('etat_passée', Etat::class));
+            } elseif ($dateDebut < (clone $now)->modify('+7 days')) {
+                $sortie->setEtat($this->getReference('etat_cloturée', Etat::class));
             } else {
-                $sortie->setEtat($this->getReference('etat_ouverte'));
+                $sortie->setEtat($this->getReference('etat_ouverte', Etat::class));
             }
 
             $manager->persist($sortie);
