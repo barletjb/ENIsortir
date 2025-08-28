@@ -24,7 +24,7 @@ class Sortie
     #[Assert\NotBlank(message: 'Vous devez indiquer un nom de sortie')]
     private ?string $nom = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Assert\NotNull(message: 'Vous devez indiquer une date de début')]
     #[Assert\GreaterThan('today', message: 'La date de début de la sortie doit être postérieure à aujourd\hui')]
     private ?\DateTime $dateHeureDebut = null;
@@ -34,7 +34,7 @@ class Sortie
     #[Assert\NotNull(message: 'Vous devez indiquer une durée')]
     private ?int $duree = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[Assert\NotNull(message: 'Vous devez indiquer une date de fin d\'inscription')]
     #[Assert\LessThan(propertyPath: 'dateHeureDebut')]
     private ?\DateTime $dateLimiteInscription = null;

@@ -30,13 +30,18 @@
         <li>Aucun participant inscrit</li>
     {% endfor %}
 
+    {% if sortie.dateLimiteInscription > "now"|date %}
     {% if not sortie.users.contains(app.user) %}
-        <form method="post" action="{{ path('sortie_inscription', {id: sortie.id}) }}">
-            <button type="submit" class="btn btn-success">Je participe</button>
-        </form>
+    <form method="post" action="{{ path('sortie_inscription', {id: sortie.id}) }}">
+    <button type="submit" class="btn btn-success">Je participe</button>
+    </form>
     {% else %}
-        <p class="text-success"> Vous êtes déjà inscrit(e) à cette sortie.</p>
+    <p class="text-success">Vous êtes déjà inscrit(e) à cette sortie.</p>
     {% endif %}
+    {% else %}
+    <button class="btn btn-secondary" disabled>Inscriptions closes</button>
+    {% endif %}
+
 </ul>
 
 {% endblock %}
