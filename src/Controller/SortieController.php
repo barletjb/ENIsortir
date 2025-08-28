@@ -180,6 +180,10 @@ final class SortieController extends AbstractController
     {
         $sortie = $em->getRepository(Sortie::class)->find($id);
 
+        if ($sortie->isArchived()) {
+            throw $this->createNotFoundException('Cette sortie est archivée et n’est plus consultable.');
+        }
+
         if (!$sortie) {
 
             $this->addFlash('error', 'La sortie demandée n\'existe pas.');
