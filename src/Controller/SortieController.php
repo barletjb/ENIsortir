@@ -10,6 +10,7 @@ use App\Entity\User;
 use App\Form\LieuType;
 use App\Form\RechercheIndexType;
 use App\Form\SortieType;
+use App\Repository\EtatRepository;
 use App\Repository\LieuRepository;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -136,26 +137,35 @@ final class SortieController extends AbstractController
 
 
     #[Route('/{id}/annulation', name: '_annulation', methods: ['POST'])]
-    public function annulation(Sortie $sortie, Request $request, EntityManagerInterface $em): RedirectResponse
-    {
+    public function annulation(Sortie $sortie, Request $request, EntityManagerInterface $em, EtatRepository $etatRepository ): RedirectResponse {
+        $user = $this->getUser();
+
+        if (!$user || ($sortie->getOrganisateur() !== $user && !in_array('ROLE_ADMIN', $user->getRoles()))) {
+            $this->addFlash('error', 'Vous n\'avez pas le droit d\'annuler cette sortie.');
+            return $this->redirectToRoute('sortie');
+        }
+
         if ($sortie->getEtat()->getLibelle() === 'Activité en cours') {
             $this->addFlash('info', 'La sortie ne peut pas être annulée car elle est en cours.');
             return $this->redirectToRoute('sortie');
         }
-        $user = $this->getUser();
-        $raison = $request->request->get('raison_annulation');
 
-        if ($sortie->getOrganisateur()->contains($user) || $user->getRoles() === 'ROLE_ADMIN') {
-            $sortie->setEtat('Annulée');
-            $sortie->setRaisonAnnulation($raison);
-            $em->persist($sortie);
-            $em->flush();
-
-            $this->addFlash('success', 'La sortie a été annulée avec la raison : ' . $raison);
-
+        if ($sortie->getEtat()->getLibelle() === 'Annulée') {
+            $this->addFlash('info', 'La sortie est déjà annulée.');
             return $this->redirectToRoute('sortie');
         }
+
+        $raison = $request->request->get('raison_annulation');
+        $sortie->setEtat($etatRepository->findOneBy(['libelle' => 'Annulée']));
+        $sortie->setRaisonAnnulation($raison);
+        $em->persist($sortie);
+        $em->flush();
+
+        $this->addFlash('success', 'Sortie annulée avec succès : ' . $raison);
+
+        return $this->redirectToRoute('sortie');
     }
+
 
 
     #[Route('/edit', name: '_edit')]
@@ -163,7 +173,7 @@ final class SortieController extends AbstractController
     {
         $etat = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'Créée']);
 
-                $orga = $em->getRepository(User::class)->findOneBy(['id' => $this->getUser()->getId()]);
+        $orga = $em->getRepository(User::class)->findOneBy(['id' => $this->getUser()->getId()]);
         $site = $em->getRepository(Site::class)->findOneBy(['id' => $this->getUser()->getSite()->getId()]);
 
         $sortie = new Sortie();
