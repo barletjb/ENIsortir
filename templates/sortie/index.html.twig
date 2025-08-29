@@ -102,12 +102,11 @@
 
                             {#                            {% if sortie.organisateur == user and sortie.etat.libelle != "Ouverte" %} #}
                             <button type="button" class="btnMod"
-                                    onclick="window.location.href='{{ path('sortie_edit', { id: sortie.id }) }}'">
+                                    onclick="window.location.href='{{ path('sortie_update', { id: sortie.id }) }}'">
                                 Modifier
                             </button>
-                            <button type="button" class="btnAcc" data-bs-toggle="modal"
-                                    data-bs-target="#modalPublication"
-                                    data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
+                            <button type="button" class="btnAcc"
+                                    onclick="window.location.href='{{ path('sortie') }}'">
                                 Publier
                             </button>
                             {#                            {% else %} #}

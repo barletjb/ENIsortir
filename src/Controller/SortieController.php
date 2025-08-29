@@ -51,38 +51,6 @@ final class SortieController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/annuler', name: '_annuler')]
-    public function annuler(int $id, Request $request, EntityManagerInterface $em): Response
-    {
-        $sortie = $em->getRepository(Sortie::class)->find($id);
-
-        if (!$sortie) {
-            throw $this->createNotFoundException('Sortie introuvable.');
-        }
-
-        $participant = $this->getUser();
-
-        if ($sortie->getOrganisateur() !== $participant && !$participant->isAdmin()) {
-            $this->addFlash('error', 'Vous ne pouvez pas annuler cette sortie.');
-            return $this->redirectToRoute('sortie');
-        }
-
-        if ($request->isMethod('POST')) {
-            $motif = $request->get('motif');
-            $sortie->setEtat('Annulé');
-            $sortie->setInfosSortie(($sortie->getInfosSortie() ?? '') . " Annulée, motif: " . $motif);
-
-            $em->flush();
-
-            $this->addFlash('success', 'La sortie a été annulée.');
-            return $this->redirectToRoute('sortie');
-        }
-
-        return $this->render('sortie/annuler.html.twig', [
-            'sortie' => $sortie
-        ]);
-    }
-
     #[Route('/profil/{id}', name: '_user_profil')]
     public function afficherProfil(User $user): Response
     {
@@ -166,8 +134,6 @@ final class SortieController extends AbstractController
 
         return $this->redirectToRoute('sortie');
     }
-
-
 
     #[Route('/edit', name: '_edit')]
     public function editSortie(Request $request, EntityManagerInterface $em): Response
@@ -258,6 +224,48 @@ final class SortieController extends AbstractController
             'success' => false,
             'errors' => (string) $form->getErrors(true, false)
         ], 400);
+    }
+
+    #[Route('/{id}/update', name: '_update')]
+    public function updateSortie(Sortie $sortie, Request $request, EntityManagerInterface $em): Response
+    {
+
+        $orga = $em->getRepository(User::class)->findOneBy(['id' => $this->getUser()->getId()]);
+        $site = $em->getRepository(Site::class)->findOneBy(['id' => $this->getUser()->getSite()->getId()]);
+
+        $sortie->setSite($site);
+        $sortie->setOrganisateur($orga);
+        $formSortie = $this->createForm(SortieType::class, $sortie);
+
+        $formSortie->handleRequest($request);
+
+        $lieu = new Lieu();
+        $formLieu = $this->createForm(LieuType::class, $lieu);
+
+        $formLieu->handleRequest($request);
+
+
+        if ($formSortie->isSubmitted() && $formSortie->isValid()) {
+            $em->persist($sortie);
+            $em->flush();
+
+            $this->addFlash('success', 'La modification de votre sortie a bien été effectuée');
+            return $this->redirectToRoute('sortie');
+        }
+
+        if ($formLieu->isSubmitted() && $formLieu->isValid()) {
+            $em->persist($lieu);
+            $em->flush();
+
+            $this->addFlash('success', 'Nouveau lieu créé');
+        }
+
+        return $this->render('sortie/update.html.twig',[
+            'lieu' => $sortie->getLieu(),
+            'user' => $this->getUser(),
+            'sortie_form' => $formSortie,
+            'lieu_form' => $formLieu
+        ]);
     }
 
     #[Route('/{id}', name: '_detail')]
