@@ -115,12 +115,12 @@ final class SortieController extends AbstractController
         }
 
         if ($sortie->getEtat()->getLibelle() === 'Activité en cours') {
-            $this->addFlash('info', 'La sortie ne peut pas être annulée car elle est en cours.');
+            $this->addFlash('error', 'La sortie ne peut pas être annulée car elle est en cours.');
             return $this->redirectToRoute('sortie');
         }
 
         if ($sortie->getEtat()->getLibelle() === 'Annulée') {
-            $this->addFlash('info', 'La sortie est déjà annulée.');
+            $this->addFlash('error', 'La sortie est déjà annulée.');
             return $this->redirectToRoute('sortie');
         }
 
@@ -290,6 +290,27 @@ final class SortieController extends AbstractController
         ]);
     }
 
+    #[Route('/{id}/publication', name: '_publication', methods: ['GET'])]
+    public function publication(Sortie $sortie, EntityManagerInterface $em, EtatRepository $etatRepository ): RedirectResponse {
+        $user = $this->getUser();
 
+        if (!$user || ($sortie->getOrganisateur() !== $user)) {
+            $this->addFlash('error', 'Vous n\'avez pas le droit de publier cette sortie.');
+            return $this->redirectToRoute('sortie');
+        }
+
+        if ($sortie->getEtat()->getLibelle() != 'En création') {
+            $this->addFlash('info', 'La sortie ne peut pas être publier.');
+            return $this->redirectToRoute('sortie');
+        }
+
+        $sortie->setEtat($etatRepository->findOneBy(['libelle' => 'Ouverte']));
+        $em->persist($sortie);
+        $em->flush();
+
+        $this->addFlash('success', 'Sortie a été publié');
+
+        return $this->redirectToRoute('sortie');
+    }
 
 }
