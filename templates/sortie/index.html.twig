@@ -65,51 +65,58 @@
                 <div class="card h-100">
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">{{ sortie.nom }}</h5>
-                        <p class="card-text mb-1"><strong>Date de la sortie :</strong> {{ sortie.dateHeureDebut|date('d/m/Y') }}</p>
-                        <p class="card-text mb-1"><strong>Clôture d'inscription :</strong> {{ sortie.dateLimiteInscription|date('d/m/Y') }}</p>
-                        <p class="card-text mb-1"><strong>Inscrits / Places :</strong> {{ sortie.users|length }} / {{ sortie.nbInscriptionsMax }}</p>
+                        <p class="card-text mb-1"><strong>Date de la sortie
+                                :</strong> {{ sortie.dateHeureDebut|date('d/m/Y') }}</p>
+                        <p class="card-text mb-1"><strong>Clôture d'inscription
+                                :</strong> {{ sortie.dateLimiteInscription|date('d/m/Y') }}</p>
+                        <p class="card-text mb-1"><strong>Inscrits / Places :</strong> {{ sortie.users|length }}
+                            / {{ sortie.nbInscriptionsMax }}</p>
                         <p class="card-text mb-1"><strong>État :</strong> {{ sortie.etat.libelle }}</p>
-                        <p class="card-text mb-3"><strong>Organisateur :</strong> {{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom|first }}.</p>
+                        {% if sortie.etat.libelle == 'Annulée' %}
+                        <p class="card-text mb-1"><strong>Raison :</strong> {{ sortie.raisonAnnulation }}</p>
+                        {% endif %}
+                        <p class="card-text mb-3"><strong>Organisateur
+                                :</strong> {{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom|first }}.</p>
 
                         <div class="mt-auto">
-{#                            {%  if  sortie.etat.libelle != "Activité en cours"%}#}
-                            <button type="button" class="btnMod" onclick="window.location.href='{{ path('sortie_detail', { id: sortie.id }) }}'">
+                            {#                            {%  if  sortie.etat.libelle != "Activité en cours"%} #}
+                            <button type="button" class="btnMod"
+                                    onclick="window.location.href='{{ path('sortie_detail', { id: sortie.id }) }}'">
                                 Afficher
                             </button>
-{#                            {% endif %}#}
+                            {#                            {% endif %} #}
 
-{#                            {% if sortie.etat.libelle != "En création" and user in sortie.users %}#}
-                                <button type="button" class="btnMod" data-bs-toggle="modal"
-                                        data-bs-target="#modalDesistement"
-                                        data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
-                                    Se désister
-                                </button>
-{#                            {% elseif sortie.etat.libelle != "En création" and user not in sortie.users %}#}
-                                <button type="button" class="btnAcc" data-bs-toggle="modal"
-                                        data-bs-target="#modalInscription"
-                                        data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
-                                    S'inscrire
-                                </button>
-{#                            {% endif %}#}
+                            {#                            {% if sortie.etat.libelle != "En création" and user in sortie.users %} #}
+                            <button type="button" class="btnMod" data-bs-toggle="modal"
+                                    data-bs-target="#modalDesistement"
+                                    data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
+                                Se désister
+                            </button>
+                            {#                            {% elseif sortie.etat.libelle != "En création" and user not in sortie.users %} #}
+                            <button type="button" class="btnAcc" data-bs-toggle="modal"
+                                    data-bs-target="#modalInscription"
+                                    data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
+                                S'inscrire
+                            </button>
+                            {#                            {% endif %} #}
 
-{#                            {% if sortie.organisateur == user and sortie.etat.libelle != "Ouverte" %}#}
-                                <button type="button" class="btnMod" data-bs-toggle="modal"
-                                        data-bs-target="#modalModification"
-                                        data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
-                                    Modifier
-                                </button>
-                                <button type="button" class="btnAcc" data-bs-toggle="modal"
-                                        data-bs-target="#modalPublication"
-                                        data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
-                                    Publier
-                                </button>
-{#                            {% else %}#}
-                                <button type="button" class="btnMod" data-bs-toggle="modal"
-                                        data-bs-target="#modalAnnulation"
-                                        data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
-                                    Annuler
-                                </button>
-{#                            {% endif %}#}
+                            {#                            {% if sortie.organisateur == user and sortie.etat.libelle != "Ouverte" %} #}
+                            <button type="button" class="btnMod"
+                                    onclick="window.location.href='{{ path('sortie_edit', { id: sortie.id }) }}'">
+                                Modifier
+                            </button>
+                            <button type="button" class="btnAcc" data-bs-toggle="modal"
+                                    data-bs-target="#modalPublication"
+                                    data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
+                                Publier
+                            </button>
+                            {#                            {% else %} #}
+                            <button type="button" class="btnMod" data-bs-toggle="modal"
+                                    data-bs-target="#modalAnnulation"
+                                    data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
+                                Annuler
+                            </button>
+                            {#                            {% endif %} #}
                         </div>
                     </div>
                 </div>
@@ -140,7 +147,7 @@
     </div>
 
     <script>
-            function inscription() {
+        function inscription() {
             const modal = document.getElementById('modalInscription');
             modal.addEventListener('show.bs.modal', function (event) {
                 const button = event.relatedTarget;
@@ -153,11 +160,12 @@
                 document.getElementById('inscriptionForm').action = '/sortie/' + sortieId + '/inscription';
             });
         };
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', inscription);
-            } else {
-              inscription();
-        };
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', inscription);
+        } else {
+            inscription();
+        }
+        ;
     </script>
 
     <div class="modal fade" id="modalDesistement" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
@@ -202,6 +210,56 @@
             desistement();
         }
     </script>
+
+    <div class="modal fade" id="modalAnnulation" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="annulationForm" method="post" action="">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel">Annuler la sortie</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Annuler la sortie <strong id="sortieNomAnnulation"></strong></p>
+                        <div class="mb-3">
+                            <label for="raison_annulation" class="form-label">Raison :</label>
+                            <textarea name="raison_annulation" id="raison_annulation" class="form-control" required></textarea>
+                        </div>
+                        <input type="hidden" name="_token" id="csrfTokenInput">
+                    </div>
+                    <div class="modal-footer">
+                        <form id="annulationForm" method="post" action="">
+                            <input type="hidden" name="sortie_id" id="sortieIdInput">
+                            <button type="button" class="btnMod" data-bs-dismiss="modal">Annuler</button>
+                            <button type="submit" class="btnAcc">Confirmer</button>
+                        </form>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function annulation() {
+            const modal = document.getElementById('modalAnnulation');
+            modal.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                const sortieId = button.getAttribute('data-id');
+                const sortieNom = button.getAttribute('data-nom');
+
+                document.getElementById('sortieNom').textContent = sortieNom;
+                document.getElementById('sortieIdInput').value = sortieId;
+
+                document.getElementById('annulationForm').action = '/sortie/' + sortieId + '/annulation';
+            });
+        };
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', annulation);
+        } else {
+            annulation();
+        }
+    </script>
+
 
     {#    <table> #}
     {#        <tr> #}
