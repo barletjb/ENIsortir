@@ -74,4 +74,26 @@ class SortieRepository extends ServiceEntityRepository
     }
 
 
+    public function findOpenForRegistration(): array
+    {
+        return $this->createQueryBuilder('s')
+            ->where('s.dateLimiteInscription > :now')
+            ->setParameter('now', new \DateTime())
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    public function findOlderThan(\DateTime $date): array
+    {
+        return $this->createQueryBuilder('s')
+            ->where('s.dateHeureDebut < :date')
+            ->andWhere('s.archived = false')
+            ->setParameter('date', $date)
+            ->getQuery()
+            ->getResult();
+    }
+
+
+
 }

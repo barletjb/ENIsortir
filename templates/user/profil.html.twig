@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil de {{ user.pseudo }}{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="text-center">{{ user.pseudo }}</h1>
+
+        <div class="row mt-4">
+            <!-- Photo  -->
+            <div class="col-md-4 text-center">
+                {% if user.photo %}
+                    <img src="{{ asset ('uploads/photo/' ~ user.photo) }}" alt="Photo de profil" class="img-thumbnail" style="max-width: 150px; height: auto;">
+                {% else %}
+                    <img src="{{ asset('uploads/photo/default.jpg') }}" alt="Image par défaut"class="photo">
+
+
+                {% endif %}
+            </div>
+
+
+
+            <div>
+                <ul class="list-group">
+                    <li class="list-group-item"><strong>Prénom :</strong> {{ user.prenom }}</li>
+                    <li class="list-group-item"><strong>Nom :</strong> {{ user.nom }}</li>
+                    <li class="list-group-item"><strong>Téléphone :</strong> {{ user.telephone }}</li>
+                    <li class="list-group-item"><strong>Email :</strong> {{ user.email }}</li>
+                    <li class="list-group-item"><strong>Ville de rattachement :</strong> {{ user.site.nom }}</li>
+                </ul>
+            </div>
+        </div>
+
+
+        <div>
+            <a href="{{ path('sortie') }}" class="btn btn-secondary">← Retour</a>
+        </div>
+    </div>
+{% endblock %}

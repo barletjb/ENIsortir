@@ -27,6 +27,7 @@ final class AdminController extends AbstractController
         UserPasswordHasherInterface $passwordHasher,
         MailerInterface $mailer
     ): Response {
+
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
         $user = new User();
@@ -35,7 +36,8 @@ final class AdminController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $user->setIsActive(true);
+            $user->setIsActive(false);
+            $user->setIsActif(true);
             $user->setProfileCompleted(false);
             $user->setRoles(['ROLE_USER']);
 
@@ -44,8 +46,7 @@ final class AdminController extends AbstractController
             $hashedPassword = $passwordHasher->hashPassword($user, $temporaryPassword);
             $user->setPassword($hashedPassword);
 
-            $em->persist($user);
-            $em->flush();
+
 
             $email = (new Email())
                 ->from('admin@campus-eni.fr')
@@ -59,11 +60,13 @@ final class AdminController extends AbstractController
                 );
 
             $mailer->send($email);
-
+            $em->persist($user);
+            $em->flush();
             $this->addFlash('success', 'Utilisateur créé avec succès. Un email d’activation a été envoyé.');
 
             return $this->redirectToRoute('sortie');
         }
+
 
         return $this->render('admin/user_create.html.twig', [
             'form' => $form->createView(),

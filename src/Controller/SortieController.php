@@ -15,6 +15,7 @@ use App\Repository\LieuRepository;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -264,8 +265,14 @@ final class SortieController extends AbstractController
     {
         $sortie = $em->getRepository(Sortie::class)->find($id);
 
+        if ($sortie->isArchived()) {
+            throw $this->createNotFoundException('Cette sortie est archivée et n’est plus consultable.');
+        }
+
         if (!$sortie) {
+
             $this->addFlash('error', 'La sortie demandée n\'existe pas.');
+
             return $this->redirectToRoute('sortie');
         }
 
@@ -274,6 +281,7 @@ final class SortieController extends AbstractController
             'sortie' => $sortie,
         ]);
     }
+
 
 
 }
