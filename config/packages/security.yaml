@@ -24,6 +24,7 @@ security:
             remember_me:
               secret: '%kernel.secret%'
               lifetime: 604800
+            user_checker: App\Security\UserChecker
             login_throttling:
               max_attempts: 3
               interval: '15 minutes'

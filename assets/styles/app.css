@@ -113,3 +113,15 @@ h1{
     max-width: 40%;
     height: auto;
 }
+
+.row{
+    margin:1em;
+}
+
+section{
+    margin: 1em;
+}
+
+.larger{
+    font-size: 19px;
+}
