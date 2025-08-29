@@ -34,6 +34,8 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $admin->setProfileCompleted(true);
         $admin->setSite($this->getReference("site_0", Site::class));
         $admin->setPassword($this->hasher->hashPassword($admin, "123456"));
+        $admin->setPhoto('admin.jpg');
+
         $manager->persist($admin);
 
 
@@ -51,7 +53,13 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             $user->setSite($this->getReference("site_{$siteIndex}", Site::class));
 
             $user->setPassword($this->hasher->hashPassword($user, "123456"));
-            $user->setPhoto('default.jpg');
+
+            if (in_array($i, [1, 3, 5])) {
+                $user->setPhoto("user{$i}.jpg"); // photo de l'user
+            } else {
+                $user->setPhoto("default.jpg"); // photo canard
+            }
+
 
             $manager->persist($user);
 
