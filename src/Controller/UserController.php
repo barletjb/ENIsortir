@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/user', name: 'user')]
 final class UserController extends AbstractController
@@ -31,7 +32,7 @@ final class UserController extends AbstractController
     }
 
     #[Route('/confirmed/{email}', name: '_confirmed')]
-public function confirmation(string $email,EntityManagerInterface $em,Request $request,UserPasswordHasherInterface $passwordHasher): Response
+public function confirmation(string $email,EntityManagerInterface $em,Request $request,UserPasswordHasherInterface $passwordHasher,SluggerInterface $slugger): Response
     {
         $user = $em->getRepository(User::class)->findOneBy(['email' => $email]);
         $firstPassword = $user->getPassword();
@@ -44,6 +45,24 @@ public function confirmation(string $email,EntityManagerInterface $em,Request $r
         $formUser->handleRequest($request);
 
         if ($formUser->isSubmitted() && $formUser->isValid()) {
+
+            $photoFile = $formUser->get('photo')->getData();
+            if ($photoFile) {
+                $originalFilename = pathinfo($photoFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $photoFile->guessExtension();
+
+                try {
+                    $photoFile->move(
+                        $this->getParameter('photo_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    $this->addFlash('error', 'Erreur lors de l\'upload de la photo.');
+                }
+
+                $user->setPhoto($newFilename);
+            }
 
 
 

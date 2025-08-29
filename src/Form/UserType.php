@@ -24,8 +24,8 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('avatar', FileType::class, [
-                'label' => 'Avatar',
+            ->add('photo', FileType::class, [
+                'label' => 'photo',
                 'required' => false,
                 'mapped' => false,
                 'constraints' => [
