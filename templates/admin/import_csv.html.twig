@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Charger un fichier d'utilisateurs</h1>
+
+    <div class="row justify-content-center">
+        <div class="col-4">
+
+            {{ form_start(form) }}
+            {{ form_row(form.csv_file) }}
+            <button class="btn btn-success">Importer</button>
+            {{ form_end(form) }}
+
+
+        </div>
+    </div>
+{% endblock %}

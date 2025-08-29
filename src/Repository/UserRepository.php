@@ -33,6 +33,19 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
+    public function findUsers(string $email,string $pseudo,string $telephone) :array
+    {
+        $dql = "SELECT u FROM App\Entity\User u 
+               WHERE (u.email = :email OR u.pseudo = :pseudo OR u.telephone = :telephone)";
+
+        return $this->getEntityManager()->createQuery($dql)
+            ->setParameter('email', $email)
+            ->setParameter('pseudo', $pseudo)
+            ->setParameter('telephone', $telephone)
+            ->execute();
+    }
+
+
     //    /**
     //     * @return User[] Returns an array of User objects
     //     */
