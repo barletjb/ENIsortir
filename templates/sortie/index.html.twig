@@ -5,7 +5,7 @@
 {% block body %}
     <section>
 
-
+    <div class="larger">
         <div>Date du jour :</div>
         {% if user==null %}
             <div> Vous devez vous connecter !!</div>
@@ -13,10 +13,12 @@
             <div> Participant : {{ user.prenom }} {{ user.nom |first }}.</div>
 
         {% endif %}
-
+    </div>
     </section>
 
-    <h2>Filtrer les sorties</h2>
+    <h1>Filtrer les sorties</h1>
+<div class="row justify-content-center">
+    <div class="col-6">
     <div>
         {{ form_start(form_filtre) }}
         <div>
@@ -58,6 +60,8 @@
         {{ form_end(form_filtre) }}
 
     </div>
+    </div>
+</div>
 
     <div class="row">
         {% for sortie in sorties %}
@@ -322,8 +326,8 @@
     {#        {% endfor %} #}
     {#    </table> #}
 
-    <a href="{{ path('sortie_edit') }}">
-        <button href="" class="btn btn-success" type="button">CREER UNE SORTIE</button>
-    </a>
+{#    <a href="{{ path('sortie_edit') }}">#}
+{#        <button href="" class="btn btn-success" type="button">CREER UNE SORTIE</button>#}
+{#    </a>#}
 
 {% endblock %}
