@@ -247,4 +247,10 @@ class Sortie
     }
 
 
+    public function isArchived(): bool
+    {
+        return $this->raisonAnnulation !== null;
+    }
+
+
 }
