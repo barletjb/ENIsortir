@@ -4,23 +4,25 @@
 
 {% block body %}
     <div class="container mt-4">
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+            </div>
+        {% endfor %}
         <h1 class="text-center">{{ user.pseudo }}</h1>
 
-        <div class="row mt-4">
-            <!-- Photo  -->
+        <div class="row mt-4 align-items-start">
+            <!-- Photo à gauche -->
             <div class="col-md-4 text-center">
                 {% if user.photo %}
-                    <img src="{{ asset ('uploads/photo/' ~ user.photo) }}" alt="Photo de profil" class="img-thumbnail" style="max-width: 150px; height: auto;">
+                    <img src="{{ asset('uploads/photo/' ~ user.photo) }}" alt="Photo de profil" class="img-thumbnail" style="max-width: 220px; height: auto;">
                 {% else %}
-                    <img src="{{ asset('uploads/photo/default.jpg') }}" alt="Image par défaut"class="photo">
-
-
+                    <img src="{{ asset('uploads/photo/default.jpg') }}" alt="Image par défaut" class="img-thumbnail" style="max-width: 220px; height: auto;">
                 {% endif %}
             </div>
 
-
-
-            <div>
+            <div class="col-md-8">
                 <ul class="list-group">
                     <li class="list-group-item"><strong>Prénom :</strong> {{ user.prenom }}</li>
                     <li class="list-group-item"><strong>Nom :</strong> {{ user.nom }}</li>
@@ -31,9 +33,42 @@
             </div>
         </div>
 
+        <div class="mt-4">
 
-        <div>
+            {% if app.user and app.user.id == user.id %}
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                    Ajouter une photo de profil
+                </button>
+            {% endif %}
+
+
+            <!-- Modale Bootstrap -->
+            <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form method="post" enctype="multipart/form-data" action="{{ path('user_upload_photo', {id: user.id}) }}">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="uploadModalLabel">Télécharger une photo</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                            </div>
+                            <div class="modal-body">
+                                <input type="file" name="photo" class="form-control" accept="image/*" required>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-success">Envoyer</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                            </div>
+
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+
             <a href="{{ path('sortie') }}" class="btn btn-secondary">← Retour</a>
+
         </div>
     </div>
 {% endblock %}
+
+
