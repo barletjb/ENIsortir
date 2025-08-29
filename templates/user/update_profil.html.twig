@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil de {{ user.pseudo }}{% endblock %}
+
+{% block body %}
+    <h1>Modifier mon profil</h1>
+    <div class="row justify-content-center">
+        <div class="col-4">
+
+            {{ form_start(form_User, {'attr': {'data-turbo': 'false'}}) }}
+            {{ form_row(form_User.avatar) }}
+            {{ form_row(form_User.site) }}
+            {{ form_row(form_User.email) }}
+            {{ form_row(form_User.nom) }}
+            {{ form_row(form_User.prenom) }}
+            {{ form_row(form_User.pseudo) }}
+            {{ form_row(form_User.telephone) }}
+            {{ form_row(form_User.password) }}
+            {{ form_widget(form_User._token) }}
+
+            <button type="submit" class="btn btn-success">Modifier</button>
+            {{ form_end(form_User, {'render_rest': false}) }}
+
+        </div>
+    </div>
+{% endblock %}

@@ -40,7 +40,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
-    #[A]
+    #[Assert\NotBlank(
+        message: "Le mot de passe est obligatoire",
+        groups: ['enregistrement']
+    )]
     private ?string $password = null;
 
     #[ORM\Column(length: 50)]
@@ -141,7 +144,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->password;
     }
 
-    public function setPassword(string $password): static
+    public function setPassword(?string $password): static
     {
         $this->password = $password;
 
