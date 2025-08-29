@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/sortie', name: 'sortie')]
 final class SortieController extends AbstractController
@@ -59,6 +60,7 @@ final class SortieController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/{id}/inscription', name: '_inscription', methods: ['POST'])]
     public function inscription(Sortie $sortie, EntityManagerInterface $em): RedirectResponse
     {
@@ -86,6 +88,7 @@ final class SortieController extends AbstractController
 
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/{id}/desistement', name: '_desistement', methods: ['POST'])]
     public function desistement(Sortie $sortie, EntityManagerInterface $em): RedirectResponse
     {
@@ -105,6 +108,7 @@ final class SortieController extends AbstractController
     }
 
 
+    #[IsGranted('ROLE_ORGA')]
     #[Route('/{id}/annulation', name: '_annulation', methods: ['POST'])]
     public function annulation(Sortie $sortie, Request $request, EntityManagerInterface $em, EtatRepository $etatRepository ): RedirectResponse {
         $user = $this->getUser();
@@ -135,10 +139,11 @@ final class SortieController extends AbstractController
         return $this->redirectToRoute('sortie');
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/edit', name: '_edit')]
     public function editSortie(Request $request, EntityManagerInterface $em): Response
     {
-        $etat = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'Créée']);
+        $etat = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'En création']);
 
         $orga = $em->getRepository(User::class)->findOneBy(['id' => $this->getUser()->getId()]);
         $site = $em->getRepository(Site::class)->findOneBy(['id' => $this->getUser()->getSite()->getId()]);
@@ -183,6 +188,7 @@ final class SortieController extends AbstractController
     }
 
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/lieu/details/{id}', name: 'lieu_details', methods: ['GET'])]
     public function details(int $id, LieuRepository $lieuRepository): JsonResponse
     {
@@ -202,6 +208,8 @@ final class SortieController extends AbstractController
     }
 
 
+
+    #[IsGranted('ROLE_USER')]
     #[Route('/lieu/add', name: '_lieu_add', methods: ['POST'])]
     public function addLieu(Request $request, EntityManagerInterface $em): JsonResponse
     {
@@ -226,6 +234,7 @@ final class SortieController extends AbstractController
         ], 400);
     }
 
+    #[IsGranted('ROLE_ORGA')]
     #[Route('/{id}/update', name: '_update')]
     public function updateSortie(Sortie $sortie, Request $request, EntityManagerInterface $em): Response
     {
@@ -268,6 +277,7 @@ final class SortieController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/{id}', name: '_detail')]
     public function detail(int $id, EntityManagerInterface $em): Response
     {
@@ -290,6 +300,7 @@ final class SortieController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_ORGA')]
     #[Route('/{id}/publication', name: '_publication', methods: ['GET'])]
     public function publication(Sortie $sortie, EntityManagerInterface $em, EtatRepository $etatRepository ): RedirectResponse {
         $user = $this->getUser();
