@@ -32,7 +32,7 @@ final class UserController extends AbstractController
     }
 
     #[Route('/confirmed/{email}', name: '_confirmed')]
-public function confirmation(string $email,EntityManagerInterface $em,Request $request,SluggerInterface $slugger, UserPasswordHasherInterface $passwordHasher): Response
+public function confirmation(string $email,EntityManagerInterface $em,Request $request,UserPasswordHasherInterface $passwordHasher,SluggerInterface $slugger): Response
     {
         $user = $em->getRepository(User::class)->findOneBy(['email' => $email]);
 
@@ -67,6 +67,7 @@ public function confirmation(string $email,EntityManagerInterface $em,Request $r
                 $user->setPhoto($newFilename);
             }
 
+
                 $password = $formUser->get('password')->getData();
 //
 //            if ($passwordHasher->isPasswordValid($user, $password)) {
@@ -82,6 +83,7 @@ public function confirmation(string $email,EntityManagerInterface $em,Request $r
 
                 $this->addFlash('success','Votre profil a bien été confirmé');
                 return $this->redirectToRoute('app_login');
+
 
 
         };
@@ -129,6 +131,26 @@ public function confirmation(string $email,EntityManagerInterface $em,Request $r
     }
 
 
+
+
+    #[Route('/{id}/upload-photo', name: '_upload_photo')]
+    public function uploadPhoto(Request $request, User $user, EntityManagerInterface $em): Response
+    {
+        if ($this->getUser()->getId() !== $user->getId()) {
+            throw $this->createAccessDeniedException('Accès refusé.');
+        }
+        $file = $request->files->get('photo');
+        if ($file) {
+            $filename = uniqid() . '.' . $file->guessExtension();
+            $file->move($this->getParameter('photo_directory'), $filename);
+            $user->setPhoto($filename);
+            $em->flush();
+
+            $this->addFlash('success', 'Photo mise à jour.');
+        }
+
+        return $this->redirectToRoute('user_profil', ['id' => $user->getId()]);
+    }
 
 
 
