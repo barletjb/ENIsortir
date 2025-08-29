@@ -35,13 +35,22 @@ final class SortieController extends AbstractController
         $criterias = null;
         $sorties = [];
 
-
         if ($form->isSubmitted() && $form->isValid()) {
+
             $criterias = $form->getData();
             //$userId = $this->getUser()->getId();
             $sorties = $sortieRepository->findByFiltre($criterias, $this->getUser());
         } else {
-            $sorties = $sortieRepository->findAll();
+
+            $now = new \DateTime();
+            $limitDate = (clone $now)->modify('-30 days');
+
+            $sorties = $sortieRepository->createQueryBuilder('s')
+                ->where('s.dateHeureDebut >= :limitDate')
+                ->andWhere('s.archived = false')
+                ->setParameter('limitDate', $limitDate)
+                ->getQuery()
+                ->getResult();
         }
 
         return $this->render('sortie/index.html.twig', [
