@@ -31,7 +31,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $admin->setPrenom("Admin");
         $admin->setNom("Grand");
         $admin->setIsActif(true);
-        $admin->setIsActive(true);
+        $admin->setProfileCompleted(true);
         $admin->setSite($this->getReference("site_0", Site::class));
         $admin->setPassword($this->hasher->hashPassword($admin, "123456"));
         $manager->persist($admin);
