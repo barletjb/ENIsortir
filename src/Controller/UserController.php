@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/user', name: 'user')]
@@ -30,9 +31,10 @@ final class UserController extends AbstractController
     }
 
     #[Route('/confirmed/{email}', name: '_confirmed')]
-public function confirmation(string $email,EntityManagerInterface $em,Request $request): Response
+public function confirmation(string $email,EntityManagerInterface $em,Request $request,UserPasswordHasherInterface $passwordHasher): Response
     {
         $user = $em->getRepository(User::class)->findOneBy(['email' => $email]);
+        $firstPassword = $user->getPassword();
 
         if (!$user) {
             throw $this->createNotFoundException('Utilisateur non trouvé');
@@ -41,9 +43,23 @@ public function confirmation(string $email,EntityManagerInterface $em,Request $r
         $formUser = $this->createForm(UserType::class,$user);
         $formUser->handleRequest($request);
 
+        if ($formUser->isSubmitted() && $formUser->isValid()) {
+
+
+
+            $user->setProfileCompleted(true);
+            $password = $user->getPassword();
+            $hashedPassword = $passwordHasher->hashPassword($user, $password);
+            $user->setPassword($hashedPassword);
+
+            $em->persist($user);
+            $em->flush();
+            return $this->redirectToRoute('app_login');
+        };
+
         return $this->render('user/confirmation.html.twig', [
             'form_User' => $formUser,
-           'user' => $user,
+            'user' => $user,
         ]);
     }
 

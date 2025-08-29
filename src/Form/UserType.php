@@ -80,7 +80,12 @@ class UserType extends AbstractType
                 'required' => false,
                 'mapped' => false,
             ])
-            ->add('password', RepeatedType::class, []);
+            ->add('password', RepeatedType::class, [
+                'type' => PasswordType::class,
+                'invalid_message' => 'Les mots de passe ne correspondent pas.',
+                'first_options'  => ['label' => 'Modifier mot de passe'],
+                'second_options' => ['label' => 'Confirmer le mot de passe'],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

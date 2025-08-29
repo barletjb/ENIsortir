@@ -40,6 +40,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[A]
     private ?string $password = null;
 
     #[ORM\Column(length: 50)]
@@ -53,8 +54,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $confirmationToken = null;
 
-    #[ORM\Column(type: 'boolean', options: ['default' => false])]
-    private bool $isActive = false;
 
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
     private bool $profileCompleted = false;
@@ -187,18 +186,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setConfirmationToken(?string $confirmationToken): static
     {
         $this->confirmationToken = $confirmationToken;
-
-        return $this;
-    }
-
-    public function isActive(): bool
-    {
-        return $this->isActive;
-    }
-
-    public function setIsActive(bool $isActive): static
-    {
-        $this->isActive = $isActive;
 
         return $this;
     }
