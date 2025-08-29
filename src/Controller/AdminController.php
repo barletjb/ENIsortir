@@ -35,11 +35,10 @@ final class AdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            $user->setIsActive(false);
             $user->setIsActif(true);
             $user->setProfileCompleted(false);
             $user->setRoles(['ROLE_USER']);
+            $user->setPhoto('default.jpg');
 
             $temporaryPassword = bin2hex(random_bytes(4));
 
