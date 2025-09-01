@@ -1,10 +1,10 @@
-{% block title %}Inscription à la sortie {{ sortie.nom }} {% endblock %}
+{% block title %}Désistement à la sortie {{ sortie.nom }} {% endblock %}
 
 {% block body %}
 
     <p>Bonjour {{ user.pseudo }},</p>
 
-    <p>Vous êtes bien inscrit(e) à la sortie suivante :</p>
+    <p>Vous avez fait la demande de désistement à la sortie suivante :</p>
 
     <ul>
         <li><strong>Titre :</strong> {{ sortie.nom }}</li>
@@ -13,7 +13,7 @@
         <li><strong>Description :</strong> {{ sortie.infosSortie }}</li>
     </ul>
 
-    <p>Merci de votre participation !</p>
+    <p>Nous espérons vous voir lors d'une prochaine sortie</p>
 
     <p>Cordialement,<br>
         L'équipe Campus ENI</p>
