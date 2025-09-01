@@ -84,6 +84,8 @@ final class SortieController extends AbstractController
                 if (!$sortie->getUsers()->contains($user)) {
                     $sortie->addUser($user);
 
+
+
 //                    $email = (new Email())
 //                        ->from('admin@campus-eni.fr')
 //                        ->to($user->getEmail())
