@@ -4,10 +4,15 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Helper\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -94,8 +99,8 @@ public function confirmation(string $email,EntityManagerInterface $em,Request $r
         ]);
     }
 
-    #[Route('/update/{email}', name: 'update')]
-    public function update(string $email,EntityManagerInterface $em,Request $request,UserPasswordHasherInterface $passwordHasher): Response
+    #[Route('/update/{email}', name: '_update')]
+    public function update(string $email,EntityManagerInterface $em,Request $request,UserPasswordHasherInterface $passwordHasher, SluggerInterface $slugger): Response
     {
         $user = $em->getRepository(User::class)->findOneBy(['email' => $email]);
 
@@ -110,6 +115,26 @@ public function confirmation(string $email,EntityManagerInterface $em,Request $r
         $formUser->handleRequest($request);
 
         if ($formUser->isSubmitted() && $formUser->isValid()) {
+
+            if ($formUser->isSubmitted() && $formUser->isValid()) {
+                $photoFile = $formUser->get('photo')->getData();
+                if ($photoFile) {
+                    $originalFilename = pathinfo($photoFile->getClientOriginalName(), PATHINFO_FILENAME);
+                    $safeFilename = $slugger->slug($originalFilename);
+                    $newFilename = $safeFilename . '-' . uniqid() . '.' . $photoFile->guessExtension();
+
+                    try {
+                        $photoFile->move(
+                            $this->getParameter('photo_directory'),
+                            $newFilename
+                        );
+                    } catch (FileException $e) {
+                        $this->addFlash('error', 'Erreur lors de l\'upload de la photo.');
+                    }
+
+                    $user->setPhoto($newFilename);
+                }
+            }
 
             $password = $formUser->get('password')->getData();
 
