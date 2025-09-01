@@ -77,7 +77,6 @@ final class SortieController extends AbstractController
     {
         $user = $this->getUser();
         $nbUsers = count($sortie->getUsers());
-//        dd($nbUsers);
         $date = new \DateTime();
 
         if ($date <= $sortie->getDateLimiteInscription()) {
