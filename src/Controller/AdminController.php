@@ -143,7 +143,7 @@ final class AdminController extends AbstractController
             }
             $em->flush();
             $this->addFlash('success','Import terminé');
-            return $this->redirectToRoute('sortie');
+            return $this->redirectToRoute('admin_users_list');
         }
             return $this->render('admin/import_csv.html.twig', [
                 'formCsv' => $formCsv,
@@ -161,6 +161,26 @@ final class AdminController extends AbstractController
     return $this->render('admin/users_list.html.twig', [
         'users' => $users,
     ]);
+}
+
+
+#[Route('/user/{id}/delete', name: '_user_delete')]
+public function userDelete(Request $request, User $user, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
+{
+    $this->denyAccessUnlessGranted('ROLE_ADMIN');
+    $user = $user->getId();
+
+    if ($user){
+        $userDeleted = $em->getRepository(User::class)->findOneBy(['id' => $user]);
+        $em->remove($userDeleted);
+        $em->flush();
+        $this->addFlash('success','Utilisateur supprimé avec succès');
+        return $this->redirectToRoute('admin_users_list');
+    }
+
+    return $this->render('admin/user_delete.html.twig', []);
+
+
 }
 
 }

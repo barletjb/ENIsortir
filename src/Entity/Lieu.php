@@ -40,7 +40,7 @@ class Lieu
     private Collection $sorties;
 
     #[ORM\ManyToOne(inversedBy: 'lieux')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false,onDelete: "CASCADE")]
     #[Assert\NotBlank(message: 'Vous devez indiquer une ville')]
     private ?Ville $ville = null;
 

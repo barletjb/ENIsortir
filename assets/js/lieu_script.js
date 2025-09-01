@@ -1,4 +1,5 @@
 function addLieu() {
+    console.log('Script chargé, DOM ready:', document.readyState);
     const lieuSelect = document.getElementById('sortie_lieu');
     const lieuForm = document.getElementById('lieu-form');
     const modalElement = document.getElementById('modalCreateLieu');
@@ -34,6 +35,7 @@ function addLieu() {
                     modal.hide();
                 } else {
                     alert('Erreur lors de l’ajout du lieu : ' + (data.errors || 'Inconnue'));
+
                     modal.hide();
 
                 }
