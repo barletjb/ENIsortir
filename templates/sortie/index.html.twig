@@ -147,7 +147,7 @@
                 </div>
                 <div class="modal-footer">
                     <form id="inscriptionForm" method="post" action="">
-                        <input type="hidden" name="sortie_id" id="sortieIdInput">
+                        <input type="hidden" name="sortie_id" id="sortieIdInputInscription">
                         <button type="button" class="btnMod" data-bs-dismiss="modal">Annuler</button>
                         <button type="submit" class="btnAcc">Confirmer</button>
                     </form>
@@ -165,7 +165,7 @@
                 const sortieNom = button.getAttribute('data-nom');
 
                 document.getElementById('sortieNom').textContent = sortieNom;
-                document.getElementById('sortieIdInput').value = sortieId;
+                document.getElementById('sortieIdInputInscription').value = sortieId;
 
                 document.getElementById('inscriptionForm').action = '/sortie/' + sortieId + '/inscription';
             });
@@ -190,7 +190,7 @@
                 </div>
                 <div class="modal-footer">
                     <form id="desistementForm" method="post" action="">
-                        <input type="hidden" name="sortie_id" id="sortieIdInput">
+                        <input type="hidden" name="sortie_id" id="sortieIdInputDesistement">
                         <button type="button" class="btnMod" data-bs-dismiss="modal">Annuler</button>
                         <button type="submit" class="btnAcc">Confirmer</button>
                     </form>
@@ -208,7 +208,7 @@
                 const sortieNom = button.getAttribute('data-nom');
 
                 document.getElementById('sortieNom').textContent = sortieNom;
-                document.getElementById('sortieIdInput').value = sortieId;
+                document.getElementById('sortieIdInputDesistement').value = sortieId;
 
                 document.getElementById('desistementForm').action = '/sortie/' + sortieId + '/desistement';
             });
@@ -240,7 +240,7 @@
                     </div>
                     <div class="modal-footer">
                         <form id="annulationForm" method="post" action="">
-                            <input type="hidden" name="sortie_id" id="sortieIdInput">
+                            <input type="hidden" name="sortie_id" id="sortieIdInputAnnulation">
                             <button type="button" class="btnMod" data-bs-dismiss="modal">Annuler</button>
                             <button type="submit" class="btnAcc">Confirmer</button>
                         </form>
@@ -259,7 +259,7 @@
                 const sortieNom = button.getAttribute('data-nom');
 
                 document.getElementById('sortieNom').textContent = sortieNom;
-                document.getElementById('sortieIdInput').value = sortieId;
+                document.getElementById('sortieIdInputAnnulation').value = sortieId;
 
                 document.getElementById('annulationForm').action = '/sortie/' + sortieId + '/annulation';
             });
