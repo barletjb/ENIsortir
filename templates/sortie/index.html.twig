@@ -99,7 +99,7 @@
                                             Se désister
                                         </button>
                                     {% else %}
-                                        <button type="button" class="btn-success" data-bs-toggle="modal"
+                                        <button type="button" class="btnAcc" data-bs-toggle="modal"
                                                 data-bs-target="#modalInscription"
                                                 data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
                                             S'inscrire
@@ -115,7 +115,7 @@
                                         onclick="window.location.href='{{ path('sortie_update', { id: sortie.id }) }}'">
                                     Modifier
                                 </button>
-                                <button type="button" class="btn-success"
+                                <button type="button" class="btnAcc"
                                         onclick="window.location.href='{{ path('sortie_publication', { id: sortie.id }) }}'">
                                     Publier
                                 </button>
@@ -149,7 +149,7 @@
                     <form id="inscriptionForm" method="post" action="">
                         <input type="hidden" name="sortie_id" id="sortieIdInput">
                         <button type="button" class="btnMod" data-bs-dismiss="modal">Annuler</button>
-                        <button type="submit" class="btn-success">Confirmer</button>
+                        <button type="submit" class="btnAcc">Confirmer</button>
                     </form>
                 </div>
             </div>
@@ -192,7 +192,7 @@
                     <form id="desistementForm" method="post" action="">
                         <input type="hidden" name="sortie_id" id="sortieIdInput">
                         <button type="button" class="btnMod" data-bs-dismiss="modal">Annuler</button>
-                        <button type="submit" class="btn-success">Confirmer</button>
+                        <button type="submit" class="btnAcc">Confirmer</button>
                     </form>
                 </div>
             </div>
@@ -242,7 +242,7 @@
                         <form id="annulationForm" method="post" action="">
                             <input type="hidden" name="sortie_id" id="sortieIdInput">
                             <button type="button" class="btnMod" data-bs-dismiss="modal">Annuler</button>
-                            <button type="submit" class="btn-success">Confirmer</button>
+                            <button type="submit" class="btnAcc">Confirmer</button>
                         </form>
                     </div>
                 </form>
