@@ -16,8 +16,6 @@ class SortieRepository extends ServiceEntityRepository
         parent::__construct($registry, Sortie::class);
     }
 
-
-
     public function findByFiltre(array $criterias, $user): array
     {
         $qb = $this->createQueryBuilder('s');
