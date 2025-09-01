@@ -21,6 +21,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -76,16 +78,31 @@ final class SortieController extends AbstractController
 
     #[IsGranted('ROLE_USER')]
     #[Route('/{id}/inscription', name: '_inscription', methods: ['POST'])]
-    public function inscription(Sortie $sortie, EntityManagerInterface $em): RedirectResponse
+    public function inscription(Sortie $sortie, EntityManagerInterface $em, MailerInterface $mailer): RedirectResponse
     {
         $user = $this->getUser();
-        $nbUsers = count($em->getRepository(User::class)->findAll());
+        $nbUsers = count($sortie->getUsers());
         $date = new \DateTime();
 
         if ($date <= $sortie->getDateLimiteInscription()) {
             if ($nbUsers < $sortie->getNbInscriptionsMax()) {
                 if (!$sortie->getUsers()->contains($user)) {
                     $sortie->addUser($user);
+
+
+
+//                    $email = (new Email())
+//                        ->from('admin@campus-eni.fr')
+//                        ->to($user->getEmail())
+//                        ->subject('Inscription à la sortie')
+//                        ->html(
+//                            $this->renderView('emails/user_inscription.html.twig', [
+//                                'user' => $user,
+//                                'sortie'=> $sortie,
+//                            ])
+//                        );
+//                    $mailer->send($email);
+
                     $em->persist($sortie);
                     $em->flush();
                     $this->addFlash('success', 'Inscription réussie !');
