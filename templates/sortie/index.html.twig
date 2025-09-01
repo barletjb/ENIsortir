@@ -89,19 +89,23 @@
                                     Afficher
                                 </button>
                             {% endif %}
-                            {% if sortie.organisateur != user %}
-                                {% if (sortie.etat.libelle != "En création" and user in sortie.users) %}
-                                    <button type="button" class="btnMod" data-bs-toggle="modal"
-                                            data-bs-target="#modalDesistement"
-                                            data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
-                                        Se désister
-                                    </button>
-                                {% else %}
-                                    <button type="button" class="btn-success" data-bs-toggle="modal"
-                                            data-bs-target="#modalInscription"
-                                            data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
-                                        S'inscrire
-                                    </button>
+
+                            {% if sortie.etat.libelle != "Clôturée" %}
+                                {% if  sortie.organisateur != user %}
+                                    {% if (sortie.etat.libelle != "En création" and user in sortie.users) %}
+                                        <button type="button" class="btnMod" data-bs-toggle="modal"
+                                                data-bs-target="#modalDesistement"
+                                                data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
+                                            Se désister
+                                        </button>
+                                    {% else %}
+                                        <button type="button" class="btn-success" data-bs-toggle="modal"
+                                                data-bs-target="#modalInscription"
+                                                data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
+                                            S'inscrire
+                                        </button>
+                                    {% endif %}
+
                                 {% endif %}
                             {% endif %}
 
