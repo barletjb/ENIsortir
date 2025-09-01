@@ -98,15 +98,15 @@ h1{
 
 }
 
-.btn-success{
-    background: rgb(166, 224, 183);
-    color: black;
-}
+/*.btn-success{*/
+/*    background: rgb(166, 224, 183);*/
+/*    color: black;*/
+/*}*/
 
-.btn-success:hover{
-    background: rgb(107, 179, 127);
-    color: black;
-}
+/*.btn-success:hover{*/
+/*    background: rgb(107, 179, 127);*/
+/*    color: black;*/
+/*}*/
 
 .photo{
     float: right;
@@ -124,4 +124,12 @@ section{
 
 .larger{
     font-size: 19px;
+}
+
+.bi-check-circle{
+    color:rgb(107, 179, 127);
+}
+
+.bi-x-circle{
+    color:rgb(227, 98, 98)
 }

@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Liste des utilisateurs</h1>
+
+<table class="table table-hover table-dark">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Email</th>
+        <th scope="col">Pseudo</th>
+        <th scope="col">Nom</th>
+        <th scope="col">Prénom</th>
+        <th scope="col">Profil complété</th>
+        <th scope="col">Actif ?</th>
+    </tr>
+    </thead>
+    <tbody>
+
+           {% for user in users %}
+           <tr>
+               <td>{{ user.id }}</td>
+               <td>{{ user.email }}</td>
+               <td>{{ user.pseudo }}</td>
+               <td>{{ user.nom }}</td>
+               <td>{{ user.prenom }}</td>
+               {% if user.profileCompleted %}
+               <td><i class="bi bi-check-circle"></i></td>
+               {% else %}
+                   <td> <i class="bi bi-x-circle"></i></td>
+               {% endif %}
+               {% if user.isActif %}
+               <td><button >Désactiver</button></td>
+
+
+           </tr>
+            {% endfor %}
+    </tbody>
+</table>/
+
+
+{% endblock %}
