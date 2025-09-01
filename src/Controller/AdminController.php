@@ -2,10 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Site;
 use App\Entity\User;
 use App\Form\CsvImportType;
 use App\Form\UserType;
 use Doctrine\ORM\EntityManagerInterface;
+use League\Csv\Reader;
+use League\Csv\Statement;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -75,94 +78,92 @@ final class AdminController extends AbstractController
         ]);
     }
 
-
-    #[Route('/import-users', name: '_import_users')]
+#[Route('/import-users', name: '_import_users')]
     public function importUsers(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher,LoggerInterface $logger): Response
     {
-        $requireHeaders = ['email', 'nom', 'prenom', 'pseudo', 'password'];
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
-        $form = $this->createForm(CsvImportType::class);
-        $form->handleRequest($request);
+        $formCsv = $this->createForm(CsvImportType::class);
+        $formCsv->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $file = $form->get('csv_file')->getData();
+        if ($formCsv->isSubmitted() && $formCsv->isValid()) {
+            $uploadedFile = $formCsv->get('csv')->getData();
 
-            if (($handle = fopen($file->getPathname(), 'r')) !== false) {
-                $header = fgetcsv($handle, 1000, ',');
 
-                $requiredColumns = array_diff($requireHeaders, $header);
-                if (count($requiredColumns) > 0) {
-                    $this->addFlash('error', 'Il manque une/des colonnes : ' . implode(', ', $requiredColumns));
-                    return $this->redirectToRoute('admin_import_users');
+            $csvPath = $uploadedFile->getRealPath();
+            $csv = Reader::createFromPath($csvPath, 'r');
+            $csv->setDelimiter(';');
+            $csv->setHeaderOffset(0);
+
+            $records = $csv->getRecords();
+            foreach ($records as $record) {
+
+                if (empty($record['email']) || !filter_var($record['email'], FILTER_VALIDATE_EMAIL)) {
+                    $logger->error('email vide');
+                    continue;
                 }
 
-                $lineNumber = 1;
-                $errors = [];
+                if (!preg_match('/^[a-zA-Z0-9._%+-]+@campus-eni\.fr$/', $record['email'])) {
+                    $logger->error('email pattern');
+                    continue;
+                }
 
-                while (($data = fgetcsv($handle, 1000, ',')) !== false) {
-                    $lineNumber++;
-                    $row = array_combine($header, $data);
+                $existingUser = $em->getRepository(User::class)->findOneBy(['email' => $record['email']]);
+                if ($existingUser) {
+                    $logger->error('existe déjà');
+                    continue;
+                }
 
-                    try {
-                        foreach ($requireHeaders as $column) {
-                            if (empty($row[$column])) {
-                                throw new \Exception("La colonne '$column' de la ligne $lineNumber est vide.");
-                            }
-                        }
-
-                        $existingUser = $em->getRepository(User::class)->findUsers(
-                            $row['email'],
-                            $row['pseudo'],
-                            $row['telephone'] ?? ''
-                        );
-
-                        if (!empty($existingUser)) {
-                            throw new \Exception("L'email '{$row['email']}' et/ou le pseudo '{$row['pseudo']}' et/ou le téléphone '{$row['telephone']}' existe déjà.");
-                        }
-
-                        $user = new User();
-                        $user->setEmail($row['email']);
-                        $user->setNom($row['nom']);
-                        $user->setPrenom($row['prenom']);
-                        $user->setPseudo($row['pseudo'] ?? $row['email']);
-                        $user->setTelephone($row['telephone'] ?? null);
-                        $user->setProfileCompleted(false);
-                        $user->setPhoto('uploads/photo/default.jpg');
-                        $user->setRoles(['ROLE_USER']);
-                        $user->setIsActif(true);
-
-                        $password = $row['password'] ?? 'Password123!';
-                        $hashedPassword = $passwordHasher->hashPassword($user, $password);
-                        $user->setPassword($hashedPassword);
-
-                        $em->persist($user);
-
-                    } catch (\Exception $e) {
-                        $errors[$lineNumber] = $e->getMessage();
-                        $logger->error("Erreur import ligne {$lineNumber}: " . $e->getMessage());
+                $site = null;
+                if (!empty($record['site'])) {
+                    $site = $em->getRepository(Site::class)->find($record['site']);
+                    if (!$site) {
+                        $logger->error('pas de site');
+                        continue;
                     }
                 }
 
-                fclose($handle);
+                $user = new User();
+                $user->setEmail($record['email']);
+                $user->setNom($record['nom'] ?? '');
+                $user->setPrenom($record['prenom'] ?? '');
+                $user->setPseudo($record['pseudo'] ?? $record['email']);
+                $user->setTelephone($record['telephone'] ?? null);
+                $user->setSite($site);
 
-                if (empty($errors)) {
-                    $em->flush();
-                    $this->addFlash('success', 'Importation terminée avec succès.');
-                    return $this->redirectToRoute('sortie');
-                } else {
-                    foreach ($errors as $line => $message) {
-                        $this->addFlash('error', "Ligne $line : $message");
-                    }
-                }
+                $password = $record['password'] ?? 'Password123!';
+                $hashedPassword = $passwordHasher->hashPassword($user, $password);
+                $user->setPassword($hashedPassword);
+                $user->setRoles(['ROLE_USER']);
 
-            } else {
-                $this->addFlash('error', 'Erreur lors de l’ouverture du fichier CSV.');
+                $logger->error('user créé'.$record['email']);
+
+                $em->persist($user);
+
             }
+            $em->flush();
+            $this->addFlash('success','Import terminé');
+            return $this->redirectToRoute('sortie');
         }
+            return $this->render('admin/import_csv.html.twig', [
+                'formCsv' => $formCsv,
+            ]);
 
-        return $this->render('admin/import_csv.html.twig', [
-            'form' => $form->createView(),
-        ]);
+
     }
 
+
+    #[Route('/users_list', name: '_users_list')]
+    public function usersList(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher) : Response
+{
+    $this->denyAccessUnlessGranted('ROLE_ADMIN');
+    $users = $em->getRepository(User::class)->findAll();
+    return $this->render('admin/users_list.html.twig', [
+        'users' => $users,
+    ]);
 }
+
+}
+
+
+

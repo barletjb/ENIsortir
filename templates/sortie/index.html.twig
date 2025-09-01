@@ -89,6 +89,7 @@
                                     Afficher
                                 </button>
                             {% endif %}
+
                             {% if sortie.etat.libelle != "Clôturée" %}
                                 {% if  sortie.organisateur != user %}
                                     {% if (sortie.etat.libelle != "En création" and user in sortie.users) %}
@@ -98,12 +99,13 @@
                                             Se désister
                                         </button>
                                     {% else %}
-                                        <button type="button" class="btnAcc" data-bs-toggle="modal"
+                                        <button type="button" class="btn-success" data-bs-toggle="modal"
                                                 data-bs-target="#modalInscription"
                                                 data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
                                             S'inscrire
                                         </button>
                                     {% endif %}
+
                                 {% endif %}
                             {% endif %}
 
@@ -113,7 +115,7 @@
                                         onclick="window.location.href='{{ path('sortie_update', { id: sortie.id }) }}'">
                                     Modifier
                                 </button>
-                                <button type="button" class="btnAcc"
+                                <button type="button" class="btn-success"
                                         onclick="window.location.href='{{ path('sortie_publication', { id: sortie.id }) }}'">
                                     Publier
                                 </button>
@@ -147,7 +149,7 @@
                     <form id="inscriptionForm" method="post" action="">
                         <input type="hidden" name="sortie_id" id="sortieIdInput">
                         <button type="button" class="btnMod" data-bs-dismiss="modal">Annuler</button>
-                        <button type="submit" class="btnAcc">Confirmer</button>
+                        <button type="submit" class="btn-success">Confirmer</button>
                     </form>
                 </div>
             </div>
@@ -190,7 +192,7 @@
                     <form id="desistementForm" method="post" action="">
                         <input type="hidden" name="sortie_id" id="sortieIdInput">
                         <button type="button" class="btnMod" data-bs-dismiss="modal">Annuler</button>
-                        <button type="submit" class="btnAcc">Confirmer</button>
+                        <button type="submit" class="btn-success">Confirmer</button>
                     </form>
                 </div>
             </div>
@@ -240,7 +242,7 @@
                         <form id="annulationForm" method="post" action="">
                             <input type="hidden" name="sortie_id" id="sortieIdInput">
                             <button type="button" class="btnMod" data-bs-dismiss="modal">Annuler</button>
-                            <button type="submit" class="btnAcc">Confirmer</button>
+                            <button type="submit" class="btn-success">Confirmer</button>
                         </form>
                     </div>
                 </form>

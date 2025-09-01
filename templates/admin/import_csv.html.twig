@@ -6,10 +6,10 @@
     <div class="row justify-content-center">
         <div class="col-4">
 
-            {{ form_start(form) }}
-            {{ form_row(form.csv_file) }}
+            {{ form_start(formCsv, {'attr': {'enctype': 'multipart/form-data'}}) }}
+            {{ form_row(formCsv.csv) }}
             <button class="btn btn-success">Importer</button>
-            {{ form_end(form) }}
+            {{ form_end(formCsv) }}
 
 
         </div>
