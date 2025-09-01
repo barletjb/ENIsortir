@@ -89,19 +89,17 @@ final class SortieController extends AbstractController
                 if (!$sortie->getUsers()->contains($user)) {
                     $sortie->addUser($user);
 
-
-
-//                    $email = (new Email())
-//                        ->from('admin@campus-eni.fr')
-//                        ->to($user->getEmail())
-//                        ->subject('Inscription à la sortie')
-//                        ->html(
-//                            $this->renderView('emails/user_inscription.html.twig', [
-//                                'user' => $user,
-//                                'sortie'=> $sortie,
-//                            ])
-//                        );
-//                    $mailer->send($email);
+                    $email = (new Email())
+                        ->from('admin@campus-eni.fr')
+                        ->to($user->getEmail())
+                        ->subject('Inscription à la sortie " '. $sortie->getNom() . " \" .")
+                        ->html(
+                            $this->renderView('emails/user_inscription.html.twig', [
+                                'user' => $user,
+                                'sortie'=> $sortie,
+                            ])
+                        );
+                    $mailer->send($email);
 
                     $em->persist($sortie);
                     $em->flush();
@@ -121,11 +119,22 @@ final class SortieController extends AbstractController
 
     #[IsGranted('ROLE_USER')]
     #[Route('/{id}/desistement', name: '_desistement', methods: ['POST'])]
-    public function desistement(Sortie $sortie, EntityManagerInterface $em): RedirectResponse
+    public function desistement(Sortie $sortie, EntityManagerInterface $em, MailerInterface $mailer): RedirectResponse
     {
         $user = $this->getUser();
 
         if ($sortie->getUsers()->contains($user)) {
+            $email = (new Email())
+                ->from('admin@campus-eni.fr')
+                ->to($user->getEmail())
+                ->subject('Désistement à la sortie " '. $sortie->getNom() . " \" .")
+                ->html(
+                    $this->renderView('emails/user_desistement.html.twig', [
+                        'user' => $user,
+                        'sortie'=> $sortie,
+                    ])
+                );
+            $mailer->send($email);
             $sortie->removeUser($user);
             $em->persist($sortie);
             $em->flush();
