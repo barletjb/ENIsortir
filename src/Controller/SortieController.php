@@ -14,6 +14,7 @@ use App\Repository\EtatRepository;
 use App\Repository\LieuRepository;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use MobileDetectBundle\DeviceDetector\MobileDetector;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -27,8 +28,12 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class SortieController extends AbstractController
 {
     #[Route('/', name: '')]
-    public function index(Request $request, SortieRepository $sortieRepository): Response
+    public function index(Request $request, SortieRepository $sortieRepository, MobileDetector $mobileDetector): Response
     {
+        if($mobileDetector->isMobile()) {
+            $this->addFlash('info', 'La création de sortie est non accessible sur smartphone');
+        }
+
         $user = $this->getUser();
         $form = $this->createForm(RechercheIndexType::class);
         $form->handleRequest($request);
