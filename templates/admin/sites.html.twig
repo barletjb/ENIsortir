@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<div style="display: flex; gap: 2rem;">
+
+    <section style="flex: 1;">
+        <h3>Sites</h3>
+        <a href="{{ path('admin_sites_add') }}" class="btn btn-success">Ajouter un site</a>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Ville</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for site in sites %}
+                <tr>
+                    <td>{{ site.nom }}</td>
+
+                    <td>
+                        <a class="btnMod" href="{{ path('admin_sites_edit', { 'id': site.id }) }}">Modifier</a> |
+                        <a class="btnMod" href="{{ path('admin_sites_delete', { 'id': site.id }) }}"onclick="return confirm('Supprimer ce site ?')">Supprimer</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr><td colspan="3">Aucun site trouvé.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </section>
+</div>
+
+{% endblock %}
