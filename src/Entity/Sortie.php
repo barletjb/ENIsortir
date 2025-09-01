@@ -51,7 +51,7 @@ class Sortie
     private ?Etat $etat = null;
 
     #[ORM\ManyToOne(inversedBy: 'sorties')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false,onDelete: "CASCADE")]
     private ?Site $site = null;
 
     #[ORM\ManyToOne(inversedBy: 'sorties')]
@@ -66,7 +66,7 @@ class Sortie
     private Collection $users;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete:"CASCADE")]
     private ?User $organisateur = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]

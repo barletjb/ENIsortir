@@ -8,6 +8,7 @@
     <tr>
         <th scope="col">#</th>
         <th scope="col">Email</th>
+        <th scope="col">Rôle</th>
         <th scope="col">Pseudo</th>
         <th scope="col">Nom</th>
         <th scope="col">Prénom</th>
@@ -19,9 +20,19 @@
 
            {% for user in users %}
            <tr>
+
                <td>{{ user.id }}</td>
-               <td>{{ user.email }}</td>
-               <td>{{ user.pseudo }}</td>
+               <td>{{ user.email }}<br><a href="{{ path('admin_user_delete',{'id':user.id}) }}" class="btnMod" >Supprimer utilisateur</a></td>
+               {% if user.roles == ["ROLE_USER"] %}
+                   <td>Uilisateur</td>
+               {% else %}
+                   <td><strong>Administrateur</strong></td>
+               {% endif %}
+               <td>
+                   <a class="lien_profil" title="Voir profil"
+                       href="{{ path('user_profil',{'id':user.id}) }}">{{ user.pseudo }}
+                       <i class="bi bi-box-arrow-in-right fs-4" ></i></a>
+               </td>
                <td>{{ user.nom }}</td>
                <td>{{ user.prenom }}</td>
                {% if user.profileCompleted %}
@@ -30,13 +41,16 @@
                    <td> <i class="bi bi-x-circle"></i></td>
                {% endif %}
                {% if user.isActif %}
-               <td><button >Désactiver</button></td>
+               <td><a href=""  class="btnMod" >Désactiver</a></td>
+                   {% else %}
+               <td><a href="" class="btnAcc">Réactiver</a></td>
+               {% endif %}
 
 
            </tr>
             {% endfor %}
     </tbody>
-</table>/
+</table>
 
 
 {% endblock %}

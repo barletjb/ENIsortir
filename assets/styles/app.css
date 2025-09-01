@@ -70,6 +70,7 @@ h1{
     background: rgb(166, 224, 183);
     border-radius: 5px;
     color: black;
+    padding:0.2em;
 }
 
 .btnAcc:hover{
@@ -81,6 +82,8 @@ h1{
 .btnMod{
     background: rgb(227, 98, 98);
     border-radius: 5px;
+    color:black;
+    padding:0.2em;
 }
 
 .btnMod:hover{
@@ -132,4 +135,8 @@ section{
 
 .bi-x-circle{
     color:rgb(227, 98, 98)
+}
+
+.lien_profil:hover{
+    color:rgb(116, 199, 242);
 }
