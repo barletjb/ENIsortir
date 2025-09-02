@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h3>{{ title }}</h3>
+
+    <h4>Filtrer les villes</h4>
+
+    <form method="get" action="{{ path('admin_villes_list') }}">
+        <label for="search">Le nom contient :</label>
+        <input type="text" name="search" id="search" value="{{ app.request.get('search') }}">
+        <button type="submit">Rechercher</button>
+    </form>
+
+    <a href="{{ path(add_route) }}" class="btn btn-success">Ajouter une ville</a>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Code postal</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for ville in villes %}
+            <tr>
+                <td>{{ ville.nom }}</td>
+                <td>{{ ville.codePostal }}</td>
+                <td>
+                    <a class="btnMod" href="{{ path('admin_villes_edit', { 'id': ville.id }) }}">Modifier</a> |
+                    <a class="btnMod" href="{{ path('admin_villes_delete', { 'id': ville.id }) }}" onclick="return confirm('Supprimer cette ville ?')">Supprimer</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr><td colspan="3">Aucune ville trouvée.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
