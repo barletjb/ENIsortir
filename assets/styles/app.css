@@ -91,7 +91,10 @@ h1{
 
 .btnAdd{
     background: rgb(210, 175, 222);
+    color:black;
     border-radius: 5px;
+    padding : 0.2em;
+    margin : 1em;
 }
 
 .btnAdd:hover{
@@ -151,6 +154,12 @@ section{
 .lien_profil:hover{
     color:rgb(116, 199, 242);
 }
+
+
+.table{
+    margin-top: 1em;
+}
+
 .list-group-item{
     background-color: #0e0e0e;
 }
@@ -159,3 +168,4 @@ section{
     background-color: #f9f9f9;
 
 }
+
