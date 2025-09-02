@@ -44,7 +44,10 @@ symfony composer require symfonycasts/reset-password-bundle
 6. Install Mailer :  
 ```powershell
 symfony composer require symfony/mailer
+
+php bin/console app:rappel-mail /* Commande pour tester l'envoi de mail */
 ```
+
 
 7. Start Symfony Server :  
 ```powershell
