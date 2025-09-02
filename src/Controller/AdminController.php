@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Etat;
 use App\Entity\Site;
+use App\Entity\Sortie;
 use App\Entity\User;
 use App\Form\CsvImportType;
 use App\Form\UserType;
@@ -10,7 +12,6 @@ use App\Repository\SiteRepository;
 use App\Repository\VilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Csv\Reader;
-use League\Csv\Statement;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,8 +26,8 @@ use Symfony\Component\Routing\Attribute\Route;
 final class AdminController extends AbstractController
 {
     /**
-     * @throws TransportExceptionInterface
-     * @throws RandomException
+//     * @throws TransportExceptionInterface
+//     * @throws RandomException
      */
     #[Route('/create-user', name: '_user_create')]
     public function create(
@@ -156,7 +157,7 @@ final class AdminController extends AbstractController
 
 
     #[Route('/users_list', name: '_users_list')]
-    public function usersList(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher) : Response
+    public function usersList(Request $request, EntityManagerInterface $em) : Response
 {
     $this->denyAccessUnlessGranted('ROLE_ADMIN');
     $users = $em->getRepository(User::class)->findAll();
@@ -165,10 +166,8 @@ final class AdminController extends AbstractController
     ]);
 }
 
-
-
 #[Route('/user/{id}/delete', name: '_user_delete')]
-public function userDelete(Request $request, User $user, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
+public function userDelete(Request $request, User $user, EntityManagerInterface $em): Response
 {
     $this->denyAccessUnlessGranted('ROLE_ADMIN');
     $user = $user->getId();
@@ -182,9 +181,59 @@ public function userDelete(Request $request, User $user, EntityManagerInterface 
     }
 
     return $this->render('admin/user_delete.html.twig', []);
-
-
 }
+
+    #[Route('/user/{id}/disable', name: '_user_disable')]
+    public function userDisable(Request $request, User $user, EntityManagerInterface $em): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $user = $user->getId();
+
+        if ($user){
+            $userDisable = $em->getRepository(User::class)->findOneBy(['id' => $user]);
+            $userDisable->setIsActif(false);
+            $sortieUser = $em->getRepository(Sortie::class)->findBy(['organisateur' => $userDisable]);
+            $sortieParticipant = $userDisable->getSorties();
+
+            $etatAnnule = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'Annulée']);
+
+            foreach ($sortieUser as $sortie) {
+                $sortie->setEtat($etatAnnule);
+                $sortie->setRaisonAnnulation("Organisateur banni pour une durée indéterminée");
+                $em->persist($sortie);
+            }
+
+            foreach ($sortieParticipant as $sortie) {
+                $sortie->removeUser($userDisable);
+                $em->persist($sortie);
+            }
+
+
+            $em->flush();
+            $this->addFlash('success','Utilisateur désactivé avec succès');
+            return $this->redirectToRoute('admin_users_list');
+        }
+
+        return $this->render('admin/user_delete.html.twig', []);
+    }
+
+    #[Route('/user/{id}/active', name: '_user_active')]
+    public function userActive(Request $request, User $user, EntityManagerInterface $em): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $user = $user->getId();
+
+        if ($user){
+            $userActive = $em->getRepository(User::class)->findOneBy(['id' => $user]);
+            $userActive->setIsActif(true);
+
+            $em->flush();
+            $this->addFlash('success','Utilisateur réactivé avec succès');
+            return $this->redirectToRoute('admin_users_list');
+        }
+
+        return $this->render('admin/user_delete.html.twig', []);
+    }
 
 #[Route('/sites_list', name: '_sites_list')]
 public function list(SiteRepository $siteRepo, VilleRepository $villeRepo, Request $request): Response

@@ -40,8 +40,6 @@ final class SortieController extends AbstractController
         $form = $this->createForm(RechercheIndexType::class);
         $form->handleRequest($request);
 
-        $criterias = null;
-        $sorties = [];
 
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -84,34 +82,38 @@ final class SortieController extends AbstractController
         $nbUsers = count($sortie->getUsers());
         $date = new \DateTime();
 
-        if ($date <= $sortie->getDateLimiteInscription()) {
-            if ($nbUsers < $sortie->getNbInscriptionsMax()) {
-                if (!$sortie->getUsers()->contains($user)) {
-                    $sortie->addUser($user);
+        if($user->isActif()){
+            if ($date <= $sortie->getDateLimiteInscription()) {
+                if ($nbUsers < $sortie->getNbInscriptionsMax()) {
+                    if (!$sortie->getUsers()->contains($user)) {
+                        $sortie->addUser($user);
 
-                    $email = (new Email())
-                        ->from('admin@campus-eni.fr')
-                        ->to($user->getEmail())
-                        ->subject('Inscription à la sortie " '. $sortie->getNom() . " \" .")
-                        ->html(
-                            $this->renderView('emails/user_inscription.html.twig', [
-                                'user' => $user,
-                                'sortie'=> $sortie,
-                            ])
-                        );
-                    $mailer->send($email);
+                        $email = (new Email())
+                            ->from('admin@campus-eni.fr')
+                            ->to($user->getEmail())
+                            ->subject('Inscription à la sortie " '. $sortie->getNom() . " \" .")
+                            ->html(
+                                $this->renderView('emails/user_inscription.html.twig', [
+                                    'user' => $user,
+                                    'sortie'=> $sortie,
+                                ])
+                            );
+                        $mailer->send($email);
 
-                    $em->persist($sortie);
-                    $em->flush();
-                    $this->addFlash('success', 'Inscription réussie !');
+                        $em->persist($sortie);
+                        $em->flush();
+                        $this->addFlash('success', 'Inscription réussie !');
+                    } else {
+                        $this->addFlash('info', 'Vous êtes déjà inscrit(e).');
+                    }
                 } else {
-                    $this->addFlash('info', 'Vous êtes déjà inscrit(e).');
+                    $this->addFlash('info', 'Le nombre maximal de personne est atteint. Une prochaine fois, peut-être...');
                 }
             } else {
-                $this->addFlash('info', 'Le nombre maximal de personne est atteint. Une prochaine fois, peut-être...');
+                $this->addFlash('info', 'La date de clôture des inscriptions est atteinte !');
             }
         } else {
-            $this->addFlash('info', 'La date de clôture des inscriptions est atteinte !');
+            $this->addFlash('danger','En tant que membre banni vous ne pouvez pas vous inscrire à une sortie');
         }
         return $this->redirectToRoute('sortie');
 

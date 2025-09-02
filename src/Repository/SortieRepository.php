@@ -42,7 +42,6 @@ class SortieRepository extends ServiceEntityRepository
                 ->setParameter('dateFin', $criterias['dateFin']);
         }
 
-
         if (!empty($criterias['organisateur'])) {
             $qb->andWhere('s.organisateur = :user')
                 ->setParameter('user', $user);
@@ -65,7 +64,6 @@ class SortieRepository extends ServiceEntityRepository
             $qb->andWhere('s.dateHeureDebut >= :now')
                 ->setParameter('now', new \DateTime());
         }
-
 
         $qb->orderBy('s.dateHeureDebut', 'ASC');
         return $qb->getQuery()->getResult();

@@ -26,7 +26,7 @@ class Ville
     /**
      * @var Collection<int, Lieu>
      */
-    #[ORM\OneToMany(targetEntity: Lieu::class, mappedBy: 'ville', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Lieu::class, mappedBy: 'ville', orphanRemoval: false)]
     #[ORM\JoinColumn(nullable: false,onDelete: "CASCADE")]
     private Collection $lieux;
 

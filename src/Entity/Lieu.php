@@ -36,11 +36,11 @@ class Lieu
     /**
      * @var Collection<int, Sortie>
      */
-    #[ORM\OneToMany(targetEntity: Sortie::class, mappedBy: 'lieu', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Sortie::class, mappedBy: 'lieu', orphanRemoval: false)]
     private Collection $sorties;
 
     #[ORM\ManyToOne(inversedBy: 'lieux')]
-    #[ORM\JoinColumn(nullable: false,onDelete: "CASCADE")]
+    #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotBlank(message: 'Vous devez indiquer une ville')]
     private ?Ville $ville = null;
 

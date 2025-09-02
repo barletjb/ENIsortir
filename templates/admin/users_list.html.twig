@@ -22,7 +22,8 @@
            <tr>
 
                <td>{{ user.id }}</td>
-               <td>{{ user.email }}<br><a href="{{ path('admin_user_delete',{'id':user.id}) }}" class="btnMod" >Supprimer utilisateur</a></td>
+               <td>{{ user.email }}<br><a href="{{ path('admin_user_delete',{'id':user.id}) }}" class="btnMod" onclick="return confirm('Etes-vous sur de vouloir supprimer {{ user.email }}?')">Supprimer utilisateur</a></td>
+
                {% if user.roles == ["ROLE_USER"] %}
                    <td>Uilisateur</td>
                {% else %}
@@ -41,9 +42,9 @@
                    <td> <i class="bi bi-x-circle"></i></td>
                {% endif %}
                {% if user.isActif %}
-               <td><a href=""  class="btnMod" >Désactiver</a></td>
+               <td><a href="{{ path('admin_user_disable',{'id':user.id}) }}"  class="btnMod" onclick="return confirm('Etes-vous sur de vouloir désactiver {{ user.email }}?')">Désactiver</a></td>
                    {% else %}
-               <td><a href="" class="btnAcc">Réactiver</a></td>
+               <td><a href="{{ path('admin_user_active',{'id':user.id}) }}" class="btnAcc">Réactiver</a></td>
                {% endif %}
 
 
