@@ -1,0 +1,6 @@
+# config/cron_tasks.yaml
+envoi_rappel:
+  schedule: '35 16 * * *'  # tous les jours à 16h35
+
+# Commande dans la console réalisée pour mettre en place le CRON :
+  35 16 * * * /wamp64/bin/php /var/www/ENIsortir/bin/console
