@@ -46,12 +46,7 @@ symfony composer require symfonycasts/reset-password-bundle
 symfony composer require symfony/mailer
 ```
 
-7. Install Scheduler :  
-```powershell
-symfony composer require symfony/scheduler
-```
-
-8. Start Symfony Server :  
+7. Start Symfony Server :  
 ```powershell
 symfony serve
 ```
