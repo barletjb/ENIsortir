@@ -151,3 +151,11 @@ section{
 .lien_profil:hover{
     color:rgb(116, 199, 242);
 }
+.list-group-item{
+    background-color: #0e0e0e;
+}
+
+.infos-utilisateur .list-group-item {
+    background-color: #f9f9f9;
+
+}

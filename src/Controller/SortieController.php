@@ -276,6 +276,7 @@ final class SortieController extends AbstractController
         ], 400);
     }
 
+
     #[IsGranted('ROLE_USER')]
     #[Route('/{id}/update', name: '_update')]
     public function updateSortie(Sortie $sortie, Request $request, EntityManagerInterface $em): Response
