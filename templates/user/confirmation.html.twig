@@ -8,12 +8,21 @@
         <div class="col-4">
 
             {{ form_start(form_User, {'attr': {'data-turbo': 'false'}}) }}
-            {% if user.photo %}
-                <img src="{{ asset('uploads/photo/' ~ user.photo) }}" alt="Photo de profil" class="img-thumbnail" style="max-width: 220px; height: auto;">
-            {% else %}
-                <img src="{{ asset('uploads/photo/default.jpg') }}" alt="Image par défaut" class="img-thumbnail" style="max-width: 220px; height: auto;">
-            {% endif %}
-            {{ form_row(form_User.photo) }}
+
+{#            {% if user.photo %}#}
+{#                <img src="{{ asset('uploads/photo/' ~ user.photo) }}" alt="Photo de profil" class="img-thumbnail" style="max-width: 220px; height: auto;">#}
+{#            {% else %}#}
+{#                <img src="{{ asset('uploads/photo/default.jpg') }}" alt="Image par défaut" class="img-thumbnail" style="max-width: 220px; height: auto;">#}
+{#            {% endif %}#}
+            <div class="">
+                <img id="preview"
+                     src="{{ user.photo ? asset('uploads/photo/' ~ user.photo) : asset('uploads/photo/default.jpg') }}"
+                     alt="Photo de profil de {{ user.pseudo }}"
+                     class="img-thumbnail"
+                     style="max-width: 220px; max-height: 220px;">
+            </div>
+
+            {{ form_row(form_User.photo, { 'attr': {'accept': 'image/*'} }) }}
             {{ form_row(form_User.site) }}
             {{ form_row(form_User.email) }}
             {{ form_row(form_User.nom) }}
@@ -28,4 +37,28 @@
 
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const fileInput = document.querySelector('input[type="file"]');
+            const preview = document.getElementById('preview');
+
+            if (fileInput && preview) {
+                fileInput.addEventListener('change', function (event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            preview.src = e.target.result;
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+        });
+    </script>
+
+
+
+
 {% endblock %}

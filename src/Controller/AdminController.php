@@ -7,17 +7,13 @@ use App\Entity\Site;
 use App\Entity\Sortie;
 use App\Entity\User;
 use App\Form\CsvImportType;
-use App\Form\SiteType;
 use App\Form\UserType;
-use App\Repository\SiteRepository;
-use App\Repository\VilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Csv\Reader;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -96,7 +92,7 @@ final class AdminController extends AbstractController
 
             $csvPath = $uploadedFile->getRealPath();
             $csv = Reader::createFromPath($csvPath, 'r');
-            $csv->setDelimiter(';');
+            $csv->setDelimiter(',');
             $csv->setHeaderOffset(0);
 
             $records = $csv->getRecords();

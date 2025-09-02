@@ -147,7 +147,7 @@
                 </div>
                 <div class="modal-footer">
                     <form id="inscriptionForm" method="post" action="">
-                        <input type="hidden" name="sortie_id" id="sortieIdInputInscription">
+                        <input type="hidden" name="sortie_id" id="sortieIdInput">
                         <button type="button" class="btnMod" data-bs-dismiss="modal">Annuler</button>
                         <button type="submit" class="btnAcc">Confirmer</button>
                     </form>
@@ -162,8 +162,8 @@
             modal.addEventListener('show.bs.modal', function (event) {
                 const button = event.relatedTarget;
                 const sortieId = button.getAttribute('data-id');
-                const sortieNomInscription = button.getAttribute('data-nom');
-                document.getElementById('sortieNom').textContent = sortieNomInscription;
+                const sortieNom = button.getAttribute('data-nom');
+                document.getElementById('sortieNom').textContent = sortieNom;
                 document.getElementById('sortieIdInput').value = sortieId;
 
                 document.getElementById('inscriptionForm').action = '/sortie/' + sortieId + '/inscription';
@@ -189,7 +189,7 @@
                 </div>
                 <div class="modal-footer">
                     <form id="desistementForm" method="post" action="">
-                        <input type="hidden" name="sortie_id" id="sortieIdInputDesistement">
+                        <input type="hidden" name="sortie_id" id="sortieIdInput">
                         <button type="button" class="btnMod" data-bs-dismiss="modal">Annuler</button>
                         <button type="submit" class="btnAcc">Confirmer</button>
                     </form>
@@ -204,9 +204,9 @@
             modal.addEventListener('show.bs.modal', function (event) {
                 const button = event.relatedTarget;
                 const sortieId = button.getAttribute('data-id');
-                const sortieNomDesistement = button.getAttribute('data-nom');
+                const sortieNom = button.getAttribute('data-nom');
 
-                document.getElementById('sortieNom').textContent = sortieNomDesistement;
+                document.getElementById('sortieNom').textContent = sortieNom;
                 document.getElementById('sortieIdInput').value = sortieId;
 
                 document.getElementById('desistementForm').action = '/sortie/' + sortieId + '/desistement';
@@ -229,7 +229,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
                     </div>
                     <div class="modal-body">
-                        <p>Annuler la sortie <strong id="sortieNomAnnulation"></strong></p>
+                        <p>Annuler la sortie <strong id="sortieNom"></strong></p>
                         <div class="mb-3">
                             <label for="raison_annulation" class="form-label">Raison :</label>
                             <textarea name="raison_annulation" id="raison_annulation" class="form-control"
@@ -239,7 +239,7 @@
                     </div>
                     <div class="modal-footer">
                         <form id="annulationForm" method="post" action="">
-                            <input type="hidden" name="sortie_id" id="sortieIdInputAnnulation">
+                            <input type="hidden" name="sortie_id" id="sortieIdInput">
                             <button type="button" class="btnMod" data-bs-dismiss="modal">Annuler</button>
                             <button type="submit" class="btnAcc">Confirmer</button>
                         </form>
@@ -255,9 +255,9 @@
             modal.addEventListener('show.bs.modal', function (event) {
                 const button = event.relatedTarget;
                 const sortieId = button.getAttribute('data-id');
-                const sortieNomAnnulation = button.getAttribute('data-nom');
+                const sortieNom = button.getAttribute('data-nom');
 
-                document.getElementById('sortieNom').textContent = sortieNomAnnulation;
+                document.getElementById('sortieNom').textContent = sortieNom;
                 document.getElementById('sortieIdInput').value = sortieId;
 
                 document.getElementById('annulationForm').action = '/sortie/' + sortieId + '/annulation';
