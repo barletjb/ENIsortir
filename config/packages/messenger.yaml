@@ -26,5 +26,6 @@ framework:
       Symfony\Component\Notifier\Message\SmsMessage: sync
       'App\Message\RappelMailMessage': async
 
+
       # Route your messages to the transports
       # 'App\Message\YourMessage': async
