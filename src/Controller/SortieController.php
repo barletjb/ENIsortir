@@ -276,7 +276,7 @@ final class SortieController extends AbstractController
         ], 400);
     }
 
-    #[IsGranted('ROLE_ORGA')]
+    #[IsGranted('ROLE_USER')]
     #[Route('/{id}/update', name: '_update')]
     public function updateSortie(Sortie $sortie, Request $request, EntityManagerInterface $em): Response
     {
@@ -342,7 +342,7 @@ final class SortieController extends AbstractController
         ]);
     }
 
-    #[IsGranted('ROLE_ORGA')]
+    #[IsGranted('ROLE_USER')]
     #[Route('/{id}/publication', name: '_publication', methods: ['GET'])]
     public function publication(Sortie $sortie, EntityManagerInterface $em, EtatRepository $etatRepository ): RedirectResponse {
         $user = $this->getUser();
