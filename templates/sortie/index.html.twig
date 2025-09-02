@@ -6,9 +6,9 @@
     <section>
 
         <div class="larger">
-            <div>Date du jour :</div>
+            <div>Date du jour : {{ "now"|date("d/m/Y") }} </div>
             {% if user==null %}
-                <div> Vous devez vous connecter !!</div>
+                <div> Connectez-vous pour vous inscrire aux sorties !!</div>
             {% else %}
                 <div> Participant : {{ user.prenom }} {{ user.nom |first }}.</div>
 
@@ -16,52 +16,54 @@
         </div>
     </section>
 
-    <h1>Filtrer les sorties</h1>
-    <div class="row justify-content-center">
-        <div class="col-6">
-            <div>
-                {{ form_start(form_filtre) }}
+    {% if is_granted('ROLE_USER') %}
+        <h1>Filtrer les sorties</h1>
+        <div class="row justify-content-center">
+            <div class="col-6">
                 <div>
-                    {{ form_label(form_filtre.site) }}
-                    {{ form_widget(form_filtre.site) }}
-                </div>
-                <div>
-                    {{ form_label(form_filtre.rechercheNom) }}
-                    {{ form_widget(form_filtre.rechercheNom) }}
-                </div>
-                <div>
-                    <label>Entre le :</label>
-                    {{ form_widget(form_filtre.dateDebut) }}
-                    <label>et </label>
-                    {{ form_widget(form_filtre.dateFin) }}
-                </div>
-                <div>
-                    {{ form_label(form_filtre.organisateur) }}
-                    {{ form_widget(form_filtre.organisateur) }}
-                </div>
-                <div>
-                    {{ form_label(form_filtre.participant) }}
-                    {{ form_widget(form_filtre.participant) }}
-                </div>
-                <div>
-                    {{ form_label(form_filtre.nonParticipant) }}
-                    {{ form_widget(form_filtre.nonParticipant) }}
-                </div>
-                <div>
-                    {{ form_label(form_filtre.sortiesPassees) }}
-                    {{ form_widget(form_filtre.sortiesPassees) }}
-                </div>
-                <div>
-                    {{ form_label(form_filtre.submit) }}
-                    {{ form_widget(form_filtre.submit) }}
-                </div>
+                    {{ form_start(form_filtre) }}
+                    <div>
+                        {{ form_label(form_filtre.site) }}
+                        {{ form_widget(form_filtre.site) }}
+                    </div>
+                    <div>
+                        {{ form_label(form_filtre.rechercheNom) }}
+                        {{ form_widget(form_filtre.rechercheNom) }}
+                    </div>
+                    <div>
+                        <label>Entre le :</label>
+                        {{ form_widget(form_filtre.dateDebut) }}
+                        <label>et </label>
+                        {{ form_widget(form_filtre.dateFin) }}
+                    </div>
+                    <div>
+                        {{ form_label(form_filtre.organisateur) }}
+                        {{ form_widget(form_filtre.organisateur) }}
+                    </div>
+                    <div>
+                        {{ form_label(form_filtre.participant) }}
+                        {{ form_widget(form_filtre.participant) }}
+                    </div>
+                    <div>
+                        {{ form_label(form_filtre.nonParticipant) }}
+                        {{ form_widget(form_filtre.nonParticipant) }}
+                    </div>
+                    <div>
+                        {{ form_label(form_filtre.sortiesPassees) }}
+                        {{ form_widget(form_filtre.sortiesPassees) }}
+                    </div>
+                    <div>
+                        {{ form_label(form_filtre.submit) }}
+                        {{ form_widget(form_filtre.submit) }}
+                    </div>
 
 
-                {{ form_end(form_filtre) }}
+                    {{ form_end(form_filtre) }}
 
+                </div>
             </div>
         </div>
-    </div>
+    {% endif %}
 
     <div class="row">
         {% for sortie in sorties %}
@@ -77,55 +79,57 @@
                             / {{ sortie.nbInscriptionsMax }}</p>
                         <p class="card-text mb-1"><strong>État :</strong> {{ sortie.etat.libelle }}</p>
                         {% if sortie.etat.libelle == 'Annulée' %}
-                            <p class="card-text mb-1"><strong>Raison : {{ sortie.raisonAnnulation }}</strong> </p>
+                            <p class="card-text mb-1"><strong>Raison : {{ sortie.raisonAnnulation }}</strong></p>
                         {% endif %}
                         <p class="card-text mb-3"><strong>Organisateur
                                 :</strong> {{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom|first }}.</p>
 
                         <div class="mt-auto">
-                            {% if  sortie.etat.libelle != "Activité en cours" or sortie.etat.libelle != "En création" %}
-                                <button type="button" class="btnMod"
-                                        onclick="window.location.href='{{ path('sortie_detail', { id: sortie.id }) }}'">
-                                    Afficher
-                                </button>
-                            {% endif %}
 
-                            {% if sortie.etat.libelle != "Clôturée" and sortie.etat.libelle != "Annulée"  and sortie.etat.libelle != "En création"%}
-                                {% if  sortie.organisateur != user %}
-                                    {% if (sortie.etat.libelle != "En création" and user in sortie.users) %}
-                                        <button type="button" class="btnMod" data-bs-toggle="modal"
-                                                data-bs-target="#modalDesistement"
-                                                data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
-                                            Se désister
-                                        </button>
-                                    {% else %}
-                                        <button type="button" class="btnAcc" data-bs-toggle="modal"
-                                                data-bs-target="#modalInscription"
-                                                data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
-                                            S'inscrire
-                                        </button>
-                                    {% endif %}
-
+                                {% if  sortie.etat.libelle != "Activité en cours" or sortie.etat.libelle != "En création" %}
+                                    <button type="button" class="btnMod"
+                                            onclick="window.location.href='{{ path('sortie_detail', { id: sortie.id }) }}'">
+                                        Afficher
+                                    </button>
                                 {% endif %}
-                            {% endif %}
+                            {% if is_granted('ROLE_USER') %}
+                                {% if sortie.etat.libelle != "Clôturée" and sortie.etat.libelle != "Annulée"  and sortie.etat.libelle != "En création" %}
+                                    {% if  sortie.organisateur != user %}
+                                        {% if (sortie.etat.libelle != "En création" and user in sortie.users) %}
+                                            <button type="button" class="btnMod" data-bs-toggle="modal"
+                                                    data-bs-target="#modalDesistement"
+                                                    data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
+                                                Se désister
+                                            </button>
+                                        {% else %}
+                                            <button type="button" class="btnAcc" data-bs-toggle="modal"
+                                                    data-bs-target="#modalInscription"
+                                                    data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
+                                                S'inscrire
+                                            </button>
+                                        {% endif %}
+
+                                    {% endif %}
+                                {% endif %}
 
 
-                            {% if sortie.organisateur == user and sortie.etat.libelle == "En création" %}
-                                <button type="button" class="btnMod"
-                                        onclick="window.location.href='{{ path('sortie_update', { id: sortie.id }) }}'">
-                                    Modifier
-                                </button>
-                                <button type="button" class="btnAcc"
-                                        onclick="window.location.href='{{ path('sortie_publication', { id: sortie.id }) }}'">
-                                    Publier
-                                </button>
-                            {% endif %}
-                            {% if (is_granted('ROLE_ADMIN') or sortie.organisateur == user) and sortie.etat.libelle == "Ouverte" %}
-                                <button type="button" class="btnMod" data-bs-toggle="modal"
-                                        data-bs-target="#modalAnnulation"
-                                        data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
-                                    Annuler
-                                </button>
+                                {% if sortie.organisateur == user and sortie.etat.libelle == "En création" %}
+                                    <button type="button" class="btnMod"
+                                            onclick="window.location.href='{{ path('sortie_update', { id: sortie.id }) }}'">
+                                        Modifier
+                                    </button>
+                                    <button type="button" class="btnAcc"
+                                            onclick="window.location.href='{{ path('sortie_publication', { id: sortie.id }) }}'">
+                                        Publier
+                                    </button>
+                                {% endif %}
+                                {% if (is_granted('ROLE_ADMIN') or sortie.organisateur == user) and sortie.etat.libelle == "Ouverte" %}
+                                    <button type="button" class="btnMod" data-bs-toggle="modal"
+                                            data-bs-target="#modalAnnulation"
+                                            data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
+                                        Annuler
+                                    </button>
+                                {% endif %}
                             {% endif %}
                         </div>
                     </div>
@@ -169,6 +173,7 @@
                 document.getElementById('inscriptionForm').action = '/sortie/' + sortieId + '/inscription';
             });
         }
+
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', inscription);
         } else {
@@ -213,6 +218,7 @@
             });
 
         }
+
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', desistement);
         } else {
@@ -263,6 +269,7 @@
                 document.getElementById('annulationForm').action = '/sortie/' + sortieId + '/annulation';
             });
         }
+
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', annulation);
         } else {
@@ -335,5 +342,6 @@
     {#    <a href="{{ path('sortie_edit') }}"> #}
     {#        <button href="" class="btn btn-success" type="button">CREER UNE SORTIE</button> #}
     {#    </a> #}
+
 
 {% endblock %}
