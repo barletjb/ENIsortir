@@ -3,7 +3,16 @@
 <div style="display: flex; gap: 2rem;">
 
     <section style="flex: 1;">
-        <h3>Sites</h3>
+        <h3>{{ title }}</h3>
+
+        <h4>Filtrer les sites</h4>
+
+        <form method="get" action="{{ path('admin_sites_list') }}">
+            <label for="search">Le nom contient :</label>
+            <input type="text" name="search" id="search" value="{{ app.request.get('search') }}">
+            <button type="submit">Rechercher</button>
+        </form>
+
         <a href="{{ path('admin_sites_add') }}" class="btn btn-success">Ajouter un site</a>
 
         <table class="table">

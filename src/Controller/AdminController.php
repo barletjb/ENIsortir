@@ -187,67 +187,6 @@ public function userDelete(Request $request, User $user, EntityManagerInterface 
 
 }
 
-#[Route('/sites_list', name: '_sites_list')]
-public function list(SiteRepository $siteRepo, VilleRepository $villeRepo, Request $request): Response
-{
-    $villeId = $request->query->get('ville');
-    $villes = $villeRepo->findAll();
-
-    $sites = $villeId
-        ? $siteRepo->findBy(['ville' => $villeId])
-        : $siteRepo->findAll();
-
-    return $this->render('admin/sites.html.twig', [
-        'sites' => $sites,
-        'villes' => $villes,
-        'selectedVille' => $villeId,
-    ]);
-}
-    #[Route('/sites/add', name: '_sites_add')]
-    public function add(Request $request, EntityManagerInterface $em): Response
-    {
-        $site = new Site();
-        $form = $this->createForm(SiteType::class, $site);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em->persist($site);
-            $em->flush();
-            return $this->redirectToRoute('admin_sites_list');
-
-        }
-
-        return $this->render('sites/edit.html.twig', [
-            'form' => $form->createView(),
-            'title' => 'Ajouter un site',
-        ]);
-    }
-
-    #[Route('/sites/{id}/edit', name: '_sites_edit')]
-    public function edit(Site $site, Request $request, EntityManagerInterface $em): Response
-    {
-        $form = $this->createForm(SiteType::class, $site);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em->flush();
-            return $this->redirectToRoute('admin_sites_list');
-        }
-
-        return $this->render('sites/edit.html.twig', [
-            'form' => $form->createView(),
-            'title' => 'Modifier le site',
-        ]);
-    }
-
-    #[Route('/sites/{id}/delete', name: '_sites_delete')]
-    public function delete(Site $site, EntityManagerInterface $em): Response
-    {
-        $em->remove($site);
-        $em->flush();
-        return $this->redirectToRoute('admin_sites_list');
-    }
-
 
 
 
