@@ -147,7 +147,7 @@
                 </div>
                 <div class="modal-footer">
                     <form id="inscriptionForm" method="post" action="">
-                        <input type="hidden" name="sortie_id" id="sortieIdInput">
+                        <input type="hidden" name="sortie_id" id="sortieIdInputInscription">
                         <button type="button" class="btnMod" data-bs-dismiss="modal">Annuler</button>
                         <button type="submit" class="btnAcc">Confirmer</button>
                     </form>
@@ -163,7 +163,6 @@
                 const button = event.relatedTarget;
                 const sortieId = button.getAttribute('data-id');
                 const sortieNomInscription = button.getAttribute('data-nom');
-
                 document.getElementById('sortieNom').textContent = sortieNomInscription;
                 document.getElementById('sortieIdInput').value = sortieId;
 
@@ -190,7 +189,7 @@
                 </div>
                 <div class="modal-footer">
                     <form id="desistementForm" method="post" action="">
-                        <input type="hidden" name="sortie_id" id="sortieIdInput">
+                        <input type="hidden" name="sortie_id" id="sortieIdInputDesistement">
                         <button type="button" class="btnMod" data-bs-dismiss="modal">Annuler</button>
                         <button type="submit" class="btnAcc">Confirmer</button>
                     </form>
@@ -240,7 +239,7 @@
                     </div>
                     <div class="modal-footer">
                         <form id="annulationForm" method="post" action="">
-                            <input type="hidden" name="sortie_id" id="sortieIdInput">
+                            <input type="hidden" name="sortie_id" id="sortieIdInputAnnulation">
                             <button type="button" class="btnMod" data-bs-dismiss="modal">Annuler</button>
                             <button type="submit" class="btnAcc">Confirmer</button>
                         </form>

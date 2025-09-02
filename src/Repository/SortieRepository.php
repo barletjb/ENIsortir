@@ -90,6 +90,16 @@ class SortieRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findByDateBetween(\DateTimeInterface $start, \DateTimeInterface $end): array
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.dateHeureDebut >= :start')
+            ->andWhere('s.dateHeureDebut < :end')
+            ->setParameter('start', $start)
+            ->setParameter('end', $end)
+            ->getQuery()
+            ->getResult();
+    }
 
 
 }

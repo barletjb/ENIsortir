@@ -1,0 +1,19 @@
+{% block title %}Rappel : Sortie ENI {% endblock %}
+
+{% block body %}
+
+    <p>Bonjour {{ user.pseudo }},</p>
+
+    <p>Un petit rappel : la sortie <strong>{{ sortie.nom }}</strong> aura lieu dans 2 jours !</p>
+
+    <ul>
+        <li>Date : {{ sortie.dateHeureDebut|date('d/m/Y H:i') }}</li>
+        <li>Lieu : {{ sortie.lieu.nom }}</li>
+    </ul>
+
+    <p>À bientôt !</p>
+    <p>Cordialement,<br>
+        L'équipe Campus ENI</p>
+
+
+{% endblock %}
