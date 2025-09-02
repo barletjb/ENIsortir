@@ -138,3 +138,6 @@ section{
 .lien_profil:hover{
     color:rgb(116, 199, 242);
 }
+.list-group-item{
+    background-color: #0e0e0e;
+}
