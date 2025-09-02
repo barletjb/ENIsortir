@@ -3,6 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use App\Entity\Sortie;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -71,15 +74,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private bool $isActif = true;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
-    #[ORM\JoinColumn(nullable: false,onDelete: "CASCADE")]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Site $site = null;
 
+    /**
+     * @var Collection<int, Sortie>
+     */
+    #[ORM\ManyToMany(targetEntity: Sortie::class, mappedBy: 'users')]
+    private Collection $sorties;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $photo = null;
     public function getPhoto(): ?string
     {
         return $this->photo;
+    }
+
+    public function __construct()
+    {
+        $this->sorties = new ArrayCollection();
     }
 
     public function setPhoto(?string $photo): self
@@ -249,6 +262,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setSite(?Site $site): static
     {
         $this->site = $site;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Sortie>
+     */
+    public function getSorties(): Collection
+    {
+        return $this->sorties;
+    }
+
+    public function addSortie(Sortie $sortie): static
+    {
+        if (!$this->sorties->contains($sortie)) {
+            $this->sorties->add($sortie);
+            $sortie->addUser($this);
+        }
+
+        return $this;
+    }
+
+
+    public function removeSortie(Sortie $sortie): static
+    {
+        if ($this->sorties->removeElement($sortie)) {
+            $sortie->removeUser($this);
+        }
 
         return $this;
     }

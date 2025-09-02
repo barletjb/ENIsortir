@@ -46,7 +46,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             $user->setPrenom($faker->firstName);
             $user->setNom($faker->lastName);
             $user->setRoles(["ROLE_USER"]);
-            $user->setIsActif($faker->boolean(25));
+            $user->setIsActif(true);
             $user->setProfileCompleted(true);
 
             $siteIndex = $faker->numberBetween(0, 2);

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello SortieController!{% endblock %}
+{% block title %}Liste des sorties!{% endblock %}
 
 {% block body %}
     <section>
@@ -77,7 +77,7 @@
                             / {{ sortie.nbInscriptionsMax }}</p>
                         <p class="card-text mb-1"><strong>État :</strong> {{ sortie.etat.libelle }}</p>
                         {% if sortie.etat.libelle == 'Annulée' %}
-                            <p class="card-text mb-1"><strong>Raison :</strong> {{ sortie.raisonAnnulation }}</p>
+                            <p class="card-text mb-1"><strong>Raison : {{ sortie.raisonAnnulation }}</strong> </p>
                         {% endif %}
                         <p class="card-text mb-3"><strong>Organisateur
                                 :</strong> {{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom|first }}.</p>
@@ -90,7 +90,7 @@
                                 </button>
                             {% endif %}
 
-                            {% if sortie.etat.libelle != "Clôturée" %}
+                            {% if sortie.etat.libelle != "Clôturée" and sortie.etat.libelle != "Annulée"  and sortie.etat.libelle != "En création"%}
                                 {% if  sortie.organisateur != user %}
                                     {% if (sortie.etat.libelle != "En création" and user in sortie.users) %}
                                         <button type="button" class="btnMod" data-bs-toggle="modal"
@@ -162,20 +162,19 @@
             modal.addEventListener('show.bs.modal', function (event) {
                 const button = event.relatedTarget;
                 const sortieId = button.getAttribute('data-id');
-                const sortieNom = button.getAttribute('data-nom');
-
-                document.getElementById('sortieNom').textContent = sortieNom;
-                document.getElementById('sortieIdInputInscription').value = sortieId;
+                const sortieNomInscription = button.getAttribute('data-nom');
+                document.getElementById('sortieNom').textContent = sortieNomInscription;
+                document.getElementById('sortieIdInput').value = sortieId;
 
                 document.getElementById('inscriptionForm').action = '/sortie/' + sortieId + '/inscription';
             });
-        };
+        }
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', inscription);
         } else {
             inscription();
         }
-        ;
+
     </script>
 
     <div class="modal fade" id="modalDesistement" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
@@ -205,15 +204,15 @@
             modal.addEventListener('show.bs.modal', function (event) {
                 const button = event.relatedTarget;
                 const sortieId = button.getAttribute('data-id');
-                const sortieNom = button.getAttribute('data-nom');
+                const sortieNomDesistement = button.getAttribute('data-nom');
 
-                document.getElementById('sortieNom').textContent = sortieNom;
-                document.getElementById('sortieIdInputDesistement').value = sortieId;
+                document.getElementById('sortieNom').textContent = sortieNomDesistement;
+                document.getElementById('sortieIdInput').value = sortieId;
 
                 document.getElementById('desistementForm').action = '/sortie/' + sortieId + '/desistement';
             });
 
-        };
+        }
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', desistement);
         } else {
@@ -256,14 +255,14 @@
             modal.addEventListener('show.bs.modal', function (event) {
                 const button = event.relatedTarget;
                 const sortieId = button.getAttribute('data-id');
-                const sortieNom = button.getAttribute('data-nom');
+                const sortieNomAnnulation = button.getAttribute('data-nom');
 
-                document.getElementById('sortieNom').textContent = sortieNom;
-                document.getElementById('sortieIdInputAnnulation').value = sortieId;
+                document.getElementById('sortieNom').textContent = sortieNomAnnulation;
+                document.getElementById('sortieIdInput').value = sortieId;
 
                 document.getElementById('annulationForm').action = '/sortie/' + sortieId + '/annulation';
             });
-        };
+        }
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', annulation);
         } else {

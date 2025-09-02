@@ -23,7 +23,7 @@ class Etat
     /**
      * @var Collection<int, Sortie>
      */
-    #[ORM\OneToMany(targetEntity: Sortie::class, mappedBy: 'etat', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Sortie::class, mappedBy: 'etat', orphanRemoval: false)]
     private Collection $sorties;
 
     public function __construct()
