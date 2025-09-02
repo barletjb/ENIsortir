@@ -46,7 +46,7 @@ symfony composer require symfonycasts/reset-password-bundle
 symfony composer require symfony/mailer
 
 php bin/console app:rappel-mail
-/* Commande pour tester l'envoi de mail */
+/* Commande pour tester l\'envoi de mail */
 ```
 
 
