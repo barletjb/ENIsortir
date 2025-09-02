@@ -83,6 +83,7 @@ final class VilleController extends AbstractController
     #[Route('/villes/{id}/delete', name: '_villes_delete')]
     public function delete(Ville $ville, EntityManagerInterface $em): Response
     {
+
         $em->remove($ville);
         $em->flush();
         return $this->redirectToRoute('admin_villes_list');

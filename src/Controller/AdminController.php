@@ -85,32 +85,38 @@ final class AdminController extends AbstractController
 
         $formCsv = $this->createForm(CsvImportType::class);
         $formCsv->handleRequest($request);
+        $importedUsers = [];
+        $erreurs = [];
 
         if ($formCsv->isSubmitted() && $formCsv->isValid()) {
             $uploadedFile = $formCsv->get('csv')->getData();
 
-
             $csvPath = $uploadedFile->getRealPath();
             $csv = Reader::createFromPath($csvPath, 'r');
-            $csv->setDelimiter(',');
+            $csv->setDelimiter(';');
             $csv->setHeaderOffset(0);
 
             $records = $csv->getRecords();
+
             foreach ($records as $record) {
 
+                if (count(array_filter($record)) === 0) {
+                    continue;
+                }
+
                 if (empty($record['email']) || !filter_var($record['email'], FILTER_VALIDATE_EMAIL)) {
-                    $logger->error('email vide');
+                    $erreurs[] = 'L\email n\'est pas valide : '.($record['email'] ?? '(vide)');
                     continue;
                 }
 
                 if (!preg_match('/^[a-zA-Z0-9._%+-]+@campus-eni\.fr$/', $record['email'])) {
-                    $logger->error('email pattern');
+                    $erreurs[] = 'Email non conforme : ' . $record['email'];
                     continue;
                 }
 
                 $existingUser = $em->getRepository(User::class)->findOneBy(['email' => $record['email']]);
                 if ($existingUser) {
-                    $logger->error('existe déjà');
+                    $erreurs[] = 'Utilisateur déjà existant : ' . $record['email'];
                     continue;
                 }
 
@@ -118,7 +124,7 @@ final class AdminController extends AbstractController
                 if (!empty($record['site'])) {
                     $site = $em->getRepository(Site::class)->find($record['site']);
                     if (!$site) {
-                        $logger->error('pas de site');
+                        $erreurs[] = 'Site non trouvé pour l\'utilisateur : ' . $record['email'];
                         continue;
                     }
                 }
@@ -139,14 +145,26 @@ final class AdminController extends AbstractController
                 $logger->error('user créé'.$record['email']);
 
                 $em->persist($user);
+                $importedUsers[] = $user;
 
             }
             $em->flush();
+
+            foreach ($erreurs as $erreur) {
+                $this->addFlash('danger', $erreur);
+            }
+
+            foreach ($importedUsers as $importedUser) {
+                $this->addFlash('success',$importedUser->getEmail().' importé');
+            }
             $this->addFlash('success','Import terminé');
             return $this->redirectToRoute('admin_users_list');
+
         }
             return $this->render('admin/import_csv.html.twig', [
                 'formCsv' => $formCsv,
+                'erreurs' => $erreurs,
+                'importedUsers' => $importedUsers,
             ]);
 
 
