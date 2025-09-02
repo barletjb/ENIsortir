@@ -32,8 +32,8 @@
         <div class="navbar">
 
             {% if is_granted('ROLE_ADMIN') %}
-                <a class="nav-link" href="{{ path('admin_sites_list') }}"><i class="bi bi-building-add"></i> Villes </a>
-               {#  <a class="nav-link" href="{{ path('admin_sites_list') }}"><i class="bi bi-geo"></i> Sites </a>#}
+                <a class="nav-link" href="{{ path('admin_sites_list') }}"><i class="bi bi-building-add"></i> Sites </a>
+               {#  <a class="nav-link" href="{{ path('admin_sites_list') }}"><i class="bi bi-geo"></i> Villes </a>#}
             {% endif %}
 
                 <a class="nav-link" href="{{ path('sortie') }}"><i class="bi bi-grid"></i> Accueil </a>
@@ -43,7 +43,7 @@
 
                         <a class="nav-link" href="{{ path('admin_user_create') }}"><i class="bi bi-person-add"></i> Créer Profil</a>
                         {#                <a href="{{ path('') }}"><i class=""></i> Villes</a>#}
-                        {#                <a href="{{ path('') }}"><i class=""></i> Sites</a>#}
+                        {#                <a href="{{ path('') }}"><i class=""></i> sites</a>#}
 
                 {% endif %}
 
