@@ -13,7 +13,7 @@
         <h1 class="text-center">{{ user.pseudo }}</h1>
 
         <div class="row mt-4 align-items-start">
-            <!-- Photo à gauche -->
+
             <div class="col-md-4 text-center">
                 {% if user.photo %}
                     <img src="{{ asset('uploads/photo/' ~ user.photo) }}" alt="Photo de profil" class="img-thumbnail" style="max-width: 220px; height: auto;">
@@ -23,7 +23,7 @@
             </div>
 
             <div class="col-md-8">
-                <ul class="list-group">
+                <ul class="infos-utilisateur list-group">
                     <li class="list-group-item"><strong>Prénom :</strong> {{ user.prenom }}</li>
                     <li class="list-group-item"><strong>Nom :</strong> {{ user.nom }}</li>
                     <li class="list-group-item"><strong>Téléphone :</strong> {{ user.telephone }}</li>

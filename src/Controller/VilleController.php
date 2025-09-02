@@ -84,6 +84,11 @@ final class VilleController extends AbstractController
     public function delete(Ville $ville, EntityManagerInterface $em): Response
     {
 
+        if(count($ville->getLieux())>0){
+            $this->addFlash('danger', 'impossible de supprimer cette ville car elle est actuellement utilisée');
+            return $this->redirectToRoute('admin_villes_list');
+        }
+
         $em->remove($ville);
         $em->flush();
         return $this->redirectToRoute('admin_villes_list');
