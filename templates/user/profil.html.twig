@@ -36,10 +36,10 @@
         <div class="mt-4">
 
             {% if app.user and app.user.id == user.id %}
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
-                    Ajouter une photo de profil
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                    Modifier photo de profil
                 </button>
-                <button type="button" class="btnMod"
+                <button type="button" class="btn btn-info"
                         onclick="window.location.href='{{ path('user_update', {email: user.email}) }}'">
                     Modifier mon profil
                 </button>

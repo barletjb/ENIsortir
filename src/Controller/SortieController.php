@@ -149,6 +149,7 @@ final class SortieController extends AbstractController
     }
 
 
+
     #[IsGranted('ROLE_USER')]
     #[Route('/{id}/annulation', name: '_annulation', methods: ['POST'])]
     public function annulation(Sortie $sortie, Request $request, EntityManagerInterface $em, EtatRepository $etatRepository ): RedirectResponse {

@@ -109,6 +109,19 @@ h1{
     color: black;
 }
 
+.btn-info{
+    background: rgb(155, 213, 242);
+    color: black;
+}
+
+.btn-info:hover{
+    background: rgb(116, 199, 242);
+    color: black;
+}
+
+
+
+
 .photo{
     float: right;
     max-width: 40%;

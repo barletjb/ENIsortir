@@ -1,9 +1,12 @@
 {% extends 'base.html.twig' %}
 {% block body %}
+
+<div class="row justify-content-center">
+    <div class="col-8">
 <div style="display: flex; gap: 2rem;">
 
     <section style="flex: 1;">
-        <h3>{{ title }}</h3>
+        <h1>{{ title }}</h1>
 
         <h4>Filtrer les sites</h4>
 
@@ -39,5 +42,7 @@
         </table>
     </section>
 </div>
+    </div>
+</div>/
 
 {% endblock %}

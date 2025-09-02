@@ -42,7 +42,7 @@ class UserType extends AbstractType
                     ])
                 ],
                 'attr' => [
-                    'accept' => 'image/*'
+                    'accept' => 'image/*',
                 ]
             ])
             ->add('site',EntityType::class, [
