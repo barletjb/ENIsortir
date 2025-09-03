@@ -35,11 +35,12 @@
                     <a class="nav-link" href="{{ path('admin_users_list') }}"><i class="bi bi-person-lines-fill"></i>Utilisateurs</a>
                         {#                <a href="{{ path('') }}"><i class=""></i> Villes</a>#}
                         {#                <a href="{{ path('') }}"><i class=""></i> sites</a>#}
-
                 {% endif %}
 
 
                 <a href="{{ path('user_profil',{'id':app.user.id}) }}"><i class="bi bi-person-circle"></i> Mon Profil</a>
+
+                <a href="{{ path('groupe_prive')}}"><i class="bi bi-person-circle"></i> Mes Groupes Privés</a>
 
 
                 {% if not is_mobile() %}

@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello GroupePriveController!{% endblock %}
+
+{% block body %}
+    <div class="row justify-content-center">
+        <div class="col-4">
+
+            <h1>Modifier ce groupe privé : {{ groupePrive.nom }}</h1>
+            <div class="">
+                <strong>Membres présents :</strong>
+                {% for user in groupePrive.user %}
+                    <div> {{ user.nom }} {{ user.prenom }} </div>
+                {% else %}
+                    <p>Aucun membre</p>
+                {% endfor %}
+            </div>
+            <div>
+                {{ form_start(groupeprive_form) }}
+
+                {{ form_row(groupeprive_form.user, {'attr': {'class': 'select2'}}) }}
+
+                <button type="submit" name="submit_groupe_prive" class="btn btn-success">Modifier</button>
+                <button type="button" onclick="window.location.href='{{ path('groupe_prive') }}'" class="btn btn-secondary">Retour</button>
+                {{ form_widget(groupeprive_form.nom, {'attr':{'hidden' : true} }) }}
+
+                {{ form_end(groupeprive_form, {'render_rest': false }) }}
+
+            </div>
+        </div>
+    </div>
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <style>
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            color: black !important;
+        }
+
+        .select2-container--default .select2-results__option {
+            color: black !important;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: black !important;
+        }
+    </style>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2({
+                placeholder: "Sélectionner un ou plusieurs membres",
+                allowClear: true,
+                width: '100%'
+            });
+        });
+    </script>
+{% endblock %}

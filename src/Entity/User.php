@@ -85,6 +85,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $photo = null;
+
+    /**
+     * @var Collection<int, GroupePrive>
+     */
+    #[ORM\ManyToMany(targetEntity: GroupePrive::class, mappedBy: 'user')]
+    private Collection $sortie;
     public function getPhoto(): ?string
     {
         return $this->photo;
@@ -93,6 +99,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->sorties = new ArrayCollection();
+        $this->sortie = new ArrayCollection();
     }
 
     public function setPhoto(?string $photo): self
@@ -294,5 +301,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * @return Collection<int, GroupePrive>
+     */
+    public function getSortie(): Collection
+    {
+        return $this->sortie;
+    }
 
+    public function getNomComplet(): string
+    {
+        return $this->getNom() . ' ' . $this->getPrenom();
+    }
 }

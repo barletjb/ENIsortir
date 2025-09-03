@@ -312,7 +312,7 @@ final class SortieController extends AbstractController
             $this->addFlash('success', 'Nouveau lieu créé');
         }
 
-        return $this->render('sortie/update.html.twig',[
+        return $this->render('sortie/manage_members.html.twig',[
             'lieu' => $sortie->getLieu(),
             'user' => $this->getUser(),
             'sortie_form' => $formSortie,

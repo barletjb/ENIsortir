@@ -250,6 +250,9 @@ class Sortie
     #[ORM\Column(type: 'boolean')]
     private bool $archived = false;
 
+    #[ORM\ManyToOne(inversedBy: 'sortie')]
+    private ?GroupePrive $groupePrive = null;
+
     public function isArchived(): bool
     {
         return $this->archived;
@@ -258,6 +261,18 @@ class Sortie
     public function setArchived(bool $archived): self
     {
         $this->archived = $archived;
+        return $this;
+    }
+
+    public function getGroupePrive(): ?GroupePrive
+    {
+        return $this->groupePrive;
+    }
+
+    public function setGroupePrive(?GroupePrive $groupePrive): static
+    {
+        $this->groupePrive = $groupePrive;
+
         return $this;
     }
 
