@@ -55,7 +55,6 @@ final class SiteController extends AbstractController
         ]);
     }
 
-
     #[Route('/sites/add', name: '_sites_add')]
     public function add(Request $request, EntityManagerInterface $em): Response
     {

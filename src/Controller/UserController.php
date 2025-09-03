@@ -83,8 +83,6 @@ public function confirmation(string $email,EntityManagerInterface $em,Request $r
                 $this->addFlash('success','Votre profil a bien été confirmé');
                 return $this->redirectToRoute('app_login');
 
-
-
         };
 
         return $this->render('user/confirmation.html.twig', [
@@ -148,9 +146,6 @@ public function confirmation(string $email,EntityManagerInterface $em,Request $r
             'user' => $user,
         ]);
     }
-
-
-
 
     #[Route('/{id}/upload-photo', name: '_upload_photo')]
     public function uploadPhoto(Request $request, User $user, EntityManagerInterface $em): Response
