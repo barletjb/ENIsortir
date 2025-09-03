@@ -85,7 +85,7 @@ final class VilleController extends AbstractController
     {
 
         if(count($ville->getLieux())>0){
-            $this->addFlash('danger', 'impossible de supprimer cette ville car elle est actuellement utilisée');
+            $this->addFlash('danger', 'Impossible de supprimer cette ville car elle est actuellement utilisée');
             return $this->redirectToRoute('admin_villes_list');
         }
 
