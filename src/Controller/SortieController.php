@@ -190,13 +190,17 @@ final class SortieController extends AbstractController
 
         $orga = $em->getRepository(User::class)->findOneBy(['id' => $this->getUser()->getId()]);
         $site = $em->getRepository(Site::class)->findOneBy(['id' => $this->getUser()->getSite()->getId()]);
+        $groupes = $this->getUser()->getGroupesPrives();
+
 
         $sortie = new Sortie();
         $sortie->setEtat($etat);
 
         $sortie->setSite($site);
         $sortie->setOrganisateur($orga);
-        $formSortie = $this->createForm(SortieType::class, $sortie);
+        $formSortie = $this->createForm(SortieType::class, $sortie,[
+            'groupes' => $groupes,
+        ]);
 
         $formSortie->handleRequest($request);
 
@@ -204,7 +208,6 @@ final class SortieController extends AbstractController
         $formLieu = $this->createForm(LieuType::class, $lieu);
 
         $formLieu->handleRequest($request);
-
 
         if ($formSortie->isSubmitted() && $formSortie->isValid()) {
             $em->persist($sortie);
@@ -226,8 +229,9 @@ final class SortieController extends AbstractController
             'lieu' => $sortie->getLieu(),
             'user' => $this->getUser(),
             'sortie_form' => $formSortie,
-            'lieu_form' => $formLieu
-        ]);
+            'lieu_form' => $formLieu,
+            'groupes' => $groupes,
+            ]);
     }
 
 

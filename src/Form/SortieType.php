@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Etat;
+use App\Entity\GroupePrive;
 use App\Entity\Lieu;
 use App\Entity\Site;
 use App\Entity\Sortie;
@@ -23,6 +24,8 @@ class SortieType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $groupes = $options['groupes'];
+
         $builder
             ->add('nom',TextType::class,[
                 'label' => 'Nom de la sortie',
@@ -68,6 +71,16 @@ class SortieType extends AbstractType
                 'attr'=> [
                     'id' => 'sortie_lieu',
                 ]
+            ])
+            ->add('groupePrive',EntityType::class, [
+                'class' => GroupePrive::class,
+                'label' => "Inviter un groupe",
+                'placeholder' => '-- Choisir un groupe --',
+                'choices' => $groupes,
+                'required' => false,
+                'choice_label' => function (GroupePrive $groupePrive) {
+                    return $groupePrive->getNom();
+                }
 
             ])
 
@@ -81,6 +94,7 @@ class SortieType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Sortie::class,
+            'groupes' => [],
         ]);
     }
 }
