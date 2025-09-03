@@ -78,6 +78,17 @@ class GroupePrive
         return $this;
     }
 
+    public function setUser(iterable $users): static
+    {
+        $this->user->clear();
+        foreach ($users as $user) {
+            $this->addUser($user);
+        }
+
+        return $this;
+    }
+
+
     public function removeUser(User $user): static
     {
         $this->user->removeElement($user);

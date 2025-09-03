@@ -8,6 +8,10 @@
 
             <h1>Mes groupes</h1>
             <div class="row">
+                <button type="button" class="btnAdd"
+                        onclick="window.location.href='{{ path('groupe_prive_nouveau') }}'">
+                    Créer
+                </button>
                 {% for groupePrive in groupePrives %}
                     <div class="col-md-4 mb-4">
                         <div class="card h-100">
@@ -31,7 +35,9 @@
                                     {% endfor %}
                                 </div>
 
-                                <button type="button" onclick="window.location.href='{{ path('groupe_prive_gerer', { id: groupePrive.id }) }}'" class="btnMod">
+                                <button type="button"
+                                        onclick="window.location.href='{{ path('groupe_prive_gerer', { id: groupePrive.id }) }}'"
+                                        class="btnMod">
                                     Gérer le groupe
                                 </button>
                             </div>
@@ -40,11 +46,6 @@
                 {% else %}
                     <p>Aucun groupe privé trouvé.</p>
                 {% endfor %}
-
-                <button type="button" class="btnAcc"
-                        onclick="window.location.href='{{ path('groupe_prive_nouveau') }}'">
-                    Créer
-                </button>
 
             </div>
 
