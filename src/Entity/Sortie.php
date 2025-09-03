@@ -26,7 +26,7 @@ class Sortie
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Assert\NotNull(message: 'Vous devez indiquer une date de début')]
-    #[Assert\GreaterThan('today', message: 'La date de début de la sortie doit être postérieure à aujourd\hui')]
+    #[Assert\GreaterThan('+1 day', message: 'La sortie ne peut débuter avant demain')]
     private ?\DateTime $dateHeureDebut = null;
 
 
@@ -36,7 +36,8 @@ class Sortie
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[Assert\NotNull(message: 'Vous devez indiquer une date de fin d\'inscription')]
-    #[Assert\LessThan(propertyPath: 'dateHeureDebut',message:'La date limite d\'inscription soit être antérieure à la date de la sortie')]
+    #[Assert\LessThan(propertyPath: 'dateHeureDebut',message:'La date limite d\'inscription doit être antérieure à la date de la sortie')]
+    #[Assert\GreaterThan('+1 day', message: 'La date de fin d\'inscription doit être minimum à demain')]
     private ?\DateTime $dateLimiteInscription = null;
 
     #[ORM\Column]

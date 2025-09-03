@@ -14,32 +14,34 @@
 
 <body>
 <header>
-
     <h1 >
-        <a href="{{ path('sortie') }}" class="">
-            <img src="{{ asset('images/groupe2.png') }}" alt="ENI Sortie" width="90px">
+        <a href="{{ path('sortie') }}" class="text-dark">
+{#            <img src="{{ asset('images/groupe2.png') }}" alt="ENI Sortie" width="90px">#}
             ENI - Sortir
         </a>
     </h1>
-    <nav>
-        <div class="navbar">
+    <nav class="navbar">
 
+            <button class="burger" onclick="toggleMenu()">
+                <i class="bi bi-list"></i>
+            </button>
+
+            <div id="nav-links" class="nav-links">
+                <a href="#" onclick="toggleMenu()" class="nav-link close-link"><i class="bi bi-x-lg"></i> Fermer</a>
                 <a class="nav-link" href="{{ path('sortie') }}"><i class="bi bi-grid"></i> Accueil </a>
 
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                 {% if is_granted('ROLE_ADMIN') %}
-                     <a class="nav-link" href="{{ path('admin_sites_list') }}"><i class="bi bi-building-add"></i> Sites </a>
-                  <a class="nav-link" href="{{ path('admin_villes_list') }}"><i class="bi bi-geo"></i> Villes </a>
+                    <a class="nav-link" href="{{ path('admin_sites_list') }}"><i class="bi bi-building-add"></i> Sites </a>
+                    <a class="nav-link" href="{{ path('admin_villes_list') }}"><i class="bi bi-geo"></i> Villes </a>
                     <a class="nav-link" href="{{ path('admin_user_create') }}"><i class="bi bi-person-add"></i>Créer Profil</a>
                     <a class="nav-link" href="{{ path('admin_import_users') }}"><i class="bi bi-folder-plus"></i>Importer utilisateurs</a>
                     <a class="nav-link" href="{{ path('admin_users_list') }}"><i class="bi bi-person-lines-fill"></i>Utilisateurs</a>
-                        {#                <a href="{{ path('') }}"><i class=""></i> Villes</a>#}
-                        {#                <a href="{{ path('') }}"><i class=""></i> sites</a>#}
 
                 {% endif %}
 
 
-                <a href="{{ path('user_profil',{'id':app.user.id}) }}"><i class="bi bi-person-circle"></i> Mon Profil</a>
+                <a class="nav-link" href="{{ path('user_profil',{'id':app.user.id}) }}"><i class="bi bi-person-circle"></i> Mon Profil</a>
 
 
                 {% if not is_mobile() %}
@@ -49,14 +51,15 @@
                 {% endif %}
 
 
-                <a href="{{ path('app_logout') }}"><i class="bi bi-box-arrow-right"></i> Se déconnecter</a>
+                <a class="nav-link" href="{{ path('app_logout') }}"><i class="bi bi-box-arrow-right"></i> Se déconnecter</a>
 
             {% else %}
 
-                <a href="{{ path('app_login') }}"><i class="bi bi-box-arrow-in-right"></i>Se connecter</a>
+                <a class="nav-link" href="{{ path('app_login') }}"><i class="bi bi-box-arrow-in-right"></i>Se connecter</a>
 
             {% endif %}
         </div>
+
     </nav>
 
 </header>
@@ -77,6 +80,15 @@
 
 {% block javascripts %}
         {{ importmap('app') }}
+    <script>
+        function toggleMenu() {
+            const navLinks = document.getElementById('nav-links');
+            navLinks.classList.toggle('show');
+            document.body.classList.toggle('menu-open');
+        }
+    </script>
+
+
 {% endblock %}
 </body>
 </html>
