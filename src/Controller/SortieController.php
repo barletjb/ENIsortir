@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Etat;
+use App\Entity\GroupePrive;
 use App\Entity\Lieu;
 use App\Entity\Site;
 use App\Entity\Sortie;
@@ -184,13 +185,13 @@ final class SortieController extends AbstractController
 
     #[IsGranted('ROLE_USER')]
     #[Route('/edit', name: '_edit')]
-    public function editSortie(Request $request, EntityManagerInterface $em): Response
+    public function editSortie(Request $request, EntityManagerInterface $em, MailerInterface $mailer): Response
     {
         $etat = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'En création']);
 
         $orga = $em->getRepository(User::class)->findOneBy(['id' => $this->getUser()->getId()]);
         $site = $em->getRepository(Site::class)->findOneBy(['id' => $this->getUser()->getSite()->getId()]);
-        $groupes = $this->getUser()->getGroupesPrives();
+        $groupes = $em->getRepository(GroupePrive::class)->findBy(['chefGroupe' => $this->getUser()->getId()]);
 
 
         $sortie = new Sortie();
@@ -212,6 +213,23 @@ final class SortieController extends AbstractController
         if ($formSortie->isSubmitted() && $formSortie->isValid()) {
             $em->persist($sortie);
             $em->flush();
+
+            if ($sortie->getGroupePrive()) {
+                $users = $sortie->getGroupePrive()->getUser();
+                foreach ($users as $user) {
+                    $email = (new Email())
+                        ->from('admin@campus-eni.fr')
+                        ->to($user->getEmail())
+                        ->subject('Invitation à la sortie " '. $sortie->getNom() . " \" .")
+                        ->html(
+                            $this->renderView('emails/user_invit.html.twig', [
+                                'user' => $user,
+                                'sortie'=> $sortie,
+                            ])
+                        );
+                    $mailer->send($email);
+                }
+            }
 
             $this->addFlash('success', 'Nouvelle sortie créée');
             return $this->redirectToRoute('sortie');
