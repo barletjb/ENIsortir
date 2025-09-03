@@ -1,0 +1,39 @@
+
+.bi-check-circle{
+    color:rgb(107, 179, 127);
+}
+
+.bi-x-circle{
+    color:rgb(227, 98, 98)
+}
+
+.lien_profil:hover{
+    color:rgb(116, 199, 242);
+}
+
+
+.table{
+    margin-top: 1em;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+.scrollbar-mirror {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 16px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    z-index: 999;
+    display: none;
+}
+
+.scroll-content {
+    height: 1px;
+}

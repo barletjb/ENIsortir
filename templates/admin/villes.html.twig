@@ -30,7 +30,7 @@
                 <td>{{ ville.nom }}</td>
                 <td>{{ ville.codePostal }}</td>
                 <td>
-                    <a class="btnMod" href="{{ path('admin_villes_edit', { 'id': ville.id }) }}">Modifier</a> |
+                    <a class="btnMod" href="{{ path('admin_villes_edit', { 'id': ville.id }) }}">Modifier</a>
                     <a class="btnMod" href="{{ path('admin_villes_delete', { 'id': ville.id }) }}" onclick="return confirm('Supprimer cette ville ?')">Supprimer</a>
                 </td>
             </tr>
