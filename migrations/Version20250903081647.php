@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250829135315 extends AbstractMigration
+final class Version20250903081647 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,14 +20,12 @@ final class Version20250829135315 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE sortie ADD archived TINYINT(1) NOT NULL');
-        $this->addSql('ALTER TABLE user DROP is_active');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_A8D00A9D6C6E55B5 ON groupe_prive (nom)');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE sortie DROP archived');
-        $this->addSql('ALTER TABLE user ADD is_active TINYINT(1) DEFAULT 0 NOT NULL');
+        $this->addSql('DROP INDEX UNIQ_A8D00A9D6C6E55B5 ON groupe_prive');
     }
 }

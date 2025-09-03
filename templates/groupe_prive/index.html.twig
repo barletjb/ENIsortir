@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello GroupePriveController!{% endblock %}
+
+{% block body %}
+    <div class="row justify-content-center">
+        <div class="col-4">
+
+            <h1>Votre(Vos) groupe(s) privé(s)</h1>
+            <div class="row">
+                {% for groupePrive in groupePrives %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">{{ groupePrive.nom }}</h5>
+
+                                <p><strong>Chef du groupe :</strong>
+                                    {% if groupePrive.chefGroupe %}
+                                        {{ groupePrive.chefGroupe.nom }} {{ groupePrive.chefGroupe.prenom }}
+                                    {% else %}
+                                        <em>Non défini</em>
+                                    {% endif %}
+                                </p>
+
+                                <p><strong>Membres :</strong></p>
+                                <div>
+                                    {% for user in groupePrive.user %}
+                                        <p>{{ user.nom }} {{ user.prenom }}</p>
+                                    {% else %}
+                                        <p><em>Aucun membre</em></p>
+                                    {% endfor %}
+                                </div>
+
+                                <button type="button" onclick="window.location.href='{{ path('groupe_prive_gerer', { id: groupePrive.id }) }}'" class="btnMod">
+                                    Gérer le groupe
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <p>Aucun groupe privé trouvé.</p>
+                {% endfor %}
+
+                <button type="button" class="btnAcc"
+                        onclick="window.location.href='{{ path('groupe_prive_nouveau') }}'">
+                    Créer
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
