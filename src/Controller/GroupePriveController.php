@@ -64,6 +64,7 @@ final class GroupePriveController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $em->flush();
             $this->addFlash('success', 'Groupe modifié avec succès.');
 

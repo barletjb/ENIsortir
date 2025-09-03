@@ -22,7 +22,7 @@ class GroupePriveType extends AbstractType
             ])
             ->add('user', EntityType::class, [
                 'class' => User::class,
-                'choice_label' => 'nomComplet',
+                'choice_label' => fn(User $user) => $user->getNomComplet(),
                 'label' => 'Membres à ajouter : ',
                 'multiple' => true,
                 'expanded' => false,

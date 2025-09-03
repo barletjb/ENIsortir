@@ -10,7 +10,7 @@
             <div class="">
                 <strong>Membres présents :</strong>
                 {% for user in groupePrive.user %}
-                    <div> {{ user.nom }} {{ user.prenom }} </div>
+                    <div> {{ user.nomComplet }} </div>
                 {% else %}
                     <p>Aucun membre</p>
                 {% endfor %}
