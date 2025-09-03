@@ -71,13 +71,8 @@ public function confirmation(string $email,EntityManagerInterface $em,Request $r
                 $user->setPhoto($newFilename);
             }
 
-
                 $password = $formUser->get('password')->getData();
-//
-//            if ($passwordHasher->isPasswordValid($user, $password)) {
-//                $this->addFlash('error', 'Vous devez changer votre mot de passe');
-//            } else {
-//                dd($password. " " . $user->getPassword());
+
                 $hashedPassword = $passwordHasher->hashPassword($user, $password);
                 $user->setProfileCompleted(true);
                 $user->setPassword($hashedPassword);
