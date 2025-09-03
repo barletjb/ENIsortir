@@ -7,7 +7,6 @@ html,body {
     overflow-x: hidden;
 }
 
-
 body{
     height: 100%;
     color:white;
@@ -28,15 +27,33 @@ footer{
     text-align: center;
 }
 
-header{
+header {
+    position: relative;
     background-image: url('/images/convivialite.jpg');
     background-size: cover;
     background-position: center;
-    opacity: 0.5;
-    height:20em;
+    height: 20em;
     width: 100%;
     text-align: center;
     color: black;
+    overflow: hidden;
+}
+
+header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: white;
+    opacity: 0.3;
+    z-index: 1;
+}
+
+header * {
+    position: relative;
+    z-index: 2;
 }
 
 a{
@@ -87,5 +104,23 @@ section{
 .larger{
     font-size: 19px;
 }
+
+
+.form-check-input[type="checkbox"]{
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    cursor: pointer;
+    position: relative;
+}
+
+.form-check-input[type="checkbox"]:checked {
+    background-color: rgb(152, 123, 227);
+    border-color: rgb(152, 123, 227);
+}
+
 
 

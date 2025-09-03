@@ -1,4 +1,3 @@
-
 .navbar{
     display: flex;
     flex-direction: row;
@@ -52,7 +51,6 @@
     .nav-links.show {
         display: flex;
     }
-
 }
 
 .close-link {

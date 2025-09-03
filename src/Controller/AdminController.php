@@ -22,10 +22,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/admin',name:'admin')]
 final class AdminController extends AbstractController
 {
-    /**
-//     * @throws TransportExceptionInterface
-//     * @throws RandomException
-     */
+
     #[Route('/create-user', name: '_user_create')]
     public function create(
         Request                     $request,
