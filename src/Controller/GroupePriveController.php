@@ -62,14 +62,18 @@ final class GroupePriveController extends AbstractController
 
         $form = $this->createForm(GroupePriveType::class, $groupePrive);
         $form->handleRequest($request);
-
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            dd($groupePrive);
+//        }
         if ($form->isSubmitted() && $form->isValid()) {
 
             $em->flush();
             $this->addFlash('success', 'Groupe modifié avec succès.');
 
             return $this->redirectToRoute('groupe_prive');
+
         }
+
 
         return $this->render('groupe_prive/manage_members.html.twig', [
             'groupePrive' => $groupePrive,

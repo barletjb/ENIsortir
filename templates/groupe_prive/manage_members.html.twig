@@ -20,11 +20,11 @@
 
                 {{ form_row(groupeprive_form.user, {'attr': {'class': 'select2'}}) }}
 
-                <button type="submit" name="submit_groupe_prive" class="btn btn-success">Modifier</button>
+                <button type="submit" name="submit_groupe_prive_update" class="btn btn-success">Modifier</button>
                 <button type="button" onclick="window.location.href='{{ path('groupe_prive') }}'" class="btn btn-secondary">Retour</button>
                 {{ form_widget(groupeprive_form.nom, {'attr':{'hidden' : true} }) }}
 
-                {{ form_end(groupeprive_form, {'render_rest': false }) }}
+                {{ form_end(groupeprive_form) }}
 
             </div>
         </div>
