@@ -10,7 +10,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: GroupePriveRepository::class)]
-#[UniqueEntity(fields: ['nom'], message: 'Ce nom de groupe n\'est pas disponible')]
+#[UniqueEntity(fields: ['nom', 'chefGroupe'], message: 'Ce nom de groupe n\'est pas disponible')]
 class GroupePrive
 {
     #[ORM\Id]
@@ -18,7 +18,7 @@ class GroupePrive
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 55, unique: true)]
+    #[ORM\Column(length: 55)]
     #[Assert\NotBlank(message: 'Vous devez indiquer un nom de groupe')]
     private ?string $nom = null;
 
