@@ -90,7 +90,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var Collection<int, GroupePrive>
      */
     #[ORM\ManyToMany(targetEntity: GroupePrive::class, mappedBy: 'user')]
-    private Collection $sortie;
+    private Collection $groupesPrives;
+
+
     public function getPhoto(): ?string
     {
         return $this->photo;
@@ -99,7 +101,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->sorties = new ArrayCollection();
-        $this->sortie = new ArrayCollection();
+        $this->groupesPrives = new ArrayCollection();
     }
 
     public function setPhoto(?string $photo): self
@@ -304,13 +306,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, GroupePrive>
      */
-    public function getSortie(): Collection
+    public function getGroupesPrives(): Collection
     {
-        return $this->sortie;
+        return $this->groupesPrives;
+    }
+
+    public function addGroupePrive(GroupePrive $groupe): static
+    {
+        if (!$this->groupesPrives->contains($groupe)) {
+            $this->groupesPrives->add($groupe);
+            $groupe->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGroupePrive(GroupePrive $groupe): static
+    {
+        if ($this->groupesPrives->contains($groupe)) {
+            $this->groupesPrives->removeElement($groupe);
+            $groupe->removeUser($this);
+        }
+
+        return $this;
     }
 
     public function getNomComplet(): string
     {
-        return $this->getNom() . ' ' . $this->getPrenom();
+        return $this->getNom() . ' ' . $this->getPrenom() . ' (' . $this->getPseudo() . ')';
     }
 }

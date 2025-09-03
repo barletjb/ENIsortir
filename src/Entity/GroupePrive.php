@@ -25,7 +25,7 @@ class GroupePrive
     /**
      * @var Collection<int, User>
      */
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'sortie')]
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'groupesPrives')]
     private Collection $user;
 
     /**

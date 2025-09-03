@@ -43,7 +43,7 @@
 
                 <a class="nav-link" href="{{ path('user_profil',{'id':app.user.id}) }}"><i class="bi bi-person-circle"></i> Mon Profil</a>
 
-                <a href="{{ path('groupe_prive')}}"><i class="bi bi-person-circle"></i> Mes Groupes Privés</a>
+                <a class="nav-link" href="{{ path('groupe_prive')}}"><i class="bi bi-person-circle"></i> Mes Groupes Privés</a>
 
 
                 {% if not is_mobile() %}
