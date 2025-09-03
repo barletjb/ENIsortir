@@ -15,9 +15,19 @@ class LieuFixtures extends Fixture implements DependentFixtureInterface
     {
         $faker = Factory::create('fr_FR');
 
+        $ville = [
+            'saint_herblain',
+            'nantes',
+            'reze',
+            'orvault',
+            'bouguenais',
+            'sautron',
+            'indre',
+        ];
+
         $villes = [];
-        for ($i = 0; $i < 7; $i++) {
-            $villes[] = $this->getReference("ville_$i", Ville::class);
+        foreach ($ville as $ref) {
+            $villes[] = $this->getReference($ref, Ville::class);
         }
 
 
@@ -30,6 +40,8 @@ class LieuFixtures extends Fixture implements DependentFixtureInterface
             $lieu->setVille($faker->randomElement($villes));
 
             $manager->persist($lieu);
+
+            $this->addReference("lieu_$i", $lieu);
         }
 
         $manager->flush();
