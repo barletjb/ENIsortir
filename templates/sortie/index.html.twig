@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Liste des sorties!{% endblock %}
+{% block title %}Liste des sorties{% endblock %}
 
 {% block body %}
     <section>
@@ -57,7 +57,6 @@
                         {{ form_widget(form_filtre.submit) }}
                     </div>
 
-
                     {{ form_end(form_filtre) }}
 
                 </div>
@@ -87,7 +86,7 @@
                         <div class="mt-auto">
 
                                 {% if  sortie.etat.libelle != "Activité en cours" or sortie.etat.libelle != "En création" %}
-                                    <button type="button" class="btnMod"
+                                    <button type="button" class="btnAdd"
                                             onclick="window.location.href='{{ path('sortie_detail', { id: sortie.id }) }}'">
                                         Afficher
                                     </button>

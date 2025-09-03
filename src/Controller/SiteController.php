@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Site;
+use App\Entity\Sortie;
+use App\Entity\User;
 use App\Form\SiteType;
 use App\Repository\SiteRepository;
 use App\Repository\VilleRepository;
@@ -53,7 +55,6 @@ final class SiteController extends AbstractController
         ]);
     }
 
-
     #[Route('/sites/add', name: '_sites_add')]
     public function add(Request $request, EntityManagerInterface $em): Response
     {
@@ -94,8 +95,18 @@ final class SiteController extends AbstractController
     #[Route('/sites/{id}/delete', name: '_sites_delete')]
     public function delete(Site $site, EntityManagerInterface $em): Response
     {
-        $em->remove($site);
-        $em->flush();
+        $siteParticipant = $em->getRepository(User::class)->findBy(['site' => $site->getId()]);
+        $siteSortie = $em->getRepository(Sortie::class)->findBy(['site' => $site->getId()]);
+
+        if (!$siteParticipant and !$siteSortie) {
+            $em->remove($site);
+            $em->flush();
+        } else {
+            $this->addFlash('danger','Vous ne pouvez pas supprimer ce site car il est déjà utilisé');
+        }
+
+
+
         return $this->redirectToRoute('admin_sites_list');
     }
 

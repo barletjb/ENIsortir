@@ -1,4 +1,7 @@
 {% extends 'base.html.twig' %}
+
+{% block title %}Sites{% endblock %}
+
 {% block body %}
 
 <div class="row justify-content-center">
@@ -13,10 +16,10 @@
         <form method="get" action="{{ path('admin_sites_list') }}">
             <label for="search">Le nom contient :</label>
             <input type="text" name="search" id="search" value="{{ app.request.get('search') }}">
-            <button type="submit">Rechercher</button>
+            <button class="btn btn-success" type="submit">Rechercher</button>
         </form>
 
-        <a href="{{ path('admin_sites_add') }}" class="btn btn-success">Ajouter un site</a>
+        <a href="{{ path('admin_sites_add') }}" class="btnAdd">Ajouter un site</a>
 
         <table class="table">
             <thead>
@@ -31,8 +34,8 @@
                     <td>{{ site.nom }}</td>
 
                     <td>
-                        <a class="btnMod" href="{{ path('admin_sites_edit', { 'id': site.id }) }}">Modifier</a> |
-                        <a class="btnMod" href="{{ path('admin_sites_delete', { 'id': site.id }) }}"onclick="return confirm('Supprimer ce site ?')">Supprimer</a>
+                        <a class="btnMod" href="{{ path('admin_sites_edit', { 'id': site.id }) }}">Modifier</a>
+                        <a class="btnMod" href="{{ path('admin_sites_delete', { 'id': site.id }) }}" onclick="return confirm('Supprimer ce site ?')">Supprimer</a>
                     </td>
                 </tr>
             {% else %}
@@ -43,6 +46,6 @@
     </section>
 </div>
     </div>
-</div>/
+</div>
 
 {% endblock %}

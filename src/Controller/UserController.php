@@ -71,13 +71,8 @@ public function confirmation(string $email,EntityManagerInterface $em,Request $r
                 $user->setPhoto($newFilename);
             }
 
-
                 $password = $formUser->get('password')->getData();
-//
-//            if ($passwordHasher->isPasswordValid($user, $password)) {
-//                $this->addFlash('error', 'Vous devez changer votre mot de passe');
-//            } else {
-//                dd($password. " " . $user->getPassword());
+
                 $hashedPassword = $passwordHasher->hashPassword($user, $password);
                 $user->setProfileCompleted(true);
                 $user->setPassword($hashedPassword);
@@ -87,8 +82,6 @@ public function confirmation(string $email,EntityManagerInterface $em,Request $r
 
                 $this->addFlash('success','Votre profil a bien été confirmé');
                 return $this->redirectToRoute('app_login');
-
-
 
         };
 
@@ -153,9 +146,6 @@ public function confirmation(string $email,EntityManagerInterface $em,Request $r
             'user' => $user,
         ]);
     }
-
-
-
 
     #[Route('/{id}/upload-photo', name: '_upload_photo')]
     public function uploadPhoto(Request $request, User $user, EntityManagerInterface $em): Response

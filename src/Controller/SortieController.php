@@ -65,6 +65,7 @@ final class SortieController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/profil/{id}', name: '_user_profil')]
     public function afficherProfil(User $user): Response
     {

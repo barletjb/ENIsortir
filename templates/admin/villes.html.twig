@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Villes{% endblock %}
+
 {% block body %}
 
 <div class="row justify-content-center">
@@ -11,10 +13,10 @@
     <form method="get" action="{{ path('admin_villes_list') }}">
         <label for="search">Le nom contient :</label>
         <input type="text" name="search" id="search" value="{{ app.request.get('search') }}">
-        <button type="submit">Rechercher</button>
+        <button class="btn btn-success" type="submit">Rechercher</button>
     </form>
 
-    <a href="{{ path(add_route) }}" class="btn btn-success">Ajouter une ville</a>
+    <a href="{{ path(add_route) }}" class="btnAdd">Ajouter une ville</a>
 
     <table class="table">
         <thead>
@@ -30,7 +32,7 @@
                 <td>{{ ville.nom }}</td>
                 <td>{{ ville.codePostal }}</td>
                 <td>
-                    <a class="btnMod" href="{{ path('admin_villes_edit', { 'id': ville.id }) }}">Modifier</a> |
+                    <a class="btnMod" href="{{ path('admin_villes_edit', { 'id': ville.id }) }}">Modifier</a>
                     <a class="btnMod" href="{{ path('admin_villes_delete', { 'id': ville.id }) }}" onclick="return confirm('Supprimer cette ville ?')">Supprimer</a>
                 </td>
             </tr>
@@ -40,5 +42,5 @@
         </tbody>
     </table>
     </div>
-</div>/
+</div>
 {% endblock %}

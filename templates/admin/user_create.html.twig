@@ -1,10 +1,12 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Créer utilisateur{% endblock %}
+
 {% block body %}
     <h1>Créer un utilisateur</h1>
 
     <div class="row justify-content-center">
-        <div class="col-4">
+        <div class="col-6">
 
             {{ form_start(form, {'attr': {'data-turbo': 'false'}}) }}
 {#            {{ form_row(form.photo) }}#}

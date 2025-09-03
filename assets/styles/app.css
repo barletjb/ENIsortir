@@ -4,9 +4,8 @@ html,body {
     padding: 0;
     color:white;
     background: black;
-
+    overflow-x: hidden;
 }
-
 
 body{
     height: 100%;
@@ -23,16 +22,38 @@ footer{
     position: fixed;
     bottom: 0;
     width:100%;
-
     background: black;
     color: white;
-    /*height:5%;*/
     text-align: center;
 }
 
-header{
+header {
+    position: relative;
+    background-image: url('/images/convivialite.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 20em;
+    width: 100%;
     text-align: center;
-    /*height:15%;*/
+    color: black;
+    overflow: hidden;
+}
+
+header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: white;
+    opacity: 0.3;
+    z-index: 1;
+}
+
+header * {
+    position: relative;
+    z-index: 2;
 }
 
 a{
@@ -48,11 +69,10 @@ h1{
     text-align: center;
 }
 
-.navbar{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+h1 a:hover{
+    font-size: larger;
 }
+
 
 .sortie-list{
     display: flex;
@@ -61,66 +81,11 @@ h1{
     grid-gap: 10em;
     border: #997404 2px solid;
     border-radius: 15px;
-
 }
 
-.btnAcc{
-    background: rgb(166, 224, 183);
-    border-radius: 5px;
-    color: black;
-    padding:0.2em;
-}
-
-.btnAcc:hover{
-    background: rgb(107, 179, 127);
-    color: black;
-}
-
-
-.btnMod{
-    background: rgb(227, 98, 98);
-    border-radius: 5px;
-    color:black;
-    padding:0.2em;
-}
-
-.btnMod:hover{
-    background: rgb(213, 59, 59);
-
-}
-
-.btnAdd{
-    background: rgb(210, 175, 222);
+input{
     border-radius: 5px;
 }
-
-.btnAdd:hover{
-    background: rgb(173, 126, 194);
-
-}
-
-.btn-success{
-    background: rgb(166, 224, 183);
-    color: black;
-}
-
-.btn-success:hover{
-    background: rgb(107, 179, 127);
-    color: black;
-}
-
-.btn-info{
-    background: rgb(155, 213, 242);
-    color: black;
-}
-
-.btn-info:hover{
-    background: rgb(116, 199, 242);
-    color: black;
-}
-
-
-
 
 .photo{
     float: right;
@@ -140,22 +105,22 @@ section{
     font-size: 19px;
 }
 
-.bi-check-circle{
-    color:rgb(107, 179, 127);
+
+.form-check-input[type="checkbox"]{
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    cursor: pointer;
+    position: relative;
 }
 
-.bi-x-circle{
-    color:rgb(227, 98, 98)
+.form-check-input[type="checkbox"]:checked {
+    background-color: rgb(152, 123, 227);
+    border-color: rgb(152, 123, 227);
 }
 
-.lien_profil:hover{
-    color:rgb(116, 199, 242);
-}
-.list-group-item{
-    background-color: #0e0e0e;
-}
 
-.infos-utilisateur .list-group-item {
-    background-color: #f9f9f9;
 
-}

@@ -1,8 +1,11 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Utilisateurs{% endblock %}
+
 {% block body %}
     <h1>Liste des utilisateurs</h1>
 
+<div class="table-container" id="tableContainer">
 <table class="table table-hover table-dark">
     <thead>
     <tr>
@@ -13,7 +16,7 @@
         <th scope="col">Nom</th>
         <th scope="col">Prénom</th>
         <th scope="col">Profil complété</th>
-        <th scope="col">Actif ?</th>
+        <th scope="col">Activer / Désactiver</th>
     </tr>
     </thead>
     <tbody>
@@ -52,6 +55,49 @@
             {% endfor %}
     </tbody>
 </table>
+</div>
+
+    <div class="scrollbar-mirror" id="scrollbarMirror">
+        <div class="scroll-content" id="scrollContent"></div>
+    </div>
+
+    <script>
+
+            document.addEventListener('turbo:load', () => {
+            const tableContainer = document.getElementById('tableContainer');
+            const scrollbarMirror = document.getElementById('scrollbarMirror');
+            const scrollContent = document.getElementById('scrollContent');
+
+            if (!tableContainer || !scrollbarMirror || !scrollContent) return;
+
+            function updateScrollbarVisibility() {
+            const tableScrollWidth = tableContainer.scrollWidth;
+            const tableClientWidth = tableContainer.clientWidth;
+
+            if (tableScrollWidth > tableClientWidth) {
+            scrollbarMirror.style.display = 'block';
+            scrollContent.style.width = tableScrollWidth + 'px';
+        } else {
+            scrollbarMirror.style.display = 'none';
+        }
+        }
+
+            scrollbarMirror.addEventListener('scroll', () => {
+            tableContainer.scrollLeft = scrollbarMirror.scrollLeft;
+        });
+
+            tableContainer.addEventListener('scroll', () => {
+            scrollbarMirror.scrollLeft = tableContainer.scrollLeft;
+        });
+
+            updateScrollbarVisibility();
+            window.addEventListener('resize', updateScrollbarVisibility);
+        });
+    </script>
+
 
 
 {% endblock %}
+
+
+

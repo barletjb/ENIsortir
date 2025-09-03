@@ -24,7 +24,6 @@ class RechercheIndexType extends AbstractType
                 'choice_label' => 'nom',
                 'placeholder' => 'Tous les sites',
                 'required' => false,
-
             ])
             ->add('rechercheNom', SearchType::class, [
                 'label' => 'Le nom de la sortie contient :',
@@ -41,6 +40,7 @@ class RechercheIndexType extends AbstractType
             ->add('organisateur', CheckboxType::class, [
                 'label'    => 'Sorties dont je suis l\'organisateur∙trice',
                 'required' => false,
+
             ])
             ->add('participant', CheckboxType::class, [
                 'label'    => 'Sorties auxquelles je suis inscrit∙e',

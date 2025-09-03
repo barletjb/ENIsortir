@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Profil de {{ user.pseudo }}{% endblock %}
+{% block title %}Profil{% endblock %}
 
 {% block body %}
     <div class="container mt-4">
@@ -23,7 +23,7 @@
             </div>
 
             <div class="col-md-8">
-                <ul class="infos-utilisateur list-group">
+                <ul class="list-group">
                     <li class="list-group-item"><strong>Prénom :</strong> {{ user.prenom }}</li>
                     <li class="list-group-item"><strong>Nom :</strong> {{ user.nom }}</li>
                     <li class="list-group-item"><strong>Téléphone :</strong> {{ user.telephone }}</li>
@@ -45,8 +45,6 @@
                 </button>
             {% endif %}
 
-
-            <!-- Modale Bootstrap -->
             <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -69,7 +67,7 @@
                 </div>
             </div>
 
-            <a href="{{ path('sortie') }}" class="btn btn-secondary">← Retour</a>
+            <a href="{{ path('sortie') }}" class="btn btn-secondary">← Accueil</a>
 
         </div>
     </div>

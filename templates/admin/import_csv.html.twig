@@ -1,10 +1,36 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Import{% endblock %}
+
 {% block body %}
     <h1>Charger un fichier d'utilisateurs</h1>
 
+    {% if erreurs|length > 0 %}
+        <div class="alert alert-danger">
+            <h4>Erreurs lors de l'import :</h4>
+            <ul>
+                {% for erreur in erreurs %}
+                    <li>{{ erreur }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    {% if importedUsers is not empty %}
+        <div class="alert alert-success">
+            <h4>Utilisateurs importés :</h4>
+            <ul>
+                {% for user in importedUsers %}
+                    <li>{{ user.prenom }} {{ user.nom }} ({{ user.email }})</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+
+
     <div class="row justify-content-center">
-        <div class="col-4">
+        <div class="col-8">
 
             {{ form_start(formCsv, {'attr': {'enctype': 'multipart/form-data'}}) }}
             {{ form_row(formCsv.csv) }}
