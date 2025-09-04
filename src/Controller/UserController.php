@@ -100,13 +100,15 @@ public function confirmation(string $email,EntityManagerInterface $em,Request $r
             throw $this->createNotFoundException('Utilisateur non trouvé');
         }
 
+        if ($this->getUser()->getId() !== $user->getId()) {
+            throw $this->createAccessDeniedException('Accès refusé.');
+        }
+
         $formUser = $this->createForm(UserType::class,$user,[
             'validation_groups' => ['Default'],
             'password_required' => false,
         ]);
         $formUser->handleRequest($request);
-
-        if ($formUser->isSubmitted() && $formUser->isValid()) {
 
             if ($formUser->isSubmitted() && $formUser->isValid()) {
                 $photoFile = $formUser->get('photo')->getData();
@@ -120,17 +122,15 @@ public function confirmation(string $email,EntityManagerInterface $em,Request $r
                             $this->getParameter('photo_directory'),
                             $newFilename
                         );
+                        $user->setPhoto($newFilename);
                     } catch (FileException $e) {
                         $this->addFlash('error', 'Erreur lors de l\'upload de la photo.');
                     }
-
-                    $user->setPhoto($newFilename);
                 }
-            }
 
             $password = $formUser->get('password')->getData();
 
-            if($password !== null && $password !== ''){
+            if(!empty($password)){
                 $hashedPassword = $passwordHasher->hashPassword($user, $password);
                 $user->setPassword($hashedPassword);
             }
@@ -165,8 +165,6 @@ public function confirmation(string $email,EntityManagerInterface $em,Request $r
 
         return $this->redirectToRoute('user_profil', ['id' => $user->getId()]);
     }
-
-
 
 }
 
