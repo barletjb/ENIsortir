@@ -9,7 +9,7 @@
         <div class="col-6">
 
             {{ form_start(form, {'attr': {'data-turbo': 'false'}}) }}
-{#            {{ form_row(form.photo) }}#}
+
             {{ form_row(form.site) }}
             {{ form_row(form.email) }}
             {{ form_row(form.nom) }}
@@ -18,7 +18,6 @@
             {{ form_row(form.telephone) }}
             {{ form_widget(form._token) }}
 
-            {#        {{ form(form) }}#}
 
             <button type="submit" class="btn btn-success">Créer</button>
             {{ form_end(form, {'render_rest': false}) }}

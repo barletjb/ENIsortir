@@ -34,40 +34,6 @@
                 </div>
             </div>
 
-{#
-    <h2>Participants inscrits</h2>
-    <ul>
-        {% for user in sortie.users %}
-            <li>
-                <a href="{{ path('user_profil', {id: user.id}) }}">
-                    {{ user.pseudo }} - {{ user.nom }}
-                </a>
-            </li>
-        {% else %}
-            <li>Aucun participant inscrit</li>
-        {% endfor %}
-
-        {% if sortie.etat.libelle != "Clôturée" and sortie.etat.libelle != "Annulée"  and sortie.etat.libelle != "En création" %}
-            {% if  sortie.organisateur != app.user %}
-                {% if sortie.dateLimiteInscription > "now"|date %}
-
-                    {% if not sortie.users.contains(app.user) %}
-                        <form method="post" action="{{ path('sortie_inscription', {id: sortie.id}) }}">
-                            <button type="submit" class="btn btn-success">Je participe</button>
-                        </form>
-                    {% else %}
-                        <p class="text-success">Vous êtes déjà inscrit(e) à cette sortie.</p>
-                    {% endif %}
-                {% else %}
-                    <button class="btn btn-secondary" disabled>Inscriptions closes</button>
-                {% endif %}
-            {% endif %}
-        {% endif %}
-
-    </ul>
-
-#}
-
         <div class="card mb-3">
             <div class="card-body">
                 <h5 class="card-title">Participants inscrits</h5>

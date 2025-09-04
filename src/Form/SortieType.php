@@ -82,12 +82,7 @@ class SortieType extends AbstractType
                     return $groupePrive->getNom();
                 }
 
-            ])
-
-
-
-
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

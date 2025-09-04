@@ -105,12 +105,7 @@ final class SiteController extends AbstractController
             $this->addFlash('danger','Vous ne pouvez pas supprimer ce site car il est déjà utilisé');
         }
 
-
-
         return $this->redirectToRoute('admin_sites_list');
     }
-
-
-
 
 }
