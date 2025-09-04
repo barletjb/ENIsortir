@@ -99,18 +99,20 @@ class RappelMailCommand extends Command
 
         foreach ($sorties as $sortie) {
             $this->bus->dispatch(new RappelMailMessage($sortie->getId()));
-            foreach ($sortie->getUsers() as $user) {
-                $email = (new Email())
-                    ->from('noreply@campus-eni.fr')
-                    ->to($user->getEmail())
-                    ->subject('Rappel : Votre sortie "' . $sortie->getNom() . '" est dans 2 jours !')
-                    ->html(
-                        $this->twig->render('emails/rappel.html.twig', [
-                            'user' => $user,
-                            'sortie' => $sortie
-                        ])
-                    );
-                $this->mailer->send($email);
+            if ($sortie->getEtat()->getLibelle() != 'Annulée'){
+                foreach ($sortie->getUsers() as $user) {
+                    $email = (new Email())
+                        ->from('noreply@campus-eni.fr')
+                        ->to($user->getEmail())
+                        ->subject('Rappel : Votre sortie "' . $sortie->getNom() . '" est dans 2 jours !')
+                        ->html(
+                            $this->twig->render('emails/rappel.html.twig', [
+                                'user' => $user,
+                                'sortie' => $sortie
+                            ])
+                        );
+                    $this->mailer->send($email);
+                }
             }
         }
 
