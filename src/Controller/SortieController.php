@@ -185,11 +185,9 @@ final class SortieController extends AbstractController
     public function editSortie(Request $request, EntityManagerInterface $em, MailerInterface $mailer): Response
     {
         $etat = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'En création']);
-
         $orga = $em->getRepository(User::class)->findOneBy(['id' => $this->getUser()->getId()]);
         $site = $em->getRepository(Site::class)->findOneBy(['id' => $this->getUser()->getSite()->getId()]);
         $groupes = $em->getRepository(GroupePrive::class)->findBy(['chefGroupe' => $this->getUser()->getId()]);
-
 
         $sortie = new Sortie();
         $sortie->setEtat($etat);
@@ -199,18 +197,15 @@ final class SortieController extends AbstractController
         $formSortie = $this->createForm(SortieType::class, $sortie,[
             'groupes' => $groupes,
         ]);
-
         $formSortie->handleRequest($request);
 
         $lieu = new Lieu();
         $formLieu = $this->createForm(LieuType::class, $lieu);
-
         $formLieu->handleRequest($request);
 
         if ($formSortie->isSubmitted() && $formSortie->isValid()) {
             $em->persist($sortie);
             $em->flush();
-
             if ($sortie->getGroupePrive()) {
                 $users = $sortie->getGroupePrive()->getUser();
                 foreach ($users as $user) {
@@ -227,7 +222,6 @@ final class SortieController extends AbstractController
                     $mailer->send($email);
                 }
             }
-
             $this->addFlash('success', 'Nouvelle sortie créée');
             return $this->redirectToRoute('sortie');
         }
@@ -235,9 +229,7 @@ final class SortieController extends AbstractController
         if ($formLieu->isSubmitted() && $formLieu->isValid()) {
             $em->persist($lieu);
             $em->flush();
-
             $this->addFlash('success', 'Nouveau lieu créé');
-//            return $this->redirectToRoute('sortie_edit');
         }
 
         return $this->render('sortie/edit.html.twig',[

@@ -3,15 +3,14 @@ function chargementLieu() {
 
     if (lieuSelect) {
         const lieuDetails = document.getElementById('lieu-details');
-        lieuSelect.addEventListener('change', function () {
 
+        lieuSelect.addEventListener('change', function () {
             const lieuId = this.value;
 
             if (!lieuId) {
                 lieuDetails.innerHTML = '';
                 return;
             }
-
             fetch(`/sortie/lieu/details/${lieuId}`)
                 .then(response => response.json())
                 .then(data => {

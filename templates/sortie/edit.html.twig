@@ -11,7 +11,6 @@
             {{ form_start(sortie_form) }}
             <div>
                 {{ form_row(sortie_form.nom) }}
-
             </div>
             <div>
                 {{ form_row(sortie_form.dateHeureDebut) }}
@@ -39,12 +38,9 @@
                     +
                 </button>
                 {{ form_widget(sortie_form.lieu) }}
-
             </div>
 
-
             <div id="lieu-details" style="margin-top: 1em;">
-
             </div>
 
             <button type="submit" name="submit_sortie" class="btn btn-success">Créer sortie</button>
@@ -62,9 +58,7 @@
                 <div class="modal-body">
 
                     <h1>Créer un lieu</h1>
-
                     <form id="lieu-form" action="{{ path('sortie_lieu_add') }}" method="POST" data-turbo="false">
-
                         {{ form_row(lieu_form._token) }}
                         {{ form_row(lieu_form.nom) }}
                         {{ form_row(lieu_form.rue) }}
@@ -72,18 +66,13 @@
                         {{ form_row(lieu_form.latitude) }}
                         {{ form_row(lieu_form.longitude) }}
                         <button type="submit" name="submit_lieu" class="btn btn-dark">Ajouter le lieu</button>
-
                     </form>
-
                 </div>
             </div>
         </div>
     </div>
+
     <script src="{{ asset('js/lieu_script.js') }}" defer></script>
-
-
-
     <script src="{{ asset('js/sortie_script.js') }}" defer></script>
-
 
 {% endblock %}
