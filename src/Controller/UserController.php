@@ -166,7 +166,5 @@ public function confirmation(string $email,EntityManagerInterface $em,Request $r
         return $this->redirectToRoute('user_profil', ['id' => $user->getId()]);
     }
 
-
-
 }
 

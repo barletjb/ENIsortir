@@ -8,3 +8,4 @@ import './styles/boutons.css';
 import './styles/usersList.css';
 
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
+
