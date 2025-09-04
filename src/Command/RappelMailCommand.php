@@ -66,7 +66,8 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Twig\Environment;
 
-#[AsCommand(name: 'app:rappel-mail')]
+#[AsCommand(name: 'app:rappel-mail',
+    description: 'Mail de rappel 48h avant la sortie')]
 class RappelMailCommand extends Command
 {
     private SortieRepository $sortieRepository;
@@ -116,7 +117,7 @@ class RappelMailCommand extends Command
             }
         }
 
-        $output->writeln('Rappels dispatchés avec succès.');
+        $output->writeln('Rappels de sortie envoyés avec succès.');
         return Command::SUCCESS;
     }
 }
