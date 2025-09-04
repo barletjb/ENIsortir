@@ -85,12 +85,12 @@
                                 :</strong> {{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom|first }}.</p>
 
                         <div class="mt-auto">
-                                {% if  sortie.etat.libelle != "Activité en cours" or sortie.etat.libelle != "En création" %}
-                                    <button type="button" class="btnAdd"
-                                            onclick="window.location.href='{{ path('sortie_detail', { id: sortie.id }) }}'">
-                                        Afficher
-                                    </button>
-                                {% endif %}
+                            {% if  sortie.etat.libelle != "Activité en cours" or sortie.etat.libelle != "En création" %}
+                                <button type="button" class="btnAdd"
+                                        onclick="window.location.href='{{ path('sortie_detail', { id: sortie.id }) }}'">
+                                    Afficher
+                                </button>
+                            {% endif %}
                             {% if is_granted('ROLE_USER') %}
                                 {% if sortie.etat.libelle != "Clôturée" and sortie.etat.libelle != "Annulée"  and sortie.etat.libelle != "En création" %}
                                     {% if  sortie.organisateur != user %}
@@ -100,12 +100,12 @@
                                                     data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
                                                 Se désister
                                             </button>
-                                        {% else %}
-                                            <button type="button" class="btnAcc" data-bs-toggle="modal"
-                                                    data-bs-target="#modalInscription"
-                                                    data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
-                                                S'inscrire
-                                            </button>
+                                        {% elseif sortie.users|length < sortie.NbInscriptionsMax %}
+                                                <button type="button" class="btnAcc" data-bs-toggle="modal"
+                                                        data-bs-target="#modalInscription"
+                                                        data-id="{{ sortie.id }}" data-nom="{{ sortie.nom }}">
+                                                    S'inscrire
+                                                </button>
                                         {% endif %}
                                     {% endif %}
                                 {% endif %}
