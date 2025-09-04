@@ -151,7 +151,7 @@ final class SortieController extends AbstractController
 
     #[IsGranted('ROLE_USER')]
     #[Route('/{id}/annulation', name: '_annulation', methods: ['POST'])]
-    public function annulation(Sortie $sortie, Request $request, EntityManagerInterface $em, EtatRepository $etatRepository ): RedirectResponse {
+    public function annulation(Sortie $sortie, Request $request, EntityManagerInterface $em, EtatRepository $etatRepository, MailerInterface $mailer): RedirectResponse {
         $user = $this->getUser();
 
         if (!$user || ($sortie->getOrganisateur() !== $user && !in_array('ROLE_ADMIN', $user->getRoles()))) {
@@ -169,13 +169,26 @@ final class SortieController extends AbstractController
             return $this->redirectToRoute('sortie');
         }
 
-        $raison = $request->request->get('raison_annulation');
-        $sortie->setEtat($etatRepository->findOneBy(['libelle' => 'Annulée']));
-        $sortie->setRaisonAnnulation($raison);
-        $em->persist($sortie);
-        $em->flush();
+        if ($user || ($sortie->getOrganisateur() !== $user && in_array('ROLE_ADMIN', $user->getRoles()))) {
+            $raison = $request->request->get('raison_annulation');
+            $sortie->setEtat($etatRepository->findOneBy(['libelle' => 'Annulée']));
+            $sortie->setRaisonAnnulation($raison);
+            $em->persist($sortie);
+            $em->flush();
 
-        $this->addFlash('success', 'Sortie annulée avec succès : ' . $raison);
+            foreach ($sortie->getUsers() as $user) {
+                $email = (new Email())
+                    ->from('admin@campus-eni.fr')
+                    ->to($user->getEmail())
+                    ->subject('Annulation de la sortie "' . $sortie->getNom() . '"')
+                    ->html($this->renderView('emails/user_annulation.html.twig', [
+                        'user' => $user,
+                        'sortie' => $sortie,
+                    ]));
+                $mailer->send($email);
+            }
+            $this->addFlash('success', 'Sortie annulée avec succès : ' . $raison);
+        }
 
         return $this->redirectToRoute('sortie');
     }

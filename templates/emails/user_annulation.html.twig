@@ -1,0 +1,19 @@
+{% block title %}Désistement à la sortie {% endblock %}
+
+{% block body %}
+
+    <p>Bonjour {{ user.pseudo }},</p>
+
+    <p>Nous avons le regret de vous annoncer que la sortie ' {{ sortie.nom }} ' est annulée pour la raison suivante :</p>
+
+    <ul>
+        <li>{{ sortie.raisonAnnulation }}</li>
+    </ul>
+
+    <p>Nous en sommes désolé !</p>
+
+    <p>Cordialement,<br>
+        L'équipe Campus ENI</p>
+
+
+{% endblock %}

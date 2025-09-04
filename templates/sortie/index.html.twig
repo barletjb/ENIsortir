@@ -69,6 +69,7 @@
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
                     <div class="card-body d-flex flex-column">
+                        <h4>Site : {{ sortie.site.nom }}</h4>
                         <h5 class="card-title">{{ sortie.nom }}</h5>
                         <p class="card-text mb-1"><strong>Date de la sortie
                                 :</strong> {{ sortie.dateHeureDebut|date('d/m/Y') }}</p>
@@ -84,7 +85,6 @@
                                 :</strong> {{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom|first }}.</p>
 
                         <div class="mt-auto">
-
                                 {% if  sortie.etat.libelle != "Activité en cours" or sortie.etat.libelle != "En création" %}
                                     <button type="button" class="btnAdd"
                                             onclick="window.location.href='{{ path('sortie_detail', { id: sortie.id }) }}'">
@@ -107,10 +107,8 @@
                                                 S'inscrire
                                             </button>
                                         {% endif %}
-
                                     {% endif %}
                                 {% endif %}
-
 
                                 {% if sortie.organisateur == user and sortie.etat.libelle == "En création" %}
                                     <button type="button" class="btnMod"
@@ -234,7 +232,6 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
                     </div>
                     <div class="modal-body">
-                        <p>Annuler la sortie <strong id="sortieNom"></strong></p>
                         <div class="mb-3">
                             <label for="raison_annulation" class="form-label">Raison :</label>
                             <textarea name="raison_annulation" id="raison_annulation" class="form-control"

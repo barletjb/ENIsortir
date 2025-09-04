@@ -9,7 +9,7 @@
 
     <div class="card mb-3">
         <div class="card-body">
-
+            <h3>Site : {{ sortie.site.nom }}</h3>
             <p><strong>État :</strong> {{ sortie.etat.libelle }}</p>
             {% if sortie.etat.libelle == 'Annulée' %}
                 <p><strong>Raison :</strong> {{ sortie.raisonAnnulation }}</p>
@@ -25,7 +25,7 @@
 
             <div class="card mb-3">
                 <div class="card-body">
-                    <p><strong>Ville organisatrice :</strong> {{ sortie.lieu.ville.nom }}</p>
+                    <p><strong>Ville :</strong> {{ sortie.lieu.ville.nom }}</p>
                     <p><strong>Lieu : </strong>{{ sortie.lieu.nom}} </p>
                     <p><strong>Rue :</strong> {{ sortie.lieu.rue }}</p>
                     <p><strong>Code postal :</strong> {{ sortie.lieu.ville.codePostal }}</p>
