@@ -40,7 +40,6 @@ final class SortieController extends AbstractController
         $form = $this->createForm(RechercheIndexType::class);
         $form->handleRequest($request);
 
-
         if ($form->isSubmitted() && $form->isValid()) {
 
             $criterias = $form->getData();
@@ -149,8 +148,6 @@ final class SortieController extends AbstractController
         return $this->redirectToRoute('sortie');
 
     }
-
-
 
     #[IsGranted('ROLE_USER')]
     #[Route('/{id}/annulation', name: '_annulation', methods: ['POST'])]
